@@ -15,7 +15,7 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getDatabase } from "firebase/database";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDCi0_iWWgSu1O8yk_LCflEUTnlVUev3K8",

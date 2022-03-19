@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const port = 3000;
+const port = 3010;
 
 app.listen(port, () => {
   console.log(`The app server is running on port: ${port}`);

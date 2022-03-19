@@ -3,6 +3,9 @@ import { Box, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 //import { fakeData } from './fakeGroupData';
 
+
+
+
 export default function GroupTabs() {
   const [value, setValue] = React.useState<string>('1');
   //console.log(fakeData);
@@ -26,5 +29,6 @@ export default function GroupTabs() {
         <TabPanel value="3">Item Three</TabPanel>
       </TabContext>
     </Box>
+
   );
 }

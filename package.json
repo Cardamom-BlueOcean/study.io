@@ -6,10 +6,12 @@
     "watch": "webpack -w"
   },
   "dependencies": {
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.5.1",
     "@mui/lab": "^5.0.0-alpha.73",
     "@mui/material": "^5.5.1",
-    "@mui/styled-engine-sc": "^5.4.2",
+    "@types/firebase": "^3.2.1",
     "@types/react-redux": "^7.1.23",
     "@types/redux": "^3.6.0",
     "axios": "^0.26.1",

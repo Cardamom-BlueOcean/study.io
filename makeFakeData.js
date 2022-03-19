@@ -1,6 +1,8 @@
 const { faker } = require('@faker-js/faker');
 const fs = require('fs')
 
+// https://github.com/faker-js/faker
+
 const makeMessages = function (groupName, numberOfMessages) {
 
   messagesList = []

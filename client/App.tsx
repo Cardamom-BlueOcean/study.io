@@ -24,9 +24,10 @@ import {
   Link,
   Navigate
 } from "react-router-dom";
-import UserPage from './components/GroupTabs';
+import UserPage from './components/UserPage';
 import Login from './components/Login';
-
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 // const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
@@ -87,13 +88,15 @@ const App = () => {
 
   //const [user] = useAuthState(auth);
   return (
-    <Router>
-      <Routes>
-        <Route path="/about" />
-        <Route path="/userlogin" element={<UserPage />} />
-        <Route path="/" element={<Login />} />
-      </Routes>
-    </Router >
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/about" />
+          <Route path="/userlogin" element={<UserPage />} />
+          <Route path="/" element={<Login />} />
+        </Routes>
+      </Router >
+    </Provider>
   );
 }
 

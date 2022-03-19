@@ -1,4 +1,4 @@
-import React from "react";
+import {useState, useEffect} from "react";
 import { createTheme } from "@mui/material/styles";
 import {
   Box,
@@ -6,6 +6,7 @@ import {
   Paper,
   ThemeProvider,
   Typography,
+  Button
 } from "@mui/material";
 import firebase from "firebase/app";
 import { getFirestore, collection } from "firebase/firestore";
@@ -35,11 +36,14 @@ const firestore = getFirestore();
 type Props = {};
 
 function App({}: Props) {
+  const[toggle, setToggle] = useState(false)
 
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider);
   };
+
+
   const theme = createTheme({
     palette: {
       primary: {
@@ -56,8 +60,38 @@ function App({}: Props) {
       },
     },
   });
+  const theme2 = createTheme({
+    palette: {
+      primary: {
+        light: "blue",
+        main: "#0989e3",
+        dark: "#005db0",
+        contrastText: "#000",
+      },
+      secondary: {
+        main: "#4db6ac",
+        light: "blue",
+        dark: "#00867d",
+        contrastText: "#000",
+      },
+    },
+  });
+
+  const[currentTheme, setCurrentTheme] =useState(theme)
+  const setTheme = () => {
+    setToggle(!toggle)
+    toggle ? setCurrentTheme(theme) : setCurrentTheme(theme2)
+  }
+
+  useEffect(() => {
+    alert('changed')
+  }, [])
+
+
+
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={currentTheme}>
       <CssBaseline />
       <Box
         height="100vh"
@@ -73,7 +107,8 @@ function App({}: Props) {
           <Typography color="primary.dark" variant="h1" onClick={()=> {signInWithGoogle()}}>
             Sign in With Google
           </Typography>
-        </Paper>
+          <Button variant="contained" onClick={() => {setTheme() }}>Contained</Button>
+        </Paper>setToggle
       </Box>
     </ThemeProvider>
   );

@@ -1,32 +1,41 @@
-import {useState, useEffect} from "react";
-import { createTheme } from "@mui/material/styles";
-import {
-  Box,
-  CssBaseline,
-  Paper,
-  ThemeProvider,
-  Typography,
-  Button
-} from "@mui/material";
-import firebase from "firebase/app";
-import { getFirestore, collection } from "firebase/firestore";
-import "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getDatabase } from "firebase/database";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  Navigate
-} from "react-router-dom";
-import UserPage from './components/GroupTabs';
-import Login from './components/Login';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import UserPage from "./components/GroupTabs";
+import Login from "./components/Login";
 
+const App = () => {
+  //const [user] = useAuthState(auth);
+  return (
+    <Router>
+      <Routes>
+        <Route path="/about" />
+        <Route path="/userlogin" element={<UserPage />} />
+        <Route path="/" element={<Login />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
+
+// import {useState, useEffect} from "react";
+// import { createTheme } from "@mui/material/styles";
+// import {
+//   Box,
+//   CssBaseline,
+//   Paper,
+//   ThemeProvider,
+//   Typography,
+//   Button
+// } from "@mui/material";
+// import firebase from "firebase/app";
+// import { getFirestore, collection } from "firebase/firestore";
+// import "firebase/auth";
+// import { useAuthState } from "react-firebase-hooks/auth";
+// import { useCollectionData } from "react-firebase-hooks/firestore";
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+// import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+// import { getDatabase } from "firebase/database";
 
 // const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
@@ -82,19 +91,3 @@ import Login from './components/Login';
 //   );
 // }
 //const auth = getAuth();
-
-const App = () => {
-
-  //const [user] = useAuthState(auth);
-  return (
-    <Router>
-      <Routes>
-        <Route path="/about" />
-        <Route path="/userlogin" element={<UserPage />} />
-        <Route path="/" element={<Login />} />
-      </Routes>
-    </Router >
-  );
-}
-
-export default App;

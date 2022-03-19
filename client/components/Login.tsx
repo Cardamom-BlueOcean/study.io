@@ -1,4 +1,4 @@
-import React from "react";
+
 import { createTheme } from "@mui/material/styles";
 import {
   Box,
@@ -15,7 +15,6 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getDatabase } from "firebase/database";
 import firebaseConfig from '../../config';
 import { useNavigate } from "react-router-dom";
 

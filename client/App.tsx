@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserPage from "./components/GroupTabs";
 import Login from "./components/Login";
@@ -36,6 +37,38 @@ export default App;
 // import { getAnalytics } from "firebase/analytics";
 // import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 // import { getDatabase } from "firebase/database";
+=======
+import React from "react";
+import { createTheme } from "@mui/material/styles";
+import {
+  Box,
+  CssBaseline,
+  Paper,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+import firebase from "firebase/app";
+import { getFirestore, collection } from "firebase/firestore";
+import "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getDatabase } from "firebase/database";
+import firebaseConfig from '../config';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate
+} from "react-router-dom";
+import UserPage from './components/UserPage';
+import Login from './components/Login';
+import { Provider } from 'react-redux';
+import { store } from './store';
+>>>>>>> 8980804c5f498c1204542988e91fc26676b94fcf
 
 // const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
@@ -91,3 +124,24 @@ export default App;
 //   );
 // }
 //const auth = getAuth();
+<<<<<<< HEAD
+=======
+
+const App = () => {
+
+  //const [user] = useAuthState(auth);
+  return (
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/about" />
+          <Route path="/userlogin" element={<UserPage />} />
+          <Route path="/" element={<Login />} />
+        </Routes>
+      </Router >
+    </Provider>
+  );
+}
+
+export default App;
+>>>>>>> 8980804c5f498c1204542988e91fc26676b94fcf

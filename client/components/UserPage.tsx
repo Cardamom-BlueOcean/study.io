@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
 // import GroupTabs from "./GroupTabs";
 import { getAuth } from "firebase/auth";
@@ -9,6 +10,18 @@ import {
   onSnapshot,
   where
 } from "firebase/firestore";
+=======
+import * as React from 'react';
+import GroupTabs from './GroupTabs';
+import ReduxExample from './reduxExample';
+import AutreRedux from './AutreRedux';
+//Redux Imports Below:
+import { Provider } from 'react-redux';
+import { store } from '../store';
+
+
+
+>>>>>>> 8980804c5f498c1204542988e91fc26676b94fcf
 
 export default function UserPage() {
   // const auth = getAuth();
@@ -33,10 +46,28 @@ export default function UserPage() {
 
 
 
+
+  // Everything within the provider tags below will have access to our global redux variables.
   return (
+
     <div>
+<<<<<<< HEAD
       {/* <GroupTabs /> */}
       <Test/>
+=======
+      <GroupTabs />
+      {/* <ReduxExample />
+      <AutreRedux /> */}
+
+>>>>>>> 8980804c5f498c1204542988e91fc26676b94fcf
     </div>
+
+
+
   );
 }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 8980804c5f498c1204542988e91fc26676b94fcf

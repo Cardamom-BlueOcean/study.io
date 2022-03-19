@@ -1,6 +1,9 @@
 const { faker } = require('@faker-js/faker');
 const fs = require('fs')
 
+// npm install @faker-js/faker --save-dev
+// https://github.com/faker-js/faker
+
 let roomNames = ['javascript', 'python', 'history']
 
 const makeMessages = function (groupName, numberOfMessages) {

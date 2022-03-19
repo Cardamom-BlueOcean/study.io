@@ -41,6 +41,8 @@ const counterExampleSlice = createSlice({
       state.value += action.payload;
     }
 
+    // can we just redefine state.value = action.payload??
+
   }
 
 

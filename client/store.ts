@@ -10,6 +10,7 @@ export const store = configureStore({
 
   reducer: {
     counterExample: counterExampleReducer,
+    // example2: example2Reducer,
   }
 });
 

@@ -36,9 +36,17 @@ const ReduxExample = () => {
 
   const [test, setTest] = useState('');
 
-  const handleClick = () => {
+  const handleIncrement = () => {
     // here we invoke our counterExample's incremented function,to globally change its state.
-    dispatch(incremented);
+    dispatch(incremented());
+  }
+
+  const handleAmount = () => {
+    dispatch(amountAdded(5));
+  }
+
+  const handleDecrement = () => {
+    dispatch(decremented());
   }
 
   return (
@@ -49,7 +57,9 @@ const ReduxExample = () => {
         Counter: {counter}
         <br></br>
 
-        <button type='button' onClick={handleClick}>Click me!</button>
+        <button type='button' onClick={handleIncrement}>Increment</button>
+        <button type='button' onClick={handleAmount}>Increment by 5!</button>
+        <button type='button' onClick={handleDecrement}>Decrement</button>
 
 
 

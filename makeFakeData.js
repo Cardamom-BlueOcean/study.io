@@ -35,38 +35,8 @@ for (let i = 0; i < groupNames.length; i++) {
   groups.push(newGroup)
 }
 
-/*
-let groups = [
-  {
-    'groupName': 'javascript',
-    'messages': makeMessages('javascript', 100),
-    admins: ['BJ']
-  },
-  {
-    'groupName': 'python',
-    'messages': makeMessages('python', 100),
-    admins: ['BJ']
-  },
-  {
-    'groupName': 'math',
-    'messages': makeMessages('math', 100),
-    admins: ['BJ']
-  },
-  {
-    'groupName': 'science',
-    'messages': makeMessages('science', 100),
-    admins: ['BJ']
-  },
-  {
-    'groupName': 'history',
-    'messages': makeMessages('history', 100),
-    admins: ['BJ']
-  }
-]
-
-*/
-
 let groupsAsJSON = JSON.stringify(groups, null, 2)
+
 fs.writeFile('./fakeData.json', groupsAsJSON, err => {
   if (err) {
     console.error(err)

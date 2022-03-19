@@ -1,4 +1,5 @@
 const { faker } = require('@faker-js/faker');
+const fs = require('fs')
 
 let roomNames = ['javascript', 'python', 'history']
 
@@ -47,5 +48,14 @@ let groups = [
   }
 ]
 
+let groupsAsJSON = JSON.stringify(groups, null, 2)
+fs.writeFile('./fakeData.json', groupsAsJSON, err => {
+  if (err) {
+    console.error(err)
+    return
+  }
+})
+
+//old way of generating data (without fs)
 //on the console, do 'node makeFakeData.js > fakeData.json'
-console.log(JSON.stringify(groups, null, 2));
+//console.log(JSON.stringify(groups, null, 2));

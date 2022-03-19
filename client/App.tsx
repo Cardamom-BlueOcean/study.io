@@ -16,7 +16,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-import { firebaseConfig } from '../config';
+import firebaseConfig from '../config';
 import {
   BrowserRouter as Router,
   Routes,

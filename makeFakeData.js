@@ -1,8 +1,6 @@
 const { faker } = require('@faker-js/faker');
 const fs = require('fs')
 
-let roomNames = ['javascript', 'python', 'history']
-
 const makeMessages = function (groupName, numberOfMessages) {
 
   messagesList = []
@@ -20,6 +18,22 @@ const makeMessages = function (groupName, numberOfMessages) {
   return messagesList;
 }
 
+let groupNames = ['javascript', 'python', 'math', 'science', 'history']
+let admins = ['bj']
+let groups = []
+
+for (let i = 0; i < groupNames.length; i++) {
+
+  let newGroup = {
+    'groupName': groupNames[i],
+    'messages': makeMessages('javascript', 100),
+    'admins': admins
+  }
+
+  groups.push(newGroup)
+}
+
+/*
 let groups = [
   {
     'groupName': 'javascript',
@@ -47,6 +61,8 @@ let groups = [
     admins: ['BJ']
   }
 ]
+
+*/
 
 let groupsAsJSON = JSON.stringify(groups, null, 2)
 fs.writeFile('./fakeData.json', groupsAsJSON, err => {

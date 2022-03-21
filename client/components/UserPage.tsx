@@ -18,8 +18,8 @@ export default function UserPage() {
 
     <div>
       <GroupTabs />
-      <ReduxExample />
-      <AutreRedux />
+      {/* <ReduxExample />
+      <AutreRedux /> */}
 
     </div>
 

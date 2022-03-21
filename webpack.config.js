@@ -2,9 +2,9 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: path.resolve(__dirname,'./src/index.tsx'),
+  entry: path.resolve(__dirname, './src/index.tsx'),
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js', '.png'],
   },
   module: {
     rules: [
@@ -17,6 +17,10 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: 'file-loader'
+      }
       // {
       //   test: /\.css$/,
       //   use: ['style-loader', 'css-loader'],
@@ -30,7 +34,7 @@ module.exports = {
   mode: 'development',
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname,'./src/index.html'),
+      template: path.resolve(__dirname, './src/index.html'),
     }),
   ],
   // stats: 'errors-only',

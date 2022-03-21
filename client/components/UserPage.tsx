@@ -1,7 +1,7 @@
 import { useState } from "react";
 import GroupTabs from "./GroupTabs";
-import ReduxExample from "./redux-examples/reduxExample";
-import AutreRedux from "./redux-examples/AutreRedux";
+// import ReduxExample from "./redux-examples/reduxExample";
+// import AutreRedux from "./redux-examples/AutreRedux";
 import {
   getFirestore,
   collection,
@@ -16,8 +16,17 @@ import {
 import "firebase/auth";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 //Redux Imports Below:
-import { Provider } from "react-redux";
-import { store } from "../store";
+import { Provider } from 'react-redux';
+import { store } from '../store';
+import Calendar from './Calendar';
+import {
+  Box,
+  CssBaseline,
+  Paper,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+import logo from '../../src/logo.png'
 
 type room = {
   RoomName: string;
@@ -80,10 +89,30 @@ export default function UserPage() {
   // test
 
   return (
-    <div>
-      <GroupTabs />
-      {/* <ReduxExample />
-      <AutreRedux /> */}
-    </div>
+    <Box>
+      <Box sx={{ backgroundColor: '#542F34' }}> <img src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
+      <Box className="loginbar" sx={{ border: 1, height: '40px', width: 8 / 10, margin: '20px auto' }}>Login bar</Box>
+      <Box sx={{
+        width: 8 / 10,
+        height: 800,
+        // border: 2,
+        display: 'grid',
+        margin: 'auto',
+        columnGap: 2,
+        gridTemplateColumns: '25% 75%',
+        gridTemplateRows: 'auto'
+      }}>
+        <Box className="sidebar" sx={{ border: 1 }}>
+          <Box className="grouplist" sx={{ height: '60%', border: 1 }}></Box>
+          <Calendar />
+
+        </Box>
+        <Box className="chatview" sx={{ border: 1 }}>
+          <GroupTabs />
+
+        </Box>
+
+      </Box>
+    </Box>
   );
 }

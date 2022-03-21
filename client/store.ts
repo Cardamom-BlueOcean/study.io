@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 // Import lines below this line must impor the default export of a given slice file. These slices represent the methods/reducers we use to interact with variables. You can find all slices in the features folder. If you are not sure how to create a new variable/methods contact Richard.
 import counterExampleReducer from './features/counterExample/counterExample';
+import arrayExampleReducer from './features/arrayExample/arrayExample';
 
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
 
   reducer: {
     counterExample: counterExampleReducer,
+    arrayExample: arrayExampleReducer,
     // example2: example2Reducer,
   }
 });

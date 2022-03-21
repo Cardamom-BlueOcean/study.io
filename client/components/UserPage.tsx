@@ -82,8 +82,8 @@ export default function UserPage() {
   return (
     <div>
       <GroupTabs />
-      <ReduxExample />
-      <AutreRedux />
+      {/* <ReduxExample />
+      <AutreRedux /> */}
     </div>
   );
 }

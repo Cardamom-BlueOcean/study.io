@@ -26,6 +26,7 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
+import logo from '../../src/logo.png'
 
 type room = {
   RoomName: string;
@@ -88,27 +89,30 @@ export default function UserPage() {
   // test
 
   return (
-    <Box sx={{
-      width: 8 / 10,
-      height: 800,
-      border: 2,
-      display: 'grid',
-      margin: 'auto',
-      columnGap: 3,
-      rowGap: 1,
-      gridTemplateColumns: '30% 70%',
-      gridTemplateRows: 'auto'
-    }}>
-      <Box className="sidebar" sx={{ border: 1 }}>
-        <Box className="grouplist" />
-        <Calendar />
+    <Box>
+      <Box sx={{ backgroundColor: '#542F34' }}> <img src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
+      <Box className="loginbar" sx={{ border: 1, height: '40px', width: 8 / 10, margin: '20px auto' }}>Login bar</Box>
+      <Box sx={{
+        width: 8 / 10,
+        height: 800,
+        // border: 2,
+        display: 'grid',
+        margin: 'auto',
+        columnGap: 2,
+        gridTemplateColumns: '25% 75%',
+        gridTemplateRows: 'auto'
+      }}>
+        <Box className="sidebar" sx={{ border: 1 }}>
+          <Box className="grouplist" sx={{ height: '60%', border: 1 }}></Box>
+          <Calendar />
+
+        </Box>
+        <Box className="chatview" sx={{ border: 1 }}>
+          <GroupTabs />
+
+        </Box>
 
       </Box>
-      <Box className="chatview" sx={{ border: 1 }}>
-        <GroupTabs />
-
-      </Box>
-
     </Box>
   );
 }

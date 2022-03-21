@@ -5,12 +5,13 @@ import { useState } from 'react';
 // The two custom hooks below are required to interact with redux variables.
 // useAppSelector gives you access to the redux variable's state
 // useAppDispatch gives you acceess to the redux variables reducers, AKA methods that we defined in the slice file.
-import { useAppSelector, useAppDispatch } from '../hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 
 
 
 // Below are the reducers that we use to interact with our counter variable.
-import { incremented, decremented, amountAdded } from '../features/counterExample/counterExample';
+import { incremented, decremented, amountAdded } from '../../features/counterExample/counterExample';
+import { addArrayToArray, revertArray, setArray } from '../../features/arrayExample/arrayExample';
 
 //if you were to use an additional redux variable in this file, you would simply need to do an additional import to get those methods.
 
@@ -49,6 +50,22 @@ const ReduxExample = () => {
     dispatch(decremented());
   }
 
+  const arrayTest = useAppSelector((state) => state.arrayExample.value);
+  const newArray: Array<string | [] | number> = ['Richard', 'Tobin', 'John'];
+
+  const handleArrayChange = () => {
+    dispatch(setArray(newArray));
+  }
+
+  const handleArrayRevert = () => {
+    dispatch(revertArray());
+  }
+
+  const handleCombine = () => {
+    dispatch(addArrayToArray(newArray));
+  }
+  // console.log(arrayTest);
+
   return (
     <ReduxStyled>
 
@@ -61,6 +78,22 @@ const ReduxExample = () => {
         <button type='button' onClick={handleAmount}>Increment by 5!</button>
         <button type='button' onClick={handleDecrement}>Decrement</button>
 
+        <br></br>
+        Default Array:
+        {arrayTest.map((item) => (
+          <p>{item}</p>
+        ))}
+        Change to:
+        {newArray.map((item) =>
+          (<p>{item}</p>)
+        )}
+
+        <button type='button' onClick={handleArrayChange}>Switch It Up!</button>
+        <button type='button' onClick={handleArrayRevert}>Take it back now y'all</button>
+        <button type='button' onClick={handleCombine}>Our Powers Combined</button>
+        <hr></hr>
+        <br>
+        </br>
 
 
 

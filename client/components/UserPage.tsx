@@ -1,7 +1,7 @@
 import { useState } from "react";
 import GroupTabs from "./GroupTabs";
-import ReduxExample from "./reduxExample";
-import AutreRedux from "./AutreRedux";
+import ReduxExample from "./redux-examples/reduxExample";
+import AutreRedux from "./redux-examples/AutreRedux";
 import {
   getFirestore,
   collection,
@@ -11,10 +11,13 @@ import {
   getDocs,
   doc,
   getDoc,
-  orderBy
+  orderBy,
 } from "firebase/firestore";
 import "firebase/auth";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+//Redux Imports Below:
+import { Provider } from "react-redux";
+import { store } from "../store";
 
 type room = {
   RoomName: string;
@@ -25,20 +28,15 @@ export default function UserPage() {
   const db = getFirestore();
   const [userRooms, updateUserRooms] = useState<room[]>([]);
 
-
-
-
-
   const dbQuerysAndSubscriptions = async () => {
     const auth: any = await getAuth();
 
-
-
     onAuthStateChanged(auth, (user) => {
-      const getUsersRoomDataOnceAuthorized = async () => {//this is to get the room data
+      const getUsersRoomDataOnceAuthorized = async () => {
+        //this is to get the room data
         if (user) {
           const UID = user.uid;
-          const q =  query(
+          const q = query(
             collection(db, "Rooms"),
             where("RoomParticipants", "array-contains", UID)
           );
@@ -46,7 +44,7 @@ export default function UserPage() {
             //this function is a listener for the Users Rooms. It will Update when there are new rooms that includes the user
             const Rooms: any[] = []; //this is where the rooms are stored
             querySnapshot.forEach((doc) => {
-              console.log('doc', doc)
+              console.log("doc", doc);
               Rooms.push(doc.data());
             });
             console.log("ROOMS: ", Rooms);
@@ -56,19 +54,13 @@ export default function UserPage() {
       };
       getUsersRoomDataOnceAuthorized();
 
-
-
-
-
-
-
-
-
-      const subsribeToUpdatesForARoom = async (roomTolistenTO) =>{//The function can be called to subscribe to a room in
+      const subsribeToUpdatesForARoom = async (roomTolistenTO) => {
+        //The function can be called to subscribe to a room in
         if (user) {
-          const q =  query(
-            collection(db, "Rooms", roomTolistenTO, "Chats"), orderBy("TimeStamp")
-          );//
+          const q = query(
+            collection(db, "Rooms", roomTolistenTO, "Chats"),
+            orderBy("TimeStamp")
+          ); //
           const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chats: any[] = [];
             querySnapshot.forEach((doc) => {
@@ -78,22 +70,14 @@ export default function UserPage() {
             // updateUserRooms(chats);
           });
         }
-      }
-      subsribeToUpdatesForARoom("NAJXCCti8U4JWU9k7nnZ")//example of what a call to subsribe to a room would look like
+      };
+      subsribeToUpdatesForARoom("NAJXCCti8U4JWU9k7nnZ"); //example of what a call to subsribe to a room would look like
     });
   };
   dbQuerysAndSubscriptions();
 
-
-
-
-
-
-
-
-
-
-
+  // Everything within the provider tags below will have access to our global redux variables.
+  // test
 
   return (
     <div>

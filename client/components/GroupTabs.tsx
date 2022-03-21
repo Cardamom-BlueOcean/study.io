@@ -9,7 +9,7 @@ import { group } from 'console';
 export default function GroupTabs() {
   const [value, setValue] = React.useState<string>("javascript");
   const [roomInput, setRoomInput] = React.useState<string>("");
-
+  const [groups, setGroups] = React.useState(fakeData);
   const handleChange = (event: any, newValue: string) => {
     setValue(newValue);
   };
@@ -20,7 +20,6 @@ export default function GroupTabs() {
   );
   const dispatch = useAppDispatch();
 
-const [groups, setGroups] = React.useState(fakeData);
 const handleRoomInput = (value) => {
     setRoomInput(value);
   };

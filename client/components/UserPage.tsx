@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import GroupTabs from "./GroupTabs";
+import GroupList from './GroupList'
+import ReduxExample from "./redux-examples/reduxExample";
+import AutreRedux from "./redux-examples/AutreRedux";
 // import ReduxExample from "./redux-examples/reduxExample";
 // import AutreRedux from "./redux-examples/AutreRedux";
 import {
@@ -114,6 +117,8 @@ export default function UserPage() {
   // Everything within the provider tags below will have access to our global redux variables.
   // test
 
+  //put hook for state change here
+
   return (
     <Box>
       <Box sx={{ backgroundColor: '#542F34' }}> <img src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
@@ -129,7 +134,8 @@ export default function UserPage() {
         gridTemplateRows: 'auto'
       }}>
         <Box className="sidebar" sx={{ border: 1 }}>
-          <Box className="grouplist" sx={{ height: '60%', border: 1 }}></Box>
+          <GroupList />
+
           <Calendar />
 
         </Box>

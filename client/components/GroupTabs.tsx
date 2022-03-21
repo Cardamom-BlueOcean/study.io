@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Tab, TextField, Stack, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
+import { Box, Tab, TextField, Stack } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { fakeData } from './fakeGroupData';
 import { group } from 'console';
@@ -10,10 +10,23 @@ import { group } from 'console';
 export default function GroupTabs() {
   const [value, setValue] = React.useState<string>('javascript');
   const [groups, setGroups] = React.useState(fakeData);
+  const [sortedGroups, setSortedGroups] = React.useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  // React.useEffect(() => {
+  //   for (let i = 0; i < groups.length; i++) {
+  //     let sorting = [];
+  //     if (sorting.indexOf(groupName) === undefined) {
+  //       console.log('triggering')
+  //       setSortedGroups(sorting.push({ groupName: groups[i].groupName }));
+  //     }
+  //   }
+  //   console.log(sortedGroups);
+
+  // }, [groups]);
 
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
@@ -25,7 +38,7 @@ export default function GroupTabs() {
             ))}
           </TabList>
         </Box>
-        <Box sx={{ height: '700px', overflow: 'scroll', bottom: 0 }}>
+        <Box sx={{ height: '500px', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
           {groups.map((group, i) => (
             < TabPanel key={i} value={group.groupName}>
               {group.messages.map((message, i) => (
@@ -33,11 +46,11 @@ export default function GroupTabs() {
                   <Box>{message.userName}</Box>
                   <Box>{message.body}</Box>
                   <Box>{message.date}</Box>
-                  {message.replies.length > 0 ? () => { } : null}
-                </TabPanel>
-              ))}
-            </Box>
-      </TabContext >
+                </Stack>))}
+            </TabPanel>
+          ))}
+        </Box>
+      </TabContext>
       <Box
         component="form"
         sx={{
@@ -48,7 +61,7 @@ export default function GroupTabs() {
       >
         <TextField id="outlined-basic" label="Message" variant="outlined" />
       </Box>
-    </Box >
+    </Box>
 
   );
 }

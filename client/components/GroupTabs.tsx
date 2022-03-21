@@ -16,18 +16,6 @@ export default function GroupTabs() {
     setValue(newValue);
   };
 
-  // React.useEffect(() => {
-  //   for (let i = 0; i < groups.length; i++) {
-  //     let sorting = [];
-  //     if (sorting.indexOf(groupName) === undefined) {
-  //       console.log('triggering')
-  //       setSortedGroups(sorting.push({ groupName: groups[i].groupName }));
-  //     }
-  //   }
-  //   console.log(sortedGroups);
-
-  // }, [groups]);
-
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={value}>

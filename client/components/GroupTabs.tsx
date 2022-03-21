@@ -10,7 +10,7 @@ export default function GroupTabs() {
   const [value, setValue] = React.useState<string>('1');
   //console.log(fakeData);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (event: any, newValue :string) => {
     setValue(newValue);
   };
 

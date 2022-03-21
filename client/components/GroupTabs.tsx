@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Tab, TextField, Stack } from '@mui/material';
+import { Box, Tab, TextField, Stack, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { fakeData } from './fakeGroupData';
 import { group } from 'console';
@@ -25,7 +25,7 @@ export default function GroupTabs() {
             ))}
           </TabList>
         </Box>
-        <Box sx={{ height: '700px', overflow: 'scroll' }}>
+        <Box sx={{ height: '700px', overflow: 'scroll', bottom: 0 }}>
           {groups.map((group, i) => (
             < TabPanel key={i} value={group.groupName}>
               {group.messages.map((message, i) => (
@@ -33,11 +33,11 @@ export default function GroupTabs() {
                   <Box>{message.userName}</Box>
                   <Box>{message.body}</Box>
                   <Box>{message.date}</Box>
-                </Stack>))}
-            </TabPanel>
-          ))}
-        </Box>
-      </TabContext>
+                  {message.replies.length > 0 ? () => { } : null}
+                </TabPanel>
+              ))}
+            </Box>
+      </TabContext >
       <Box
         component="form"
         sx={{
@@ -48,7 +48,7 @@ export default function GroupTabs() {
       >
         <TextField id="outlined-basic" label="Message" variant="outlined" />
       </Box>
-    </Box>
+    </Box >
 
   );
 }

@@ -5,6 +5,7 @@ import AutreRedux from './AutreRedux';
 //Redux Imports Below:
 import { Provider } from 'react-redux';
 import { store } from '../store';
+import Calendar from './Calendar';
 
 
 
@@ -19,7 +20,7 @@ export default function UserPage() {
       <GroupTabs />
       {/* <ReduxExample />
       <AutreRedux /> */}
-
+      <Calendar />
     </div>
 
 

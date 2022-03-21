@@ -1,5 +1,7 @@
 import { useState } from "react";
 import GroupTabs from "./GroupTabs";
+import GroupList from './GroupList'
+import { Box } from '@mui/material';
 import ReduxExample from "./redux-examples/reduxExample";
 import AutreRedux from "./redux-examples/AutreRedux";
 import {
@@ -79,11 +81,14 @@ export default function UserPage() {
   // Everything within the provider tags below will have access to our global redux variables.
   // test
 
+  //put hook for state change here
+
   return (
-    <div>
+    <Box sx={{ display: 'flex' }}>
+      <GroupList />
       <GroupTabs />
       {/* <ReduxExample />
       <AutreRedux /> */}
-    </div>
+    </Box>
   );
 }

@@ -4,9 +4,6 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { fakeData } from './fakeGroupData';
 import { group } from 'console';
 
-
-
-
 export default function GroupTabs() {
   const [value, setValue] = React.useState<string>('javascript');
   const [groups, setGroups] = React.useState(fakeData);
@@ -16,7 +13,7 @@ export default function GroupTabs() {
   };
 
   return (
-    <Box sx={{ width: '50%', typography: 'body1' }}>
+    <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">

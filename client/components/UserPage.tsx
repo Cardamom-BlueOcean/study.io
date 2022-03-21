@@ -1,73 +1,105 @@
-<<<<<<< HEAD
-import { useState, useEffect } from "react";
-// import GroupTabs from "./GroupTabs";
-import { getAuth } from "firebase/auth";
-import Test from './test'
+import { useState } from "react";
+import GroupTabs from "./GroupTabs";
+import ReduxExample from "./reduxExample";
+import AutreRedux from "./AutreRedux";
 import {
   getFirestore,
   collection,
   query,
+  where,
   onSnapshot,
-  where
+  getDocs,
+  doc,
+  getDoc,
+  orderBy
 } from "firebase/firestore";
-=======
-import * as React from 'react';
-import GroupTabs from './GroupTabs';
-import ReduxExample from './reduxExample';
-import AutreRedux from './AutreRedux';
-//Redux Imports Below:
-import { Provider } from 'react-redux';
-import { store } from '../store';
+import "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-
-
->>>>>>> 8980804c5f498c1204542988e91fc26676b94fcf
+type room = {
+  RoomName: string;
+  RoomParticipants: string[];
+};
 
 export default function UserPage() {
-  // const auth = getAuth();
-  // const db = getFirestore();
-  // const [userRooms, updateUserRooms] = useState([]);
-
-  // // const unsubToUserData = onSnapshot(doc(db, "Users", "auth.currentUser.uid"), { includeMetadataChanges: true }, (doc) => {
-  // //   console.log("Current data: ", doc.data());
-  // //   const userData = doc.data();
-  // //   updateUserRooms(userData.rooms);
-  // // });
-  // const roomsRef = collection(db, "Rooms");
-  // const q = query(roomsRef, where("Users", "array-contains", auth.currentUser.uid));
-  // const unsubscribeToRoomsData = onSnapshot(q, (querySnapshot) => {
-  //   const usersRooms = [];
-  //   querySnapshot.forEach((doc) => {
-  //     usersRooms.push(doc.data());
-  //   });
-  //   updateUserRooms(usersRooms)
-  //   console.log("Current cities in CA: ", usersRooms);
-  // });
+  const db = getFirestore();
+  const [userRooms, updateUserRooms] = useState<room[]>([]);
 
 
 
 
-  // Everything within the provider tags below will have access to our global redux variables.
+
+  const dbQuerysAndSubscriptions = async () => {
+    const auth: any = await getAuth();
+
+
+
+    onAuthStateChanged(auth, (user) => {
+      const getUsersRoomDataOnceAuthorized = async () => {//this is to get the room data
+        if (user) {
+          const UID = user.uid;
+          const q =  query(
+            collection(db, "Rooms"),
+            where("RoomParticipants", "array-contains", UID)
+          );
+          const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            //this function is a listener for the Users Rooms. It will Update when there are new rooms that includes the user
+            const Rooms: any[] = []; //this is where the rooms are stored
+            querySnapshot.forEach((doc) => {
+              console.log('doc', doc)
+              Rooms.push(doc.data());
+            });
+            console.log("ROOMS: ", Rooms);
+            // updateUserRooms(Rooms);
+          });
+        }
+      };
+      getUsersRoomDataOnceAuthorized();
+
+
+
+
+
+
+
+
+
+      const subsribeToUpdatesForARoom = async (roomTolistenTO) =>{//The function can be called to subscribe to a room in
+        if (user) {
+          const q =  query(
+            collection(db, "Rooms", roomTolistenTO, "Chats"), orderBy("TimeStamp")
+          );//
+          const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const chats: any[] = [];
+            querySnapshot.forEach((doc) => {
+              chats.push(doc.data());
+            });
+            console.log("Chats: ", chats);
+            // updateUserRooms(chats);
+          });
+        }
+      }
+      subsribeToUpdatesForARoom("NAJXCCti8U4JWU9k7nnZ")//example of what a call to subsribe to a room would look like
+    });
+  };
+  dbQuerysAndSubscriptions();
+
+
+
+
+
+
+
+
+
+
+
+
   return (
-
     <div>
-<<<<<<< HEAD
-      {/* <GroupTabs /> */}
-      <Test/>
-=======
       <GroupTabs />
-      {/* <ReduxExample />
-      <AutreRedux /> */}
-
->>>>>>> 8980804c5f498c1204542988e91fc26676b94fcf
+      <ReduxExample />
+      <AutreRedux />
     </div>
-
-
-
   );
 }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 8980804c5f498c1204542988e91fc26676b94fcf

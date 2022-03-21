@@ -1,7 +1,7 @@
 import { useState } from "react";
 import GroupTabs from "./GroupTabs";
-import ReduxExample from "./redux-examples/reduxExample";
-import AutreRedux from "./redux-examples/AutreRedux";
+// import ReduxExample from "./redux-examples/reduxExample";
+// import AutreRedux from "./redux-examples/AutreRedux";
 import {
   getFirestore,
   collection,
@@ -19,6 +19,13 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Provider } from 'react-redux';
 import { store } from '../store';
 import Calendar from './Calendar';
+import {
+  Box,
+  CssBaseline,
+  Paper,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 
 type room = {
   RoomName: string;
@@ -81,11 +88,27 @@ export default function UserPage() {
   // test
 
   return (
-    <div>
-      <GroupTabs />
-      <Calendar />
-      <ReduxExample />
-      <AutreRedux />
-    </div>
+    <Box sx={{
+      width: 8 / 10,
+      height: 800,
+      border: 2,
+      display: 'grid',
+      margin: 'auto',
+      columnGap: 3,
+      rowGap: 1,
+      gridTemplateColumns: '30% 70%',
+      gridTemplateRows: 'auto'
+    }}>
+      <Box className="sidebar" sx={{ border: 1 }}>
+        <Box className="grouplist" />
+        <Calendar />
+
+      </Box>
+      <Box className="chatview" sx={{ border: 1 }}>
+        <GroupTabs />
+
+      </Box>
+
+    </Box>
   );
 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import CalendarModal from './CalendarModal';
+import ExpandedCalendar from './ExpandedCalendar';
 import {
   Box,
   CssBaseline,
@@ -21,6 +21,7 @@ export default function Calendar() {
   const [openCalendarModal, setOpenCalendarModal] = React.useState<boolean>(false);
   const [accepted, setAccepted] = React.useState<Array<string>>([]);
   const [pending, setPending] = React.useState<Array<string>>([]);
+  const [accept, setAccept] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setAccepted(['meeting with john', 'meeting with bj']);
@@ -44,7 +45,7 @@ export default function Calendar() {
         <Box key={idx} >{meeting} </Box>
       ))}
       {/* TODO button onclick, rerender chat view to show calendar */}
-      <Button variant="contained">Show Calendar</Button>
+      <Button variant="contained" onClick={() => console.log('clicked')}>Show Calendar</Button>
       {/* {openCalendarModal}
       <CalendarModal /> */}
     </Box>

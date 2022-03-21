@@ -20,10 +20,10 @@ import {
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#63b8ff",
-      main: "#0989e3",
-      dark: "#005db0",
-      contrastText: "#000",
+      light: "#806543",
+      main: "#542F34",
+      dark: "#33266E",
+      contrastText: "#A6607C",
     },
     secondary: {
       main: "#4db6ac",

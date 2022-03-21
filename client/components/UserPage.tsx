@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GroupTabs from "./GroupTabs";
+import GroupList from './GroupList'
+import ReduxExample from "./redux-examples/reduxExample";
+import AutreRedux from "./redux-examples/AutreRedux";
 // import ReduxExample from "./redux-examples/reduxExample";
 // import AutreRedux from "./redux-examples/AutreRedux";
 import {
@@ -8,13 +11,13 @@ import {
   query,
   where,
   onSnapshot,
-  getDocs,
   doc,
-  getDoc,
-  orderBy,
+  setDoc,
 } from "firebase/firestore";
 import "firebase/auth";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useAppSelector, useAppDispatch } from "../hooks";
+import { setRoomsArray } from "../features/userRooms/userRooms";
 //Redux Imports Below:
 import { Provider } from 'react-redux';
 import { store } from '../store';
@@ -35,58 +38,86 @@ type room = {
 
 export default function UserPage() {
   const db = getFirestore();
-  const [userRooms, updateUserRooms] = useState<room[]>([]);
 
-  const dbQuerysAndSubscriptions = async () => {
-    const auth: any = await getAuth();
+  const userRooms = useAppSelector((state) => state.userRooms.value);
+  const dispatch = useAppDispatch();
 
-    onAuthStateChanged(auth, (user) => {
-      const getUsersRoomDataOnceAuthorized = async () => {
-        //this is to get the room data
+  useEffect(() => {
+    const asyncGetAuth = async () => {
+      const auth: any = await getAuth();
+      onAuthStateChanged(auth, (user: any) => {
         if (user) {
-          const UID = user.uid;
-          const q = query(
-            collection(db, "Rooms"),
-            where("RoomParticipants", "array-contains", UID)
-          );
-          const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            //this function is a listener for the Users Rooms. It will Update when there are new rooms that includes the user
-            const Rooms: any[] = []; //this is where the rooms are stored
-            querySnapshot.forEach((doc) => {
-              console.log("doc", doc);
-              Rooms.push(doc.data());
+          const addUserDbIfUserIsNotAlreadyAdded = async () => {
+            await setDoc(doc(db, "Users", user.uid), {
+              name: user.displayName,
+              email: user.email,
+              thumbnailPhotoURL: user.photoURL,
+              uid: user.uid,
+              rooms: [],
             });
-            console.log("ROOMS: ", Rooms);
-            // updateUserRooms(Rooms);
-          });
+          };
+          addUserDbIfUserIsNotAlreadyAdded();
         }
-      };
-      getUsersRoomDataOnceAuthorized();
+      });
+    };
+    asyncGetAuth();
+  }, []);
+  useEffect(() => {
+    const dbQuerysAndSubscriptions = async () => {
+      const auth: any = await getAuth();
 
-      const subsribeToUpdatesForARoom = async (roomTolistenTO) => {
-        //The function can be called to subscribe to a room in
-        if (user) {
-          const q = query(
-            collection(db, "Rooms", roomTolistenTO, "Chats"),
-            orderBy("TimeStamp")
-          ); //
-          const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const chats: any[] = [];
-            querySnapshot.forEach((doc) => {
-              chats.push(doc.data());
+      onAuthStateChanged(auth, (user) => {
+        const getUsersRoomDataOnceAuthorized = async () => {
+          //this is to get the room data
+          if (user) {
+            const UID = user.uid;
+            const q = query(
+              collection(db, "Rooms"),
+              where("RoomParticipants", "array-contains", UID)
+            );
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+              //this function is a listener for the Users Rooms. It will Update when there are new rooms that includes the user
+              const Rooms: any = []; //this is where the rooms are stored
+              querySnapshot.forEach((doc) => {
+                Rooms.push(doc.data().RoomName);
+                subsribeToUpdatesForARoom(doc.id);
+              });
+              console.log("ROOMS: ", Rooms);
+              // updateUserRooms(Rooms);
+              // dispatch to update global array here.
+              dispatch(setRoomsArray(Rooms));
             });
-            console.log("Chats: ", chats);
-            // updateUserRooms(chats);
-          });
-        }
-      };
-      subsribeToUpdatesForARoom("NAJXCCti8U4JWU9k7nnZ"); //example of what a call to subsribe to a room would look like
-    });
-  };
-  dbQuerysAndSubscriptions();
+          }
+        };
+        getUsersRoomDataOnceAuthorized();
+
+        const subsribeToUpdatesForARoom = async (roomTolistenTO) => {
+          //The function can be called to subscribe to a room in
+          if (user) {
+            const q = query(
+              collection(db, "Rooms", roomTolistenTO, "Chats")
+              //,orderBy("TimeStamp")
+            ); //
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+              const chats: any[] = [];
+              querySnapshot.forEach((doc) => {
+                chats.push(doc.data());
+              });
+              console.log(`${roomTolistenTO} Chats: `, chats);
+              // updateUserRooms(chats);
+            });
+          }
+        };
+        //example of what a call to subsribe to a room would look like
+      });
+    };
+    dbQuerysAndSubscriptions();
+  }, []);
 
   // Everything within the provider tags below will have access to our global redux variables.
   // test
+
+  //put hook for state change here
 
   return (
     <Box>
@@ -103,7 +134,8 @@ export default function UserPage() {
         gridTemplateRows: 'auto'
       }}>
         <Box className="sidebar" sx={{ border: 1 }}>
-          <Box className="grouplist" sx={{ height: '60%', border: 1 }}></Box>
+          <GroupList />
+
           <Calendar />
 
         </Box>

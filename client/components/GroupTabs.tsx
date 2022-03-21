@@ -1,24 +1,39 @@
-import * as React from 'react';
+import * as React from "react";
+//import { fakeData } from './fakeGroupData';
+import { useAppSelector, useAppDispatch } from "../hooks";
 import { Box, Tab, TextField, Stack } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { fakeData } from './fakeGroupData';
 import { group } from 'console';
 
-
-
-
 export default function GroupTabs() {
-  const [value, setValue] = React.useState<string>('javascript');
+  const [value, setValue] = React.useState<string>("javascript");
+  const [roomInput, setRoomInput] = React.useState<string>("");
   const [groups, setGroups] = React.useState(fakeData);
-
-  const handleChange = (event, newValue) => {
+  const handleChange = (event: any, newValue: string) => {
     setValue(newValue);
   };
 
+  const userRooms = useAppSelector((state) => state.userRooms.value);
+  const createRoomFunction = useAppSelector(
+    (state) => state.globalFunctions.value.createRoom
+  );
+  const dispatch = useAppDispatch();
+
+const handleRoomInput = (value) => {
+    setRoomInput(value);
+  };
+
+  const handleCreateRoom = () => {
+    createRoomFunction(roomInput);
+  };
+
+  // console.log("I am in group tabs :)", userRooms);
+
   return (
-    <Box sx={{ width: '100%', typography: 'body1' }}>
+    <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
             {groups.map((group, i) => (
               < Tab key={i} label={group.groupName} value={group.groupName} />
@@ -38,8 +53,15 @@ export default function GroupTabs() {
           ))}
         </Box>
       </TabContext>
+      <input id="test"
+        type="text"
+        onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+          handleRoomInput(e.target.value)
+        }
+      ></input>
+      <button onClick={handleCreateRoom}>Add New Room</button>
       <Box
-        component="form"
+      component="form"
         sx={{
           '& > :not(style)': { m: 0, width: '100%' },
         }}
@@ -49,6 +71,5 @@ export default function GroupTabs() {
         <TextField id="outlined-basic" label="Message" variant="outlined" />
       </Box>
     </Box>
-
   );
 }

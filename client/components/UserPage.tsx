@@ -90,11 +90,11 @@ export default function UserPage() {
                 Rooms.push(doc.data().RoomName);
                 subsribeToUpdatesForARoom(doc.id);
               });
-              console.log("ROOMS: ", Rooms);
+              //console.log("ROOMS: ", Rooms);
               // updateUserRooms(Rooms);
               // dispatch to update global array here.
               setPractice(objectWithRoomsAsKeysAndArraysOfChatsAsValues);
-              console.log('THIS IS THE BIG OBJECT', objectWithRoomsAsKeysAndArraysOfChatsAsValues) //this is where the function should go to update the chats
+              //console.log('THIS IS THE BIG OBJECT', objectWithRoomsAsKeysAndArraysOfChatsAsValues) //this is where the function should go to update the chats
               dispatch(setRoomsArray(Rooms));
               setUserChats(objectWithRoomsAsKeysAndArraysOfChatsAsValues)
 

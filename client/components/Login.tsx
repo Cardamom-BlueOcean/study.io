@@ -14,6 +14,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import firebaseConfig from '../../config';
 import { useNavigate } from "react-router-dom";
+import logo from '../../src/logo.png'
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
@@ -38,20 +39,21 @@ export default function Login({ }: Props) {
 
 
   return (
-    <div>
-      <CssBaseline />
+    <div style={{ background: '#542F34', justifyContent: "center", padding: "400px 0 50px 0" }}>
+      <Box sx={{ backgroundColor: '#542F34' }}> <img src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
+      {/* <CssBaseline /> */}
       <Box
         height="100vh"
         display="flex"
-        justifyContent="center"
+        // justifyContent="center"
         alignItems="center"
         flexDirection="column"
       >
         <Paper
-          elevation={3}
-          sx={{ padding: "1rem", backgroundColor: "secondary.light" }}
+          elevation={20}
+          sx={{ padding: "1rem", backgroundColor: "secondary.light", marginTop: "50px" }}
         >
-          <Typography color="primary.dark" variant="h1" onClick={() => { signInWithGoogle() }}>
+          <Typography color="primary.main" variant="h1" onClick={() => { signInWithGoogle() }}>
             Sign in With Google
           </Typography>
         </Paper>

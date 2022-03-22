@@ -9,13 +9,20 @@ import {
   Box,
   ThemeProvider,
   Typography,
+  Button,
 } from "@mui/material";
 import Checkbox from '@mui/material/Checkbox';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-export default function ExpandedCalendar() {
+
+export default function ExpandedCalendar({ setShowCalendar }) {
 
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
   const [events, setEvents] = React.useState<Array<string>>(['meetup with Richard at 1pm', 'meetup with Tobin at 6pm']);
+
+  //add meeting stuff
+  const [show, setShow] = React.useState<boolean>(false);
+  const [scheduledMeeting, setScheduleMeeting] = React.useState<boolean>(false);
 
   const renderEvents = () => (
     <ul>
@@ -26,7 +33,11 @@ export default function ExpandedCalendar() {
   )
 
   return (
-    <Box sx={{ width: '50%' }}>
+    <Box sx={{ width: '100%' }}>
+
+      <Button variant="text" onClick={() => setShowCalendar(false)}><ArrowBackIcon />
+        <Typography>  Back</Typography></Button>
+
       <LocalizationProvider dateAdapter={AdapterDateFns} >
         <StaticDatePicker<Date>
           orientation="portrait"
@@ -42,18 +53,24 @@ export default function ExpandedCalendar() {
           renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>
-      <Typography variant="h4">Schedule Meeting</Typography>
+      <Box sx={{ display: 'grid', justifyContent: 'center' }}>
+        <Button variant="outlined" sx={{ width: '500px' }} onClick={() => { setScheduleMeeting(prev => !prev) }}>Schedule Meeting</Button>
+        {scheduledMeeting ? <Typography variant="h4">do stuff</Typography> : null}
+      </Box>
 
-      {selectedDate.toDateString() === (new Date()).toDateString() ?
-        <Typography variant="h4">Today's Events</Typography>
-        :
-        <Typography variant="h4">{selectedDate.toLocaleString('default', { month: 'long', day: 'numeric' })} Events</Typography>
+      <Box sx={{ display: 'grid', justify: 'center' }}>
+        {selectedDate.toDateString() === (new Date()).toDateString() ?
+          <Typography variant="h4">Today's Events</Typography>
+          :
+          <Typography variant="h4">{selectedDate.toLocaleString('default', { month: 'long', day: 'numeric' })} Events</Typography>
+        }
+      </Box>
+      {
+        events.length === 0 ?
+          <Typography>No meet ups scheduled today</Typography>
+          : renderEvents()
       }
 
-      {events.length === 0 ?
-        <Typography>No meet ups scheduled today</Typography>
-        : renderEvents()
-      }
-    </Box>
+    </Box >
   );
 }

@@ -46,6 +46,7 @@ export default function UserPage() {
   const dispatch = useAppDispatch();
   const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
   const [userChats, setUserChats] = useState({});
+  const [showCalendar, setShowCalendar] = useState(false);
 
   useEffect(() => {
     const asyncGetAuth = async () => {
@@ -151,15 +152,15 @@ export default function UserPage() {
         <Box className="sidebar" sx={{ border: 1 }}>
           <GroupList />
 
-          <Calendar />
+          <Calendar setShowCalendar={setShowCalendar} />
 
         </Box>
         <Box className="chatview" sx={{ border: 1 }}>
-          <GroupTabs practice={practice} userChats={userChats} />
+          <GroupTabs practice={practice} userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} />
 
         </Box>
       </Box>
-      <ExpandedCalendar />
+
     </Box>
   );
 }

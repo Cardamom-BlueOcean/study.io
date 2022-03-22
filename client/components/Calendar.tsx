@@ -18,8 +18,10 @@ import {
   onSnapshot,
   doc,
   setDoc,
-  orderBy
+  orderBy,
+  getDoc
 } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // const Reminder = styled.div`
 // height: 500px;
@@ -29,21 +31,30 @@ import {
 
 
 
-export default function Calendar() {
+export default function Calendar({ setShowCalendar }) {
 
-  // React.useEffect(() => {
+  React.useEffect(() => {
+    const asyncWrapper = async () => {
+      const db = await getFirestore();
+      const auth: any = await getAuth();
+      onAuthStateChanged(auth, (user: any) => {
+        const getEventsForCurrentUser = async () => {
+          console.log('auth', user.uid)
+          const q: any = doc(db, "Users", user.uid);
+          const userData = await getDoc(q);
+          console.log('userdata', userData.data())
+        }
+        getEventsForCurrentUser()
+      })
+    }
+    asyncWrapper()
+  }, [])
 
-  //   const q = query(
-  //     doc(db, "Users",); //
-  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //     const CalendarAccpecptedInvites: any = [];
-  //     const CalendarPendingInvites: any = [];
-  //     querySnapshot.forEach((doc) => {
-  //       chats.push(doc.data());
-  //     });
-  //   });
 
-  // }, [])
+  const addToUserArray = async () => {
+
+
+  }
 
 
 
@@ -52,15 +63,27 @@ export default function Calendar() {
   const [pending, setPending] = React.useState<Array<string>>([]);
   const [checked, setChecked] = React.useState<Array<any>>(pending.slice().fill(false));
 
+
   React.useEffect(() => {
     setAccepted(['Meeting with John at 2pm to study Python', 'Meeting with Tobin at 5pm to study Firebase', 'Meeting with BJ at 6pm to study Material UI']);
     setPending(['Alex invited you to study Typescript tomorrow at 12pm', 'Richard invited you to study Redux March 24 at 1pm']);
   }, [])
 
-  const updateCheckedBox = (idx) => {
+  const updateCheckedBox = async (idx) => {
     setChecked(checked.map((val, index) => (
       index === idx ? !val : val
     )))
+
+    // move the pending invite object to the accepted array
+    const db = await getFirestore();
+    const auth: any = await getAuth();
+    await setDoc(doc(db, "Users", user.uid), {
+      name: user.displayName,
+      email: user.email,
+      thumbnailPhotoURL: user.photoURL,
+      uid: user.uid,
+      rooms: arrayUnion(roomName)
+    }, { merge: true });
   }
 
   return (
@@ -85,21 +108,20 @@ export default function Calendar() {
       </ul>
       <Typography variant="h6">Pending Invites</Typography>
       {pending.map((meeting, idx) => (
-        <Box>
+        <Box key={idx}>
           <Checkbox
             checked={checked[idx]}
             onChange={(e) => updateCheckedBox(idx)}
             inputProps={{ 'aria-label': 'controlled' }}
             key={idx}
           />
-          <Box key={idx} >{meeting} </Box>
+          <Box >{meeting} </Box>
 
         </Box>
       ))}
       {/* TODO button onclick, rerender chat view to show calendar */}
-      <Button variant="contained" onClick={() => console.log('clicked')}>Show Calendar</Button>
-      {/* {openCalendarModal}
-      <CalendarModal /> */}
-    </Box>
+      <Button variant="contained" onClick={() => setShowCalendar(true)}>Show Calendar</Button>
+
+    </Box >
   );
 }

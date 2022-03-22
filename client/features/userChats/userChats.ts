@@ -5,7 +5,7 @@ interface ArrayState {
 }
 
 const initialState: ArrayState = {
-  value: [],
+  value: {},
 }
 
 const userChatsSlice = createSlice({
@@ -13,16 +13,15 @@ const userChatsSlice = createSlice({
   name: 'userChats',
   initialState,
   reducers: {
-    setChatsArray(state, action: PayloadAction<[]>) {
-      state.value = action.payload
+    setChatsObject(state, action: PayloadAction<{}>) {
+      console.log('THIS IS IN REDUX', action.payload);
+      return action.payload;
     },
 
-    addToChatsArray(state, action: PayloadAction<[]>) {
-      state.value = [...state.value, ...action.payload];
-    }
+
   }
 })
 
-export const { setChatsArray, addToChatsArray } = userChatsSlice.actions;
+export const { setChatsObject, } = userChatsSlice.actions;
 
 export default userChatsSlice.reducer

@@ -13,10 +13,12 @@ import {
   onSnapshot,
   doc,
   setDoc,
+  orderBy
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import { setRoomsArray } from "../features/userRooms/userRooms";
+import { setChatsObject, addToChatsObject } from '../features/userChats/userChats';
 //Redux Imports Below:
 import { Provider } from 'react-redux';
 import { store } from '../store';
@@ -39,7 +41,11 @@ export default function UserPage() {
   const db = getFirestore();
 
   const userRooms = useAppSelector((state) => state.userRooms.value);
+  // const userChats = useAppSelector((state) => state.userChats.value);
+  const [practice, setPractice] = useState({});
   const dispatch = useAppDispatch();
+  const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
+  const [userChats, setUserChats] = useState({});
 
   useEffect(() => {
     const asyncGetAuth = async () => {
@@ -52,10 +58,13 @@ export default function UserPage() {
               email: user.email,
               thumbnailPhotoURL: user.photoURL,
               uid: user.uid,
-              rooms: [],
+              acceptedInvites: [],
+              pendingInvites: [],
+              rooms: []
             });
           };
           addUserDbIfUserIsNotAlreadyAdded();
+
         }
       });
     };
@@ -84,7 +93,11 @@ export default function UserPage() {
               console.log("ROOMS: ", Rooms);
               // updateUserRooms(Rooms);
               // dispatch to update global array here.
+              setPractice(objectWithRoomsAsKeysAndArraysOfChatsAsValues);
+              console.log('THIS IS THE BIG OBJECT', objectWithRoomsAsKeysAndArraysOfChatsAsValues) //this is where the function should go to update the chats
               dispatch(setRoomsArray(Rooms));
+              setUserChats(objectWithRoomsAsKeysAndArraysOfChatsAsValues)
+
             });
           }
         };
@@ -95,15 +108,18 @@ export default function UserPage() {
           if (user) {
             const q = query(
               collection(db, "Rooms", roomTolistenTO, "Chats")
-              //,orderBy("TimeStamp")
+              , orderBy("TimeStamp")
             ); //
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
-              const chats: any[] = [];
+              const chats: any = [];
               querySnapshot.forEach((doc) => {
                 chats.push(doc.data());
               });
-              console.log(`${roomTolistenTO} Chats: `, chats);
+              objectWithRoomsAsKeysAndArraysOfChatsAsValues[roomTolistenTO] = chats
+              // console.log(`${roomTolistenTO} Chats: `, chats);
               // updateUserRooms(chats);
+              // dispatch goes here
+              // dispatch(addToChatsArray(chats));
             });
           }
         };
@@ -139,7 +155,7 @@ export default function UserPage() {
 
         </Box>
         <Box className="chatview" sx={{ border: 1 }}>
-          <GroupTabs />
+          <GroupTabs practice={practice} userChats={userChats} />
 
         </Box>
 

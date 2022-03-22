@@ -15,7 +15,8 @@ const userChatsSlice = createSlice({
   reducers: {
     setChatsObject(state, action: PayloadAction<{}>) {
       console.log('THIS IS IN REDUX', action.payload);
-      return action.payload;
+
+      Object.assign({}, ...action.payload)
     },
 
 

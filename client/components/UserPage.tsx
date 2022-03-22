@@ -65,7 +65,7 @@ export default function UserPage() {
   useEffect(() => {
     const dbQuerysAndSubscriptions = async () => {
       const auth: any = await getAuth();
-
+      const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
       onAuthStateChanged(auth, (user) => {
         const getUsersRoomDataOnceAuthorized = async () => {
           //this is to get the room data
@@ -103,6 +103,7 @@ export default function UserPage() {
               querySnapshot.forEach((doc) => {
                 chats.push(doc.data());
               });
+              objectWithRoomsAsKeysAndArraysOfChatsAsValues[roomTolistenTO] = chats
               console.log(`${roomTolistenTO} Chats: `, chats);
               // updateUserRooms(chats);
             });

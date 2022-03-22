@@ -8,6 +8,7 @@ import {
   ThemeProvider,
   Typography,
   Button,
+  Checkbox,
 } from "@mui/material";
 
 // const Reminder = styled.div`
@@ -21,12 +22,18 @@ export default function Calendar() {
   const [openCalendarModal, setOpenCalendarModal] = React.useState<boolean>(false);
   const [accepted, setAccepted] = React.useState<Array<string>>([]);
   const [pending, setPending] = React.useState<Array<string>>([]);
-  const [accept, setAccept] = React.useState<boolean>(false);
+  const [checked, setChecked] = React.useState<Array<any>>(pending.slice().fill(false));
 
   React.useEffect(() => {
-    setAccepted(['meeting with john', 'meeting with bj']);
-    setPending(['meeting with alex']);
+    setAccepted(['Meeting with John at 2pm to study Python', 'Meeting with Tobin at 5pm to study Firebase', 'Meeting with BJ at 6pm to study Material UI']);
+    setPending(['Alex invited you to study Typescript tomorrow at 12pm', 'Richard invited you to study Redux March 24 at 1pm']);
   }, [])
+
+  const updateCheckedBox = (idx) => {
+    setChecked(checked.map((val, index) => (
+      index === idx ? !val : val
+    )))
+  }
 
   return (
     <Box
@@ -35,14 +42,31 @@ export default function Calendar() {
         // width: 300,
         // border: 1,
       }}>
-      <Typography variant="h4">Today's Scheduled Events</Typography>
+      <Typography variant="h5">Today's Scheduled Events</Typography>
       <Typography variant="h6">Accepted Invites</Typography>
-      {accepted.map((meeting, idx) => (
-        <Box key={idx} >{meeting} </Box>
-      ))}
+      <ul>
+        {accepted.map((meeting, idx) => {
+          if (idx < 2) {
+            return (
+              <li key={idx} >{meeting} </li>
+
+            )
+
+          }
+        })}
+      </ul>
       <Typography variant="h6">Pending Invites</Typography>
       {pending.map((meeting, idx) => (
-        <Box key={idx} >{meeting} </Box>
+        <Box>
+          <Checkbox
+            checked={checked[idx]}
+            onChange={(e) => updateCheckedBox(idx)}
+            inputProps={{ 'aria-label': 'controlled' }}
+            key={idx}
+          />
+          <Box key={idx} >{meeting} </Box>
+
+        </Box>
       ))}
       {/* TODO button onclick, rerender chat view to show calendar */}
       <Button variant="contained" onClick={() => console.log('clicked')}>Show Calendar</Button>

@@ -42,10 +42,10 @@ export default function UserPage() {
 
   const userRooms = useAppSelector((state) => state.userRooms.value);
   // const userChats = useAppSelector((state) => state.userChats.value);
-  const [practice, setPractice] = useState({});
   const dispatch = useAppDispatch();
   const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
-  const [userChats, setUserChats] = useState({});
+  const [userChats, setUserChats] = useState([]);
+  const [currentRoom, setCurrentRoom] = useState('');
 
   useEffect(() => {
     const asyncGetAuth = async () => {
@@ -88,12 +88,12 @@ export default function UserPage() {
               const Rooms: any = []; //this is where the rooms are stored
               querySnapshot.forEach((doc) => {
                 Rooms.push(doc.data().RoomName);
-                subsribeToUpdatesForARoom(doc.id);
               });
+
+
               //console.log("ROOMS: ", Rooms);
               // updateUserRooms(Rooms);
               // dispatch to update global array here.
-              setPractice(objectWithRoomsAsKeysAndArraysOfChatsAsValues);
               //console.log('THIS IS THE BIG OBJECT', objectWithRoomsAsKeysAndArraysOfChatsAsValues) //this is where the function should go to update the chats
               dispatch(setRoomsArray(Rooms));
               setUserChats(objectWithRoomsAsKeysAndArraysOfChatsAsValues)
@@ -103,26 +103,7 @@ export default function UserPage() {
         };
         getUsersRoomDataOnceAuthorized();
 
-        const subsribeToUpdatesForARoom = async (roomTolistenTO) => {
-          //The function can be called to subscribe to a room in
-          if (user) {
-            const q = query(
-              collection(db, "Rooms", roomTolistenTO, "Chats")
-              , orderBy("TimeStamp")
-            ); //
-            const unsubscribe = onSnapshot(q, (querySnapshot) => {
-              const chats: any = [];
-              querySnapshot.forEach((doc) => {
-                chats.push(doc.data());
-              });
-              objectWithRoomsAsKeysAndArraysOfChatsAsValues[roomTolistenTO] = chats
-              // console.log(`${roomTolistenTO} Chats: `, chats);
-              // updateUserRooms(chats);
-              // dispatch goes here
-              // dispatch(addToChatsArray(chats));
-            });
-          }
-        };
+
         //example of what a call to subsribe to a room would look like
       });
     };
@@ -149,16 +130,12 @@ export default function UserPage() {
         gridTemplateRows: 'auto'
       }}>
         <Box className="sidebar" sx={{ border: 1 }}>
-          <GroupList />
-
+          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} />
           <Calendar />
-
         </Box>
         <Box className="chatview" sx={{ border: 1 }}>
-          <GroupTabs practice={practice} userChats={userChats} />
-
+          <GroupTabs userChats={userChats} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
         </Box>
-
       </Box>
     </Box>
   );

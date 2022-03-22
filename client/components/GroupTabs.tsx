@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useAppSelector, useAppDispatch } from "../hooks";
-import { Box, Tab, TextField, Stack } from '@mui/material';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { Box, TextField, Stack, List, ListItem, ListItemText, Typography } from '@mui/material';
 //import { group } from 'console';
 import {
   getFirestore,
@@ -17,37 +16,65 @@ import {
   getDoc
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { isNullOrUndefined } from "util";
 
-export default function GroupTabs({ userChats }) {
+export default function GroupTabs({ userChats, currentRoom, setCurrentRoom }) {
   const db = getFirestore()
   const auth: any = getAuth();
 
   const [messageInput, setMessageInput] = React.useState<string>("");
   const [userAddInput, setUserAddInput] = React.useState<string>("");
+  const [value, setValue] = React.useState<any>(null);
+  const [currentRoomChats, setCurrentRoomChats] = React.useState<any>([]);
 
 
 
   const userRooms = useAppSelector((state) => state.userRooms.value);
   // const userChats = useAppSelector((state) => state.userChats.value);
+  console.log('user rooms', userRooms)
   console.log('user chats', userChats)
   //console.log('practice', practice)
+
+  React.useEffect(() => {
+    if (userRooms[0] !== undefined) {
+      setValue(userRooms[0]);
+      setCurrentRoom(userRooms[0]);
+    }
+  }, [userRooms])
+
+  React.useEffect(() => {
+    if (value !== null) {
+      //console.log(value);
+      //console.log(typeof (value));
+      //console.log(userChats.english);
+      setCurrentRoomChats(userChats.english);
+    }
+  }, [value])
+
+  React.useEffect(() => {
+    //console.log('userChats now', userChats);
+    let current = value;
+    //console.log(current);
+    if (current !== undefined) {
+      //console.log('yay');
+      //console.log(typeof (value));
+      //console.log('here', userChats.english);
+      setCurrentRoomChats(userChats.english);
+    }
+  }, [userChats[value]])
 
   const createRoomFunction = useAppSelector(
     (state) => state.globalFunctions.value.createRoom
   );
 
   const addUserToRoom = useAppSelector((state) => state.globalFunctions.value.addNewUserToRoom);
-  const [value, setValue] = React.useState<string>(userRooms[0]);
 
-  // const handleChange = (event: any, newValue: string) => {
-  //   console.log(newValue);
-  //   setValue(newValue);
-  // };
 
   const dispatch = useAppDispatch();
 
   const handleMessageInput = (messageBody) => {
     setMessageInput(messageBody);
+    //console.log(userChats.english);
   };
 
   const handleAddUserInput = (userBody) => {
@@ -98,15 +125,12 @@ export default function GroupTabs({ userChats }) {
     const q: any = query(collection(db, "Users"), where("name", '==', userAddInput));
     const userToAdd = await getDoc(q);
     addUserToRoom(userToAdd.data(), value, db)
-
-
-
-
   }
 
 
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
+      <h1>{value}</h1>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}></Box>
       <input id="test"
         type="text"
@@ -115,18 +139,31 @@ export default function GroupTabs({ userChats }) {
         }
       ></input>
       <button onClick={addUserToCurrentRoom}>Add User</button>
-      {/* <Box sx={{ height: '500px', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
-          {userRooms.map((group, i) => (
-            < TabPanel key={group.Timestamp} value={group}>
-              {practice.english.map((message, i) => (
-                <Stack spacing={1}>
-                  <Box>{message.Sender}</Box>
-                  <Box>{message.Message}</Box>
-                  <Box>{message.Timestamp.toDate()}</Box>
-                </Stack>))}
-            </TabPanel>
-          ))}
-        </Box> */}
+      <Box>
+        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+          {/* {userChats[value] !== undefined ? userChats[value].map((message, i) => {
+            <ListItem alignItems="flex-start">
+              <ListItemText
+                primary=" "
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      sx={{ display: 'inline' }}
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                    >
+
+                    </Typography>
+                    {message.Message}
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+          }) : null} */}
+        </List>
+      </Box>
+
       <input id="test"
         type="text"
         onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>

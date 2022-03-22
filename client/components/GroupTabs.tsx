@@ -36,7 +36,7 @@ export default function GroupTabs({ practice, userChats }) {
     (state) => state.globalFunctions.value.createRoom
   );
   const addUserToRoom = useAppSelector((state) => state.globalFunctions.value.addNewUserToRoom);
-  const [value, setValue] = React.useState<string>('english');
+  const [value, setValue] = React.useState<string>('algebra');
 
   const handleChange = (event: any, newValue: string) => {
     console.log(newValue);
@@ -91,19 +91,13 @@ export default function GroupTabs({ practice, userChats }) {
     })
     setSearchedUsers(matchedUsers)
     console.log('users that match the current search', searchedUsers)
-
   }
 
   const addUserToCurrentRoom = async () => {
     const q: any = query(collection(db, "Users"), where("name", '==', userAddInput));
     const userToAdd = await getDoc(q);
     addUserToRoom(userToAdd.data(), value, db)
-
-
-
-
   }
-
 
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>

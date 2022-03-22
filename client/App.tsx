@@ -8,8 +8,6 @@ import UserPage from './components/UserPage';
 import Login from './components/Login';
 import { Provider } from 'react-redux';
 import { store } from './store';
-<<<<<<< HEAD
-=======
 import { createTheme } from "@mui/material/styles";
 import {
   Box,
@@ -35,7 +33,6 @@ const theme = createTheme({
     },
   },
 });
->>>>>>> 0d0194864de63d803542ce2999d6c755fc9616e1
 
 const App = () => {
   return (

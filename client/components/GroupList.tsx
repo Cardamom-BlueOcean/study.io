@@ -46,6 +46,7 @@ export default function GroupList() {
 
   let navigate = useNavigate();
   const auth = getAuth()
+  console.log('auth.currentUser is', auth.currentUser)
 
   function signOutUser() {
     signOut(auth).then(() => {
@@ -82,7 +83,7 @@ export default function GroupList() {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+          <Avatar sx={{ width: 32, height: 32 }} src={auth.currentUser?.photoURL}></Avatar>
         </IconButton>
       </Tooltip>
       <Menu
@@ -108,7 +109,7 @@ export default function GroupList() {
               display: 'block',
               position: 'absolute',
               top: 0,
-              right: 14,
+              left: 14,
               width: 10,
               height: 10,
               bgcolor: 'background.paper',
@@ -117,38 +118,26 @@ export default function GroupList() {
             },
           },
         }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
       >
         <MenuItem>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem>
-          <Avatar /> My account
+          <Avatar src={auth.currentUser?.photoURL} /> {auth.currentUser?.displayName}
         </MenuItem>
         <Divider />
-        <MenuItem>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
         <MenuItem>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem>
-          <ListItemIcon onClick={() => signOutUser()}>
+        <MenuItem onClick={() => signOutUser()}>
+          <ListItemIcon >
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout
         </MenuItem>
       </Menu>
-      <Tooltip title="Sign out of Study.io">
-        <Button variant="contained" startIcon={<GoogleIcon />} onClick={() => signOutUser()}>Sign Out</Button>
-      </Tooltip>
       <List>
         {userRooms.map((group, i) => (
           < ListItem disablePadding key={i} value={group} onClick={() => console.log('you just clicked on', group)}>

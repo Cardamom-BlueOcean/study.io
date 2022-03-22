@@ -24,6 +24,8 @@ import Menu from '@mui/material/Menu';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Logout from '@mui/icons-material/Logout';
 import Settings from '@mui/icons-material/Settings';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 export default function GroupList() {
   const [groups, setGroups] = React.useState(fakeData);
@@ -59,12 +61,24 @@ export default function GroupList() {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleUserMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleUsernameClick = (event) => {
+    console.log('you just clicked to change the user name', event)
+  }
+
+  const handleSettingsClick = (event) => {
+    console.log('you just clicked to set the settings', event)
+  }
+
+  const handleThemeClick = (event) => {
+    console.log('you just clicked to change the theme', event)
+  }
 
   return (
 
@@ -76,7 +90,7 @@ export default function GroupList() {
     }}>
       <Tooltip title="Account settings">
         <IconButton
-          onClick={handleClick}
+          onClick={handleUserMenuClick}
           size="small"
           sx={{ ml: 2 }}
           aria-controls={open ? 'account-menu' : undefined}
@@ -124,11 +138,17 @@ export default function GroupList() {
         <MenuItem>
           <Avatar src={auth.currentUser?.photoURL} /> {auth.currentUser?.displayName}
         </MenuItem>
+        <MenuItem sx={{ fontSize: '12px' }} onClick={handleUsernameClick}>
+          Change User Name
+        </MenuItem>
         <Divider />
-        <MenuItem>
+        <MenuItem onClick={handleThemeClick}>
+          <FormControlLabel control={<Switch />} label="Light Theme" />
+        </MenuItem>
+        <MenuItem onClick={handleSettingsClick}>
           <ListItemIcon>
             <Settings fontSize="small" />
-          </ListItemIcon>
+          </ListItemIcon >
           Settings
         </MenuItem>
         <MenuItem onClick={() => signOutUser()}>

@@ -37,16 +37,14 @@ const theme = createTheme({
 const App = () => {
   return (
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <Router>
-          <Routes>
-            <Route path="/about" />
-            <Route path="/userlogin" element={<UserPage />} />
-            <Route path="/" element={<Login />} />
-          </Routes>
-        </Router >
-      </ThemeProvider>
-    </Provider >
+      <Router>
+        <Routes>
+          <Route path="/about" />
+          <Route path="/userlogin" element={<UserPage />} />
+          <Route path="/" element={<Login />} />
+        </Routes>
+      </Router >
+    </Provider>
   );
 }
 

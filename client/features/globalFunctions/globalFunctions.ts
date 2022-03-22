@@ -53,9 +53,22 @@ const initialState: globalFunctionsState = {
           creatRoomOnceAuthorized()
           addRoomToUserArray()
         }
+
+
+
       })
 
     },
+
+    async addNewUserToRoom(userToAdd, currentRoom, db) {
+      await setDoc(doc(db, "Users", userToAdd.uid), {
+        name: userToAdd.displayName,
+        email: userToAdd.email,
+        thumbnailPhotoURL: userToAdd.photoURL,
+        uid: userToAdd.uid,
+        rooms: arrayUnion(currentRoom)
+      }, { merge: true });
+    }
   }
 }
 

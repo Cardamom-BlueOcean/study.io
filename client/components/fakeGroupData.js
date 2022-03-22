@@ -8,6 +8,32 @@ const fakeData = [
         "email": "Ora.Kulas92@yahoo.com",
         "date": "2022-03-17T03:25:10.839Z",
         "body": "You can't quantify the port without overriding the optical SMTP panel!",
+        "replies": [
+          {
+            "id": 68,
+            "userName": "auxiliarycard",
+            "email": "Zander.Walker@yahoo.com",
+            "date": "2022-03-18T15:32:22.273Z",
+            "body": "Use the digital GB alarm, then you can copy the mobile array!",
+            "groupName": "javascript"
+          },
+          {
+            "id": 69,
+            "userName": "auxiliaryinterface",
+            "email": "Golda_Gleichner@yahoo.com",
+            "date": "2022-03-11T08:09:32.731Z",
+            "body": "The THX microchip is down, copy the digital protocol so we can generate the AGP capacitor!",
+            "groupName": "javascript"
+          },
+          {
+            "id": 70,
+            "userName": "auxiliaryalarm",
+            "email": "Regan74@hotmail.com",
+            "date": "2022-03-17T01:26:48.323Z",
+            "body": "Try to calculate the IB hard drive, maybe it will generate the 1080p circuit!",
+            "groupName": "javascript"
+          }
+        ],
         "groupName": "javascript"
       },
       {

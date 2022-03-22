@@ -15,6 +15,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import firebaseConfig from '../../config';
 import { useNavigate } from "react-router-dom";
+import GoogleIcon from '@mui/icons-material/Google';
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
@@ -48,7 +49,7 @@ export default function Login({ }: Props) {
         alignItems="center"
         flexDirection="column"
       >
-        <Button variant="contained" onClick={() => { signInWithGoogle() }}>Sign in with Google</Button>
+        <Button variant="contained" startIcon={<GoogleIcon />} onClick={() => { signInWithGoogle() }}>Sign in with Google</Button>
       </Box>
     </div>
   );

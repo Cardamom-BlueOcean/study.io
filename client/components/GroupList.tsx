@@ -15,6 +15,7 @@ import { fakeData } from './fakeGroupData';
 import { useAppSelector, useAppDispatch } from '../hooks'
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import GoogleIcon from '@mui/icons-material/Google';
 
 
 
@@ -57,7 +58,7 @@ export default function GroupList() {
       bgcolor: 'background.paper',
       flexDirection: 'column'
     }}>
-      <Button variant="contained" onClick={() => signOutUser()}>Sign Out</Button>
+      <Button variant="contained" startIcon={<GoogleIcon />} onClick={() => signOutUser()}>Sign Out</Button>
       <List>
         {userRooms.map((group, i) => (
           < ListItem disablePadding key={i} value={group} onClick={() => console.log('you just clicked on', group)}>

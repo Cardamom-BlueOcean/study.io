@@ -10,6 +10,16 @@ import {
   Button,
   Checkbox,
 } from "@mui/material";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  setDoc,
+  orderBy
+} from "firebase/firestore";
 
 // const Reminder = styled.div`
 // height: 500px;
@@ -17,7 +27,25 @@ import {
 // border: 3px solid black;
 // `
 
+
+
 export default function Calendar() {
+
+  // React.useEffect(() => {
+
+  //   const q = query(
+  //     doc(db, "Users",); //
+  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  //     const CalendarAccpecptedInvites: any = [];
+  //     const CalendarPendingInvites: any = [];
+  //     querySnapshot.forEach((doc) => {
+  //       chats.push(doc.data());
+  //     });
+  //   });
+
+  // }, [])
+
+
 
   const [openCalendarModal, setOpenCalendarModal] = React.useState<boolean>(false);
   const [accepted, setAccepted] = React.useState<Array<string>>([]);

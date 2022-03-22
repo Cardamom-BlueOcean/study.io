@@ -5,6 +5,7 @@ import {
   CssBaseline,
   Paper,
   Typography,
+  Button
 } from "@mui/material";
 import { getFirestore, collection } from "firebase/firestore";
 import "firebase/auth";
@@ -47,14 +48,7 @@ export default function Login({ }: Props) {
         alignItems="center"
         flexDirection="column"
       >
-        <Paper
-          elevation={3}
-          sx={{ padding: "1rem", backgroundColor: "secondary.light" }}
-        >
-          <Typography color="primary.dark" variant="h1" onClick={() => { signInWithGoogle() }}>
-            Sign in With Google
-          </Typography>
-        </Paper>
+        <Button variant="contained" onClick={() => { signInWithGoogle() }}>Sign in with Google</Button>
       </Box>
     </div>
   );

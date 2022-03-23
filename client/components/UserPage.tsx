@@ -51,12 +51,13 @@ export default function UserPage() {
   const [currentRoom, setCurrentRoom] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
   //console.log(currentRoom);
-
+  const [currentUserUID, setcurrentUserUID] = useState<any>(null);
   useEffect(() => {
     const asyncGetAuth = async () => {
       const auth: any = await getAuth();
       onAuthStateChanged(auth, (user: any) => {
         if (user) {
+          setcurrentUserUID(user.uid)
           const addUserDbIfUserIsNotAlreadyAdded = async () => {
             const ref = doc(db, "Users", user.uid)
             dispatch(setUserId(user.uid));

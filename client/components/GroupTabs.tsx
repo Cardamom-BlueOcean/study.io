@@ -24,6 +24,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   const [messageInput, setMessageInput] = React.useState<string>("");
   const [userAddInput, setUserAddInput] = React.useState<string>("");
+
   const [value, setValue] = React.useState<any>(null);
   const [currentRoomChats, setCurrentRoomChats] = React.useState<any>([]);
 
@@ -76,9 +77,25 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     setMessageInput(messageBody);
     //console.log(userChats.english);
   };
-
-  const handleAddUserInput = (userBody) => {
+  const [searchedUsers, setSearchedUsers] = React.useState<string[]>([])
+  const handleAddUserInput = async (userBody) => {
     setUserAddInput(userBody);
+    const q = query(collection(db, "Users"));
+    const Users = await getDocs(q);
+    const matchedUsers: string[] = [];
+    Users.forEach((user) => {
+      console.log('user.data().name', user.data().name)
+      if (user.data().name) {
+        const userName: string = user.data().name
+        if (userName.toLocaleLowerCase().indexOf(userBody.toLowerCase()) !== -1) {
+          matchedUsers.push(userName)
+        }
+      }
+
+    })
+    setSearchedUsers(matchedUsers)
+    console.log('matchedUsers', matchedUsers)
+    console.log('users that match the current search', searchedUsers)
   };
 
   const [mediaContent, setMediaContent] = React.useState([])
@@ -106,19 +123,9 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     })
 
   }
-  const [searchedUsers, setSearchedUsers] = React.useState<string[]>([])
+
   const searchedForMatchedUsers = async () => {// this function will search for users when the input field changes
-    const q = query(collection(db, "Users"));
-    const Users = await getDocs(q);
-    const matchedUsers: string[] = [];
-    Users.forEach((user) => {
-      const userName: string = user.data().name
-      if (userAddInput.toLocaleLowerCase().indexOf(userName.toLowerCase()) !== -1) {
-        matchedUsers.push(userName)
-      }
-    })
-    setSearchedUsers(matchedUsers)
-    console.log('users that match the current search', searchedUsers)
+
   }
 
   const addUserToCurrentRoom = async () => {

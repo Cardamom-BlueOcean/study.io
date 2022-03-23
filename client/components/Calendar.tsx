@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import CalendarModal from './CalendarModal';
+import ExpandedCalendar from './ExpandedCalendar';
 import {
   Box,
   CssBaseline,
@@ -8,6 +8,8 @@ import {
   ThemeProvider,
   Typography,
   Button,
+  Checkbox,
+  Divider,
 } from "@mui/material";
 import {
   getFirestore,
@@ -17,8 +19,10 @@ import {
   onSnapshot,
   doc,
   setDoc,
-  orderBy
+  orderBy,
+  getDoc
 } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // const Reminder = styled.div`
 // height: 500px;
@@ -28,32 +32,60 @@ import {
 
 
 
-export default function Calendar() {
-
-  // React.useEffect(() => {
-
-  //   const q = query(
-  //     doc(db, "Users",); //
-  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //     const CalendarAccpecptedInvites: any = [];
-  //     const CalendarPendingInvites: any = [];
-  //     querySnapshot.forEach((doc) => {
-  //       chats.push(doc.data());
-  //     });
-  //   });
-
-  // }, [])
-
-
+export default function Calendar({ setShowCalendar }) {
 
   const [openCalendarModal, setOpenCalendarModal] = React.useState<boolean>(false);
   const [accepted, setAccepted] = React.useState<Array<string>>([]);
   const [pending, setPending] = React.useState<Array<string>>([]);
+  const [checked, setChecked] = React.useState<Array<any>>(pending.slice().fill(false));
 
   React.useEffect(() => {
-    setAccepted(['meeting with john', 'meeting with bj']);
-    setPending(['meeting with alex']);
+    const asyncWrapper = async () => {
+      const db = await getFirestore();
+      const auth: any = await getAuth();
+      onAuthStateChanged(auth, (user: any) => {
+        const getEventsForCurrentUser = async () => {
+          // console.log('auth', user.uid)
+          const q: any = doc(db, "Users", user.uid);
+          const userData = await getDoc(q);
+          console.log('userdata', userData.data())
+          //This is not working
+          setAccepted(userData.data().acceptedInvites)
+          setPending(userData.data().pendingInvites)
+        }
+        getEventsForCurrentUser()
+      })
+    }
+    asyncWrapper()
   }, [])
+
+  console.log('accepted', accepted)
+  console.log('pending', pending)
+
+
+
+
+  React.useEffect(() => {
+    setAccepted(['Meeting with John at 2pm to study Python', 'Meeting with Tobin at 5pm to study Firebase', 'Meeting with BJ at 6pm to study Material UI']);
+    setPending(['Alex invited you to study Typescript tomorrow at 12pm', 'Richard invited you to study Redux March 24 at 1pm']);
+  }, [])
+
+  const updateCheckedBox = async (idx) => {
+    setChecked(checked.map((val, index) => (
+      index === idx ? !val : val
+    )))
+
+    // move the pending invite object to the accepted array
+    const db = await getFirestore();
+    const auth: any = await getAuth();
+    await setDoc(doc(db, "Users", user.uid), {
+      name: user.displayName,
+      email: user.email,
+      thumbnailPhotoURL: user.photoURL,
+      uid: user.uid,
+      rooms: arrayUnion(roomName)
+    }, { merge: true });
+  }
 
   return (
     <Box
@@ -62,19 +94,36 @@ export default function Calendar() {
         // width: 300,
         // border: 1,
       }}>
-      <Typography variant="h4">Today's Scheduled Events</Typography>
+      <Typography variant="h5">Today's Scheduled Events</Typography>
       <Typography variant="h6">Accepted Invites</Typography>
-      {accepted.map((meeting, idx) => (
-        <Box key={idx} >{meeting} </Box>
-      ))}
+      <ul>
+        {accepted.map((meeting, idx) => {
+          if (idx < 2) {
+            return (
+              <li key={idx} >{meeting} </li>
+
+            )
+
+          }
+        })}
+      </ul>
+      <Divider variant="middle" />
       <Typography variant="h6">Pending Invites</Typography>
       {pending.map((meeting, idx) => (
-        <Box key={idx} >{meeting} </Box>
+        <Box key={idx} sx={{ display: 'flex' }}>
+          <Checkbox
+            checked={checked[idx]}
+            onChange={(e) => updateCheckedBox(idx)}
+            inputProps={{ 'aria-label': 'controlled' }}
+            key={idx}
+          />
+          <Box >{meeting} </Box>
+
+        </Box>
       ))}
       {/* TODO button onclick, rerender chat view to show calendar */}
-      <Button variant="contained">Show Calendar</Button>
-      {/* {openCalendarModal}
-      <CalendarModal /> */}
-    </Box>
+      <Button variant="contained" onClick={() => setShowCalendar(true)}>Show Calendar</Button>
+
+    </Box >
   );
 }

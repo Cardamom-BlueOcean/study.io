@@ -13,12 +13,13 @@ import {
   onSnapshot,
   doc,
   setDoc,
-  orderBy
+  orderBy,
+  getDoc
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import { setRoomsArray } from "../features/userRooms/userRooms";
-import { setChatsObject, addToChatsObject } from '../features/userChats/userChats';
+//import { setChatsObject, addToChatsObject } from '../features/userChats/userChats';
 //Redux Imports Below:
 import { Provider } from 'react-redux';
 import { store } from '../store';
@@ -27,10 +28,10 @@ import {
   Box,
   CssBaseline,
   Paper,
-  ThemeProvider,
   Typography,
 } from "@mui/material";
 import logo from '../../src/logo.png'
+import ExpandedCalendar from "./ExpandedCalendar";
 
 type room = {
   RoomName: string;
@@ -42,10 +43,12 @@ export default function UserPage() {
 
   const userRooms = useAppSelector((state) => state.userRooms.value);
   // const userChats = useAppSelector((state) => state.userChats.value);
-  const [practice, setPractice] = useState({});
   const dispatch = useAppDispatch();
   const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
-  const [userChats, setUserChats] = useState({});
+  const [userChats, setUserChats] = useState([]);
+  const [currentRoom, setCurrentRoom] = useState('');
+  const [showCalendar, setShowCalendar] = useState(false);
+  //console.log(currentRoom);
 
   useEffect(() => {
     const asyncGetAuth = async () => {
@@ -53,15 +56,19 @@ export default function UserPage() {
       onAuthStateChanged(auth, (user: any) => {
         if (user) {
           const addUserDbIfUserIsNotAlreadyAdded = async () => {
-            await setDoc(doc(db, "Users", user.uid), {
-              name: user.displayName,
-              email: user.email,
-              thumbnailPhotoURL: user.photoURL,
-              uid: user.uid,
-              acceptedInvites: [],
-              pendingInvites: [],
-              rooms: []
-            });
+            const ref = doc(db, "Users", user.uid)
+            const userDoc = await getDoc(ref);
+            if (!userDoc) {
+              await setDoc(doc(db, "Users", user.uid), {
+                name: user.displayName,
+                email: user.email,
+                thumbnailPhotoURL: user.photoURL,
+                uid: user.uid,
+                acceptedInvites: [],
+                pendingInvites: [],
+                rooms: []
+              }, { merge: true });
+            }
           };
           addUserDbIfUserIsNotAlreadyAdded();
 
@@ -73,7 +80,7 @@ export default function UserPage() {
   useEffect(() => {
     const dbQuerysAndSubscriptions = async () => {
       const auth: any = await getAuth();
-
+      const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
       onAuthStateChanged(auth, (user) => {
         const getUsersRoomDataOnceAuthorized = async () => {
           //this is to get the room data
@@ -88,41 +95,22 @@ export default function UserPage() {
               const Rooms: any = []; //this is where the rooms are stored
               querySnapshot.forEach((doc) => {
                 Rooms.push(doc.data().RoomName);
-                subsribeToUpdatesForARoom(doc.id);
               });
-              console.log("ROOMS: ", Rooms);
+
+
+              //console.log("ROOMS: ", Rooms);
               // updateUserRooms(Rooms);
               // dispatch to update global array here.
-              setPractice(objectWithRoomsAsKeysAndArraysOfChatsAsValues);
-              console.log('THIS IS THE BIG OBJECT', objectWithRoomsAsKeysAndArraysOfChatsAsValues) //this is where the function should go to update the chats
+              //console.log('THIS IS THE BIG OBJECT', objectWithRoomsAsKeysAndArraysOfChatsAsValues) //this is where the function should go to update the chats
               dispatch(setRoomsArray(Rooms));
-              setUserChats(objectWithRoomsAsKeysAndArraysOfChatsAsValues)
+              // setUserChats(objectWithRoomsAsKeysAndArraysOfChatsAsValues)
 
             });
           }
         };
         getUsersRoomDataOnceAuthorized();
 
-        const subsribeToUpdatesForARoom = async (roomTolistenTO) => {
-          //The function can be called to subscribe to a room in
-          if (user) {
-            const q = query(
-              collection(db, "Rooms", roomTolistenTO, "Chats")
-              , orderBy("TimeStamp")
-            ); //
-            const unsubscribe = onSnapshot(q, (querySnapshot) => {
-              const chats: any = [];
-              querySnapshot.forEach((doc) => {
-                chats.push(doc.data());
-              });
-              objectWithRoomsAsKeysAndArraysOfChatsAsValues[roomTolistenTO] = chats
-              // console.log(`${roomTolistenTO} Chats: `, chats);
-              // updateUserRooms(chats);
-              // dispatch goes here
-              // dispatch(addToChatsArray(chats));
-            });
-          }
-        };
+
         //example of what a call to subsribe to a room would look like
       });
     };
@@ -138,7 +126,7 @@ export default function UserPage() {
     <Box>
       <Box sx={{ backgroundColor: '#542F34' }}> <img src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
       <Box className="loginbar" sx={{ border: 1, height: '40px', width: 8 / 10, margin: '20px auto' }}>Login bar</Box>
-      <Box sx={{
+      <Box className="main" sx={{
         width: 8 / 10,
         height: 800,
         // border: 2,
@@ -149,17 +137,17 @@ export default function UserPage() {
         gridTemplateRows: 'auto'
       }}>
         <Box className="sidebar" sx={{ border: 1 }}>
-          <GroupList />
+          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} />
 
-          <Calendar />
+          <Calendar setShowCalendar={setShowCalendar} />
 
         </Box>
         <Box className="chatview" sx={{ border: 1 }}>
-          <GroupTabs practice={practice} userChats={userChats} />
+          <GroupTabs userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
 
         </Box>
-
       </Box>
+
     </Box>
   );
 }

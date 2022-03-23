@@ -12,8 +12,18 @@ import Divider from '@mui/material/Divider';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import { fakeData } from './fakeGroupData';
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  setDoc,
+  orderBy
+} from "firebase/firestore";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useAppSelector, useAppDispatch } from '../hooks'
-import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import GoogleIcon from '@mui/icons-material/Google';
 import Tooltip from '@mui/material/Tooltip';
@@ -28,7 +38,10 @@ import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-export default function GroupList() {
+export default function GroupList({ setCurrentRoom, currentRoom, setUserChats }) {
+
+  const db = getFirestore();
+  const auth: any = getAuth();
   const [groups, setGroups] = React.useState(fakeData);
   // const [newGroupName, setNewGroup] = useState('');
   const [textFieldTemp, setTextFieldTemp] = useState('');
@@ -43,13 +56,38 @@ export default function GroupList() {
   }
 
   const setTextField = function (e) {
-    console.log(e.target.value)
+    // console.log(e.target.value)
     setTextFieldTemp(e.target.value)
   }
 
+
+  React.useEffect(() => {
+    //console.log('here')
+    onAuthStateChanged(auth, (user: any) => {
+      const subsribeToUpdatesForARoom = async (currentRoom) => {
+        //The function can be called to subscribe to a room in
+        if (user) {
+
+          const q = query(
+            collection(db, "Rooms", currentRoom, "Chats")
+            , orderBy("TimeStamp")
+          ); //
+          const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const chats: any = [];
+            querySnapshot.forEach((doc) => {
+              chats.push(doc.data());
+            });
+            setUserChats(chats)
+          });
+        }
+      };
+      subsribeToUpdatesForARoom(currentRoom)
+    })
+
+  }, [currentRoom])
   let navigate = useNavigate();
-  const auth = getAuth()
-  console.log('auth.currentUser is', auth.currentUser)
+  // const auth = getAuth()
+  //console.log('auth.currentUser is', auth.currentUser)
 
   function signOutUser() {
     signOut(auth).then(() => {
@@ -70,15 +108,15 @@ export default function GroupList() {
   };
 
   const handleUsernameClick = (event) => {
-    console.log('you just clicked to change the user name', event)
+    //console.log('you just clicked to change the user name', event)
   }
 
   const handleSettingsClick = (event) => {
-    console.log('you just clicked to set the settings', event)
+    //console.log('you just clicked to set the settings', event)
   }
 
   const handleThemeClick = (event) => {
-    console.log('you just clicked to change the theme', event)
+    //console.log('you just clicked to change the theme', event)
   }
 
   return (
@@ -164,7 +202,7 @@ export default function GroupList() {
       </Menu>
       <List>
         {userRooms.map((group, i) => (
-          < ListItem disablePadding key={i} value={group} onClick={() => console.log('you just clicked on', group)}>
+          < ListItem disablePadding key={i} value={group} onClick={() => setCurrentRoom(group)}>
             <ListItemButton>
 
               <ListItemText primary={group} secondary="study group" />

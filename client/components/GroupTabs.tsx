@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ExpandedCalendar from "./ExpandedCalendar";
+import { grid } from "@mui/system";
 
 export default function GroupTabs({ userChats, showCalendar, setShowCalendar, currentRoom, setCurrentRoom }) {
   const db = getFirestore()
@@ -56,7 +57,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     const q = query(collection(db, "Users"));
     const Users = await getDocs(q);
     const matchedUsers: string[] = [];
-    const matchedUsersFullInfo: any[] =[]
+    const matchedUsersFullInfo: any[] = []
     Users.forEach((user) => {
       console.log('user.data().name', user.data().name)
       if (user.data().name) {
@@ -141,9 +142,9 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     )
   } else {
     return (
-      <Box sx={{ width: "100%", height: '600px', typography: "body1" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'inline-flex', height: '50px', gap: '100px' }}>
-          <Typography variant="h5" gutterBottom component="div">
+      <Box sx={{ width: "100%", height: '95%', typography: "body1" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '15% 30% 30% 25%', height: '50px' }}>
+          <Typography sx={{ alignSelf: 'center', justifySelf: 'center' }} variant="h5" gutterBottom component="div">
             {currentRoom}
           </Typography>
           <input id="test"
@@ -152,34 +153,43 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
               handleAddUserInput(e.target.value)
             }
           ></input>
+          <List>
+            {searchedUsers.length > 0 ? searchedUsers.map((user, index) => {
+              return (
+                <ListItem value={user}>
+                  <ListItemText primary={user}></ListItemText>
+                </ListItem>
+              )
+            }) : null}
+          </List>
           <Button sx={{ alignSelf: 'end' }} onClick={addUserToCurrentRoom}>Add User</Button>
         </Box>
-        <Box sx={{ height: '500px', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
+        <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
           <Stack>
             {userChats ? userChats.map((message, index) => {
-              if (message.Sender === 'hBsEbC5ZzdT9kHeI6We9pJupyLt1') {
+              if (message.Sender === 'x8lR3zV56bR0FpFjmKuhs3xbvPl1') {
                 return (
                   <Tooltip title="Reply" placement="bottom-end">
-                    <Box>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: '95% 5%' }}>
                       <Stack>
                         <Item2>{message.Name}</Item2>
                         <Item2>{message.Message}</Item2>
                         {/* <Item2>{message.TimeStamp.seconds}</Item2> */}
                       </Stack>
-                      <Avatar sx={{ width: 32, height: 32, alignSelf: 'right' }} src={message.Avatar}></Avatar>
+                      <Avatar sx={{ width: 32, height: 32, alignSelf: 'center', justifySelf: 'center' }} src={message.Avatar}></Avatar>
                     </Box>
                   </Tooltip>
                 )
               } else {
                 return (
                   <Tooltip title="Reply" placement="bottom-start">
-                    <Box>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: '5% 95%' }}>
+                      <Avatar sx={{ width: 32, height: 32, alignSelf: 'center', justifySelf: 'center' }} src={message.Avatar}></Avatar>
                       <Stack>
                         <Item>{message.Name}</Item>
                         <Item>{message.Message}</Item>
                         {/* <Item>{message.TimeStamp.seconds}</Item> */}
                       </Stack>
-                      <Avatar sx={{ width: 32, height: 32 }} src={message.Avatar}></Avatar>
                     </Box>
                   </Tooltip>
                 )

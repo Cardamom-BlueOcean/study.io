@@ -94,10 +94,6 @@ export default function Calendar({ setShowCalendar }) {
       })
     }
     asyncWrapper()
-
-    // move the pending invite object to the accepted array
-
-
   }
 
   // console.log('accepted', accepted)

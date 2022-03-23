@@ -39,8 +39,12 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function ExpandedCalendar({ setShowCalendar }) {
 
-  const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
-  const [events, setEvents] = React.useState<Array<string>>([]);
+  const [selectedDate, setSelectedDate] = React.useState<any>(new Date().toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' }));
+  console.log('selectedDate', selectedDate)
+  const [accepted, setAccepted] = React.useState<Array<string>>([]);
+
+  // const [events, setEvents] = React.useState<Array<string>>([]);
+
   const [pending, setPending] = React.useState<Array<string>>([]);
   const [checked, setChecked] = React.useState<Array<any>>(pending.slice().fill(false));
   const [user, setUser] = React.useState<string>('');
@@ -49,7 +53,7 @@ export default function ExpandedCalendar({ setShowCalendar }) {
   const [scheduledMeeting, setScheduleMeeting] = React.useState<boolean>(false);
   const [roomsDropdown, setRoomsDropdown] = React.useState<Array<string>>([]);
   //new meeting stuff
-  const [newMeetingDate, setNewMeetingDate] = React.useState<string>(new Date().toLocaleString('default', { month: 'long', day: 'numeric' }));
+  const [newMeetingDate, setNewMeetingDate] = React.useState<string>(new Date().toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' }));
   const [participant, setParticipant] = React.useState<string>('');
   const [time, setTime] = React.useState<string>('');
   const [selectedStudyGroup, setSelectedStudyGroup] = React.useState<string>('')
@@ -65,7 +69,7 @@ export default function ExpandedCalendar({ setShowCalendar }) {
           const userData = await getDoc(q);
           // console.log('userdata', userData.data())
           //This is not working
-          setEvents(userData.data().acceptedInvites)
+          setAccepted(userData.data().acceptedInvites)
           setPending(userData.data().pendingInvites)
           setRoomsDropdown(userData.data().rooms)
           setUser(userData.data().name)
@@ -79,13 +83,24 @@ export default function ExpandedCalendar({ setShowCalendar }) {
   // console.log('events', events)
   // console.log('pending', pending)
 
+  //map not working right when the date is a date that is not today
   const renderEvents = () => (
     <ul>
-      {events.map((event, idx) => (
-        <li key={idx}>{event}</li>
-      ))}
+      {accepted.map((event, idx) => {
+        if (event.includes(selectedDate)) {
+          return (
+            <li key={idx}>{event}</li>
+
+          )
+        }
+      })}
     </ul>
   )
+
+  React.useEffect(() => {
+    renderEvents()
+  }, [selectedDate])
+
   const renderPending = () => (
     <ul style={{ paddingLeft: '5px' }}>
       {pending.map((meeting, idx) => (
@@ -110,7 +125,37 @@ export default function ExpandedCalendar({ setShowCalendar }) {
       index === idx ? !val : val
     )))
 
+    const asyncWrapper = async () => {
+      const db = await getFirestore();
+      const auth: any = await getAuth();
+      onAuthStateChanged(auth, (user: any) => {
+        const getEventsForCurrentUser = async () => {
+          const q: any = doc(db, "Users", user.uid);
+          const userData = await getDoc(q);
+          // ON CLICK of the checkbox, the accepted and pending state will get update, a patch? request
+          // will get sent to firestore with the updated acceptedInvites and pendingInvites array
+          let checkedInvite = pending.splice(idx, 1);
+          accepted.push(checkedInvite[0])
+          setAccepted(accepted)
+
+          await setDoc(doc(db, "Users", user.uid), {
+            name: user.displayName,
+            email: user.email,
+            thumbnailPhotoURL: user.photoURL,
+            uid: user.uid,
+            rooms: arrayUnion(roomName),
+            acceptedInvites: accepted,
+            pendingInvites: pending
+          }, { merge: true });
+
+        }
+        getEventsForCurrentUser()
+      })
+    }
+    asyncWrapper()
   }
+
+
   const sendInviteToParticipant = () => {
     //TODO send invite to other user - add to other users pendingInvites
     //need to have access to other user's id??
@@ -125,7 +170,7 @@ export default function ExpandedCalendar({ setShowCalendar }) {
           <DesktopDatePicker
             label="Select Meeting Date"
             value={selectedDate}
-            minDate={new Date('2017-01-01')}
+            minDate={new Date()}
             onChange={(meetupDate: any) => {
               let meet = meetupDate.toLocaleString('default', { month: 'long', day: 'numeric' });
               setNewMeetingDate(meet);
@@ -193,23 +238,22 @@ export default function ExpandedCalendar({ setShowCalendar }) {
             openTo="day"
             value={selectedDate}
             onChange={(newDate: any) => {
-              console.log('aksd', newDate)
-              setSelectedDate(newDate);
+              setSelectedDate(newDate.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' }));
               //TODO remove hard coded array
-              setEvents(['is this working??', 'asdljasdjas'])
+              setAccepted(['is this working??', 'asdljasdjas'])
             }}
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
         <Box>
           <Box sx={{ placeSelf: 'center', marginTop: '50px' }}>
-            {selectedDate.toDateString() === (new Date()).toDateString() ?
+            {selectedDate === (new Date()).toDateString() ?
               <Typography variant="h4" sx={{ alignItems: 'center', justifyContent: 'center', fontWeight: 'light' }}>Today's Events</Typography>
               :
-              <Typography variant="h4">{selectedDate.toLocaleString('default', { month: 'long', day: 'numeric' })} Events</Typography>
+              <Typography variant="h4">{selectedDate} Events</Typography>
             }
           </Box>
-          {events.length === 0 ?
+          {accepted.length === 0 ?
             <Typography>No meet ups scheduled today</Typography>
             : renderEvents()
           }

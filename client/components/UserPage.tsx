@@ -51,12 +51,13 @@ export default function UserPage() {
   const [currentRoom, setCurrentRoom] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
   //console.log(currentRoom);
-
+  const [currentUserUID, setcurrentUserUID] = useState<any>(null);
   useEffect(() => {
     const asyncGetAuth = async () => {
       const auth: any = await getAuth();
       onAuthStateChanged(auth, (user: any) => {
         if (user) {
+          setcurrentUserUID(user.uid)
           const addUserDbIfUserIsNotAlreadyAdded = async () => {
             const ref = doc(db, "Users", user.uid)
             dispatch(setUserId(user.uid));
@@ -131,7 +132,7 @@ export default function UserPage() {
       <Box className="loginbar" sx={{ border: 1, height: '40px', width: 8 / 10, margin: '20px auto' }}>Login bar</Box>
       <Box className="main" sx={{
         width: 8 / 10,
-        height: 800,
+        height: 600,
         // border: 2,
         display: 'grid',
         margin: 'auto',
@@ -145,7 +146,7 @@ export default function UserPage() {
           <Calendar setShowCalendar={setShowCalendar} />
 
         </Box>
-        <Box className="chatview" sx={{ border: 1, height: '45%' }}>
+        <Box className="chatview" sx={{ border: 1, height: '90%' }}>
           <GroupTabs userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
         </Box>
       </Box>

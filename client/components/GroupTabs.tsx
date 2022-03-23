@@ -51,29 +51,38 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   const handleMessageInput = (messageBody) => {
     setMessageInput(messageBody);
   };
+  const [fullListOfUsers, setFullListOfUsers] = React.useState([])
   const [searchedUsers, setSearchedUsers] = React.useState<string[]>([])
   const [searchedUsersFullInfo, setSearchedUsersFullInfo] = React.useState<any[]>([])
   const handleAddUserInput = async (userBody) => {
-    setUserAddInput(userBody);
-    const q = query(collection(db, "Users"));
-    const Users = await getDocs(q);
-    const matchedUsers: string[] = [];
-    const matchedUsersFullInfo: any[] = []
-    Users.forEach((user) => {
+    //setUserAddInput(userBody);
+
+
+
+      const q = query(collection(db, "Users"));
+      const Users: any = await getDocs(q);
+
+      console.log('searchedUsers', searchedUsers)
+
+    const Usersarr: string[] = [];
+    const UsersFullInfo: any[] = []
+    Users.forEach((user: any) => {
       console.log('user.data().name', user.data().name)
       if (user.data().name) {
         const userName: string = user.data().name
-        if (userName.toLocaleLowerCase().indexOf(userBody.toLowerCase()) !== -1) {
-          matchedUsers.push(userName)
-          matchedUsersFullInfo.push(user.data())
-        }
+        Usersarr.push(userName)
+        UsersFullInfo.push(user.data())
       }
 
     })
-    setSearchedUsersFullInfo(matchedUsersFullInfo)
-    setSearchedUsers(matchedUsers)
+    setSearchedUsersFullInfo(UsersFullInfo)
+    setSearchedUsers(Usersarr)
     console.log('users that match the current search', searchedUsers)
   };
+
+  React.useEffect(() => {
+    handleAddUserInput('')
+  }, [])
 
   React.useEffect(() => {
     if (userAddInput.length >= 3) {
@@ -111,12 +120,15 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   }
 
   const addUserToCurrentRoom = async () => {
-    console.log('here', searchedUsersFullInfo[0])
-    const ref = doc(db, "Users", searchedUsersFullInfo[0].uid)//right now this is just adding the first person in the searched object
-    const userToAdd = await getDoc(ref);
-    console.log('userToAdd', userToAdd.data())
+    const inputValue = (document.getElementById('usersSearch') as HTMLInputElement).value
+    console.log('searchedUsersFullInfo', searchedUsersFullInfo)
+    console.log('inputValue', inputValue)
+    const newArr = searchedUsersFullInfo.filter((user) =>{
+      return user.name === inputValue
+    })
+
     await setDoc(doc(db, "Rooms", currentRoom), {
-      RoomParticipants: arrayUnion(searchedUsersFullInfo[0].uid)
+      RoomParticipants: arrayUnion(newArr[0].uid)
     }, { merge: true });
   }
 
@@ -144,14 +156,15 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         id="usersSearch"
         options={searchedUsers}
         sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Search Users" onChange={(e: React.ChangeEvent<HTMLInputElement>): any => {
-          e.preventDefault();
-          handleAddUserInput(e.target.value)
-        }
-        } />}
+        renderInput={(params) => <TextField {...params} label="Search Users" />}
       />
     );
   }
+  // onChange={(e: React.ChangeEvent<HTMLInputElement>): any => {
+  //   e.preventDefault();
+  //   handleAddUserInput(e.target.value)
+  // }
+  // }
 
   if (showCalendar) {
     return (

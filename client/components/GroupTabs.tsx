@@ -56,7 +56,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     const q = query(collection(db, "Users"));
     const Users = await getDocs(q);
     const matchedUsers: string[] = [];
-    const matchedUsersFullInfo: any[] =[]
+    const matchedUsersFullInfo: any[] = []
     Users.forEach((user) => {
       console.log('user.data().name', user.data().name)
       if (user.data().name) {
@@ -106,7 +106,6 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   }
 
   const searchedForMatchedUsers = async () => {// this function will search for users when the input field changes
-
   }
 
   const addUserToCurrentRoom = async () => {

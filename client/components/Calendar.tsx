@@ -9,6 +9,7 @@ import {
   Typography,
   Button,
   Checkbox,
+  Divider,
 } from "@mui/material";
 import {
   getFirestore,
@@ -33,16 +34,24 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function Calendar({ setShowCalendar }) {
 
+  const [openCalendarModal, setOpenCalendarModal] = React.useState<boolean>(false);
+  const [accepted, setAccepted] = React.useState<Array<string>>([]);
+  const [pending, setPending] = React.useState<Array<string>>([]);
+  const [checked, setChecked] = React.useState<Array<any>>(pending.slice().fill(false));
+
   React.useEffect(() => {
     const asyncWrapper = async () => {
       const db = await getFirestore();
       const auth: any = await getAuth();
       onAuthStateChanged(auth, (user: any) => {
         const getEventsForCurrentUser = async () => {
-          //console.log('auth', user.uid)
+          // console.log('auth', user.uid)
           const q: any = doc(db, "Users", user.uid);
           const userData = await getDoc(q);
-          //console.log('userdata', userData.data())
+          console.log('userdata', userData.data())
+          //This is not working
+          setAccepted(userData.data().acceptedInvites)
+          setPending(userData.data().pendingInvites)
         }
         getEventsForCurrentUser()
       })
@@ -50,18 +59,10 @@ export default function Calendar({ setShowCalendar }) {
     asyncWrapper()
   }, [])
 
-
-  const addToUserArray = async () => {
-
-
-  }
+  console.log('accepted', accepted)
+  console.log('pending', pending)
 
 
-
-  const [openCalendarModal, setOpenCalendarModal] = React.useState<boolean>(false);
-  const [accepted, setAccepted] = React.useState<Array<string>>([]);
-  const [pending, setPending] = React.useState<Array<string>>([]);
-  const [checked, setChecked] = React.useState<Array<any>>(pending.slice().fill(false));
 
 
   React.useEffect(() => {
@@ -106,9 +107,10 @@ export default function Calendar({ setShowCalendar }) {
           }
         })}
       </ul>
+      <Divider variant="middle" />
       <Typography variant="h6">Pending Invites</Typography>
       {pending.map((meeting, idx) => (
-        <Box key={idx}>
+        <Box key={idx} sx={{ display: 'flex' }}>
           <Checkbox
             checked={checked[idx]}
             onChange={(e) => updateCheckedBox(idx)}

@@ -13,7 +13,8 @@ import {
   onSnapshot,
   doc,
   setDoc,
-  orderBy
+  orderBy,
+  getDoc
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAppSelector, useAppDispatch } from "../hooks";
@@ -55,15 +56,19 @@ export default function UserPage() {
       onAuthStateChanged(auth, (user: any) => {
         if (user) {
           const addUserDbIfUserIsNotAlreadyAdded = async () => {
-            await setDoc(doc(db, "Users", user.uid), {
-              name: user.displayName,
-              email: user.email,
-              thumbnailPhotoURL: user.photoURL,
-              uid: user.uid,
-              acceptedInvites: [],
-              pendingInvites: [],
-              rooms: []
-            });
+            const ref = doc(db, "Users", user.uid)
+            const userDoc = await getDoc(ref);
+            if (!userDoc) {
+              await setDoc(doc(db, "Users", user.uid), {
+                name: user.displayName,
+                email: user.email,
+                thumbnailPhotoURL: user.photoURL,
+                uid: user.uid,
+                acceptedInvites: [],
+                pendingInvites: [],
+                rooms: []
+              }, { merge: true });
+            }
           };
           addUserDbIfUserIsNotAlreadyAdded();
 

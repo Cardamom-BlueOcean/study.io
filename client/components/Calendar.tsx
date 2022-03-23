@@ -39,10 +39,10 @@ export default function Calendar({ setShowCalendar }) {
       const auth: any = await getAuth();
       onAuthStateChanged(auth, (user: any) => {
         const getEventsForCurrentUser = async () => {
-          console.log('auth', user.uid)
+          //console.log('auth', user.uid)
           const q: any = doc(db, "Users", user.uid);
           const userData = await getDoc(q);
-          console.log('userdata', userData.data())
+          //console.log('userdata', userData.data())
         }
         getEventsForCurrentUser()
       })

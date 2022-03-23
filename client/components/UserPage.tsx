@@ -18,7 +18,7 @@ import {
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import { setRoomsArray } from "../features/userRooms/userRooms";
-import { setChatsObject, addToChatsObject } from '../features/userChats/userChats';
+//import { setChatsObject, addToChatsObject } from '../features/userChats/userChats';
 //Redux Imports Below:
 import { Provider } from 'react-redux';
 import { store } from '../store';
@@ -75,7 +75,7 @@ export default function UserPage() {
   useEffect(() => {
     const dbQuerysAndSubscriptions = async () => {
       const auth: any = await getAuth();
-
+      const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
       onAuthStateChanged(auth, (user) => {
         const getUsersRoomDataOnceAuthorized = async () => {
           //this is to get the room data

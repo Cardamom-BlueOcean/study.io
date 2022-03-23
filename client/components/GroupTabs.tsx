@@ -66,6 +66,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         // const timesent: Date = new Date();
         const chatID = serverTimestamp()
         const sendMessageOnceAuthorized = async () => {
+          //console.log('THIS IS THE VALUE OF THE CURRENT ROOM', currentRoom)
           const newChat = await addDoc(collection(db, "Rooms", currentRoom, "Chats"), {
             Message: messageInput,
             MessageMediaContent: mediaContent,

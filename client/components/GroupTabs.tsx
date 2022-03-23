@@ -120,22 +120,22 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     }, { merge: true });
   }
 
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(.2),
-    textAlign: 'left',
-    color: theme.palette.text.secondary
-  }));
+  // const Item = styled(Paper)(({ theme }) => ({
+  //   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  //   ...theme.typography.body2,
+  //   padding: theme.spacing(.2),
+  //   textAlign: 'left',
+  //   color: theme.palette.text.secondary
+  // }));
 
-  const Item2 = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#D3D3D3',
-    ...theme.typography.body2,
-    padding: theme.spacing(.2),
-    textAlign: 'right',
-    color: theme.palette.text.secondary,
-    border: '0px'
-  }));
+  // const Item2 = styled(Paper)(({ theme }) => ({
+  //   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#D3D3D3',
+  //   ...theme.typography.body2,
+  //   padding: theme.spacing(.2),
+  //   textAlign: 'right',
+  //   color: theme.palette.text.secondary,
+  //   border: '0px'
+  // }));
 
   const SearchResults = () => {
     return (
@@ -144,11 +144,8 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         id="usersSearch"
         options={searchedUsers}
         sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Search Users" onChange={(e: React.ChangeEvent<HTMLInputElement>): any => {
-          e.preventDefault();
-          handleAddUserInput(e.target.value)
-        }
-        } />}
+        renderInput={(params) => <TextField {...params} label="Search Users"
+        />}
       />
     );
   }
@@ -180,7 +177,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
               )
             }) : null}
           </List> */}
-          <Button sx={{ width: '10%', alignSelf: 'end' }} onClick={addUserToCurrentRoom}>Add User</Button>
+          <Button sx={{ width: '10%', justifySelf: 'end', gridColumnStart: '3' }} onClick={addUserToCurrentRoom}>Add User</Button>
         </Box>
         <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
           <Stack>
@@ -192,8 +189,8 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                   <Tooltip title="Reply" placement="bottom-end">
                     <Box sx={{ display: 'grid', gridTemplateColumns: '95% 5%', bgcolor: '#D3D3D3' }}>
                       <Stack>
-                        <Item2>{message.Name}</Item2>
-                        <Item2>{message.Message}</Item2>
+                        <Box>{message.Name}</Box>
+                        <Box>{message.Message}</Box>
                         {/* <Item2>{date}</Item2> */}
                       </Stack>
                       <Avatar sx={{ width: 32, height: 32, alignSelf: 'center', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: 'noReferrer' }}></Avatar>
@@ -208,8 +205,8 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                     <Box sx={{ display: 'grid', gridTemplateColumns: '5% 95%' }}>
                       <Avatar sx={{ width: 32, height: 32, alignSelf: 'center', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: 'noReferrer' }}></Avatar>
                       <Stack>
-                        <Item>{message.Name}</Item>
-                        <Item>{message.Message}</Item>
+                        <Box>{message.Name}</Box>
+                        <Box>{message.Message}</Box>
                         {/* <Item>{date}</Item> */}
                       </Stack>
                     </Box>

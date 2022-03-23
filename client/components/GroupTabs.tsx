@@ -17,8 +17,9 @@ import {
   getDoc
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import ExpandedCalendar from "./ExpandedCalendar";
 
-export default function GroupTabs({ practice, userChats }) {
+export default function GroupTabs({ practice, userChats, showCalendar, setShowCalendar }) {
   const db = getFirestore()
   const auth: any = getAuth();
 
@@ -36,7 +37,7 @@ export default function GroupTabs({ practice, userChats }) {
     (state) => state.globalFunctions.value.createRoom
   );
   const addUserToRoom = useAppSelector((state) => state.globalFunctions.value.addNewUserToRoom);
-  const [value, setValue] = React.useState<string>('algebra');
+  const [value, setValue] = React.useState<string>('alexsroom');
 
   const handleChange = (event: any, newValue: string) => {
     console.log(newValue);
@@ -99,23 +100,29 @@ export default function GroupTabs({ practice, userChats }) {
     addUserToRoom(userToAdd.data(), value, db)
   }
 
-  return (
-    <Box sx={{ width: "100%", typography: "body1" }}>
-      <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}></Box>
-        <input id="test"
-          type="text"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-            handleAddUserInput(e.target.value)
-          }
-        ></input>
-        <button onClick={addUserToCurrentRoom}>Add User</button>
-        <TabList onChange={handleChange} aria-label="lab API tabs example">
-          {userRooms.map((group, i) => (
-            < Tab key={i} label={group} value={group} />
-          ))}
-        </TabList>
-        {/* <Box sx={{ height: '500px', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
+  if (showCalendar) {
+    return (
+      <ExpandedCalendar setShowCalendar={setShowCalendar} />
+    )
+  } else {
+    return (
+
+      <Box sx={{ width: "100%", typography: "body1" }}>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}></Box>
+          <input id="test"
+            type="text"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+              handleAddUserInput(e.target.value)
+            }
+          ></input>
+          <button onClick={addUserToCurrentRoom}>Add User</button>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            {userRooms.map((group, i) => (
+              < Tab key={i} label={group} value={group} />
+            ))}
+          </TabList>
+          {/* <Box sx={{ height: '500px', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
           {userRooms.map((group, i) => (
             < TabPanel key={group.Timestamp} value={group}>
               {practice.english.map((message, i) => (
@@ -127,24 +134,25 @@ export default function GroupTabs({ practice, userChats }) {
             </TabPanel>
           ))}
         </Box> */}
-      </TabContext>
-      <input id="test"
-        type="text"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-          handleMessageInput(e.target.value)
-        }
-      ></input>
-      <button onClick={sendMessageToCurrentRoom}>Add Message</button>
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 0, width: '100%' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField id="outlined-basic" label="Message" variant="outlined" onSubmit={sendMessageToCurrentRoom} />
+        </TabContext>
+        <input id="test"
+          type="text"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            handleMessageInput(e.target.value)
+          }
+        ></input>
+        <button onClick={sendMessageToCurrentRoom}>Add Message</button>
+        <Box
+          component="form"
+          sx={{
+            '& > :not(style)': { m: 0, width: '100%' },
+          }}
+          noValidate
+          autoComplete="off"
+        >
+          <TextField id="outlined-basic" label="Message" variant="outlined" onSubmit={sendMessageToCurrentRoom} />
+        </Box>
       </Box>
-    </Box>
-  );
+    );
+  }
 }

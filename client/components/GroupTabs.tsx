@@ -189,7 +189,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                 let date = message.TimeStamp.toDate();
                 //console.log('date', date);
                 return (
-                  <Tooltip title="Reply" placement="bottom-end">
+                  <Tooltip title="Reply" placement="bottom-end" key={index}>
                     <Box sx={{ display: 'grid', gridTemplateColumns: '95% 5%', bgcolor: '#D3D3D3' }}>
                       <Stack>
                         <Item2>{message.Name}</Item2>
@@ -204,7 +204,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                 let date = message.TimeStamp.toDate();
                 //console.log('date', date);
                 return (
-                  <Tooltip title="Reply" placement="bottom-start">
+                  <Tooltip title="Reply" placement="bottom-start" key={index}>
                     <Box sx={{ display: 'grid', gridTemplateColumns: '5% 95%' }}>
                       <Avatar sx={{ width: 32, height: 32, alignSelf: 'center', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: 'noReferrer' }}></Avatar>
                       <Stack>

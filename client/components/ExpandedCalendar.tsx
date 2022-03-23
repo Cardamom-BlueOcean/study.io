@@ -172,7 +172,7 @@ export default function ExpandedCalendar({ setShowCalendar }) {
           />
         </LocalizationProvider>
         <Box>
-          <Box sx={{ placeSelf: 'center' }}>
+          <Box sx={{ placeSelf: 'center', marginTop: '50px' }}>
             {selectedDate.toDateString() === (new Date()).toDateString() ?
               <Typography variant="h4" sx={{ alignItems: 'center', justifyContent: 'center' }}>Today's Events</Typography>
               :

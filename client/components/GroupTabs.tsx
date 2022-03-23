@@ -172,7 +172,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                 )
               } else {
                 return (
-                  <Tooltip title="Reply" placement="bottom-start">
+                  <Tooltip title="Reply" placement="bottom-start" key={index}>
                     <Box>
                       <Stack>
                         <Item>{message.Name}</Item>

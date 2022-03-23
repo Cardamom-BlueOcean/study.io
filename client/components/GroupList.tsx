@@ -26,6 +26,7 @@ import Logout from '@mui/icons-material/Logout';
 import Settings from '@mui/icons-material/Settings';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export default function GroupList() {
   const [groups, setGroups] = React.useState(fakeData);
@@ -60,7 +61,7 @@ export default function GroupList() {
   }
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const openMenu = Boolean(anchorEl);
   const handleUserMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -97,13 +98,13 @@ export default function GroupList() {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar sx={{ width: 32, height: 32 }} src={auth.currentUser?.photoURL}></Avatar>
+          <Avatar sx={{ width: 32, height: 32 }} src={auth.currentUser?.photoURL} imgProps={{ referrerPolicy: 'noReferrer' }} ></Avatar>
         </IconButton>
       </Tooltip>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
-        open={open}
+        open={openMenu}
         onClose={handleClose}
         onClick={handleClose}
         PaperProps={{
@@ -126,7 +127,7 @@ export default function GroupList() {
               left: 14,
               width: 10,
               height: 10,
-              bgcolor: 'background.paper',
+              bgColor: 'background.paper',
               transform: 'translateY(-50%) rotate(45deg)',
               zIndex: 0,
             },
@@ -138,18 +139,21 @@ export default function GroupList() {
         <MenuItem>
           <Avatar src={auth.currentUser?.photoURL} /> {auth.currentUser?.displayName}
         </MenuItem>
-        <MenuItem sx={{ fontSize: '12px' }} onClick={handleUsernameClick}>
+        <MenuItem>
+          <ListItemIcon>
+            <PersonAdd fontSize="small" />
+          </ListItemIcon>
+          Switch Accounts
+        </MenuItem>
+        <MenuItem onClick={handleUsernameClick}>
+          <ListItemIcon>
+            <AccountCircleIcon fontSize="small" />
+          </ListItemIcon>
           Change User Name
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleThemeClick}>
           <FormControlLabel control={<Switch />} label="Light Theme" />
-        </MenuItem>
-        <MenuItem onClick={handleSettingsClick}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon >
-          Settings
         </MenuItem>
         <MenuItem onClick={() => signOutUser()}>
           <ListItemIcon >

@@ -146,9 +146,8 @@ export default function UserPage() {
           <Calendar setShowCalendar={setShowCalendar} />
 
         </Box>
-        <Box className="chatview" sx={{ border: 1 }}>
+        <Box className="chatview" sx={{ border: 1, height: '45%' }}>
           <GroupTabs userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
-
         </Box>
       </Box>
 

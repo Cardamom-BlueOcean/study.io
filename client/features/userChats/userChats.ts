@@ -5,7 +5,9 @@ interface ArrayState {
 }
 
 const initialState: ArrayState = {
-  value: {},
+  value: {
+    example: ['test,', 'test2']
+  },
 }
 
 const userChatsSlice = createSlice({
@@ -13,11 +15,15 @@ const userChatsSlice = createSlice({
   name: 'userChats',
   initialState,
   reducers: {
-    setChatsObject(state, action: PayloadAction<{}>) {
+    setChatsObject(state, action: any) {
       console.log('THIS IS IN REDUX', action.payload);
 
-      Object.assign({}, ...action.payload)
+      return action.payload
     },
+
+    revertChatObject(state, action: any) {
+      return initialState;
+    }
 
 
   }

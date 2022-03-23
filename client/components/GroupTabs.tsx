@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useAppSelector, useAppDispatch } from "../hooks";
-import { Box, TextField, Stack, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, TextField, Stack, List, ListItem, ListItemText, Typography, Paper, styled, Button, Tooltip } from '@mui/material';
 //import { group } from 'console';
 import {
   getFirestore,
@@ -35,33 +35,33 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   console.log('user chats', userChats)
   //console.log('practice', practice)
 
-  React.useEffect(() => {
-    if (userRooms[0] !== undefined) {
-      setValue(userRooms[0]);
-      setCurrentRoom(userRooms[0]);
-    }
-  }, [userRooms])
+  // React.useEffect(() => {
+  //   if (userRooms[0] !== undefined) {
+  //     setValue(userRooms[0]);
+  //     setCurrentRoom(userRooms[0]);
+  //   }
+  // }, [userRooms])
 
-  React.useEffect(() => {
-    if (value !== null) {
-      //console.log(value);
-      //console.log(typeof (value));
-      //console.log(userChats.english);
-      setCurrentRoomChats(userChats.english);
-    }
-  }, [value])
+  // React.useEffect(() => {
+  //   if (value !== null) {
+  //     //console.log(value);
+  //     //console.log(typeof (value));
+  //     //console.log(userChats.english);
+  //     setCurrentRoomChats(userChats.english);
+  //   }
+  // }, [value])
 
-  React.useEffect(() => {
-    //console.log('userChats now', userChats);
-    let current = value;
-    //console.log(current);
-    if (current !== undefined) {
-      //console.log('yay');
-      //console.log(typeof (value));
-      //console.log('here', userChats.english);
-      setCurrentRoomChats(userChats.english);
-    }
-  }, [userChats[value]])
+  // React.useEffect(() => {
+  //   //console.log('userChats now', userChats);
+  //   let current = value;
+  //   //console.log(current);
+  //   if (current !== undefined) {
+  //     //console.log('yay');
+  //     //console.log(typeof (value));
+  //     //console.log('here', userChats.english);
+  //     setCurrentRoomChats(userChats.english);
+  //   }
+  // }, [userChats[value]])
 
   const createRoomFunction = useAppSelector(
     (state) => state.globalFunctions.value.createRoom
@@ -81,6 +81,12 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     setUserAddInput(userBody);
   };
 
+  React.useEffect(() => {
+    if (userAddInput.length >= 3) {
+      searchedForMatchedUsers();
+    }
+  }, [userAddInput])
+
   const [mediaContent, setMediaContent] = React.useState([])
 
   const sendMessageToCurrentRoom = async () => {
@@ -89,16 +95,14 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         // const timesent: Date = new Date();
         const chatID = serverTimestamp()
         const sendMessageOnceAuthorized = async () => {
-          const newChat = await addDoc(collection(db, "Rooms", value, "Chats"), {
+          const newChat = await addDoc(collection(db, "Rooms", currentRoom, "Chats"), {
             Message: messageInput,
             MessageMediaContent: mediaContent,
             Sender: user.uid,
             TimeStamp: chatID,
             MessageThread: []
           });
-
           //console.log('newChat', newChat)
-
         }
         sendMessageOnceAuthorized()
       }
@@ -126,64 +130,81 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     addUserToRoom(userToAdd.data(), value, db)
   }
 
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(.5),
+    textAlign: 'left',
+    color: theme.palette.text.secondary,
+  }));
+
+  const Item2 = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(.5),
+    textAlign: 'right',
+    color: theme.palette.text.secondary,
+  }));
+
   if (showCalendar) {
     return (
       <ExpandedCalendar setShowCalendar={setShowCalendar} />
     )
   } else {
     return (
-      <Box sx={{ width: "100%", typography: "body1" }}>
-        <h1>{value}</h1>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}></Box>
-        <input id="test"
-          type="text"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-            handleAddUserInput(e.target.value)
-          }
-        ></input>
-        <button onClick={addUserToCurrentRoom}>Add User</button>
-        <Box>
-          <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-            {userChats?.map((message, i) => {
-              <ListItem alignItems="flex-start">
-                <ListItemText
-                  primary=" "
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        sx={{ display: 'inline' }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                      >
-
-                      </Typography>
-                      {message.Message}
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-            })}
-          </List>
+      <Box sx={{ width: "100%", height: '600px', typography: "body1" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'inline-flex', height: '50px', gap: '100px' }}>
+          <Typography variant="h5" gutterBottom component="div">
+            {currentRoom}
+          </Typography>
+          <input id="test"
+            type="text"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+              handleAddUserInput(e.target.value)
+            }
+          ></input>
+          <Button sx={{ alignSelf: 'end' }} onClick={addUserToCurrentRoom}>Add User</Button>
         </Box>
-
-        <input id="test"
-          type="text"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-            handleMessageInput(e.target.value)
-          }
-        ></input>
-        <button onClick={sendMessageToCurrentRoom}>Add Message</button>
-        <Box
-          component="form"
-          sx={{
-            '& > :not(style)': { m: 0, width: '100%' },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField id="outlined-basic" label="Message" variant="outlined" onSubmit={sendMessageToCurrentRoom} />
+        <Box sx={{ height: '500px', overflow: 'scroll' }}>
+          <Stack>
+            {userChats ? userChats.map((message, index) => {
+              if (message.Sender === 'x8lR3zV56bR0FpFjmKuhs3xbvPl1') {
+                return (
+                  <Tooltip title="Reply" placement="bottom-end">
+                    <Stack>
+                      <Item2>{message.Sender}</Item2>
+                      <Item2>{message.Message}</Item2>
+                      <Item2>{message.TimeStamp.seconds}</Item2>
+                    </Stack>
+                  </Tooltip>
+                )
+              } else {
+                return (
+                  <Tooltip title="Reply" placement="bottom-start">
+                    <Stack>
+                      <Item>{message.Sender}</Item>
+                      <Item>{message.Message}</Item>
+                      <Item>{message.TimeStamp.seconds}</Item>
+                    </Stack>
+                  </Tooltip>
+                )
+              }
+            }) : null}
+          </Stack>
         </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+          <Box
+            component="form"
+            sx={{ m: 0, width: '80%', }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField id="outlined-basic" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+              handleMessageInput(e.target.value)
+            } />
+          </Box>
+          <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom}>Send</Button>
+        </Box >
       </Box>
     );
   }

@@ -107,15 +107,15 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
   };
 
   const handleUsernameClick = (event) => {
-    console.log('you just clicked to change the user name', event)
+    //console.log('you just clicked to change the user name', event)
   }
 
   const handleSettingsClick = (event) => {
-    console.log('you just clicked to set the settings', event)
+    //console.log('you just clicked to set the settings', event)
   }
 
   const handleThemeClick = (event) => {
-    console.log('you just clicked to change the theme', event)
+    //console.log('you just clicked to change the theme', event)
   }
 
   return (

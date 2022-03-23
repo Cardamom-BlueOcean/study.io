@@ -16,7 +16,7 @@ import {
   TextField,
   Menu,
   MenuItem,
-
+  Autocomplete,
 } from "@mui/material";
 import PopupState, {
   bindTrigger,
@@ -33,11 +33,13 @@ import {
   doc,
   setDoc,
   orderBy,
-  getDoc
+  getDoc,
+  updateDoc,
+  arrayUnion
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-export default function ExpandedCalendar({ setShowCalendar }) {
+export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searchedUsersFullInfo }) {
 
   const [selectedDate, setSelectedDate] = React.useState<any>(new Date().toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' }));
   console.log('selectedDate', selectedDate)
@@ -66,19 +68,20 @@ export default function ExpandedCalendar({ setShowCalendar }) {
         const getEventsForCurrentUser = async () => {
           // console.log('auth', user.uid)
           const q: any = doc(db, "Users", user.uid);
-          const userData = await getDoc(q);
+          const unsubscribe = onSnapshot(q, (userData) => {
+            setAccepted(userData.data().acceptedInvites)
+            setPending(userData.data().pendingInvites)
+            setRoomsDropdown(userData.data().rooms)
+            setUser(userData.data().name)
+          });
           // console.log('userdata', userData.data())
-          //This is not working
-          setAccepted(userData.data().acceptedInvites)
-          setPending(userData.data().pendingInvites)
-          setRoomsDropdown(userData.data().rooms)
-          setUser(userData.data().name)
         }
         getEventsForCurrentUser()
       })
     }
     asyncWrapper()
   }, [])
+
 
   // console.log('events', events)
   // console.log('pending', pending)
@@ -129,38 +132,41 @@ export default function ExpandedCalendar({ setShowCalendar }) {
       const db = await getFirestore();
       const auth: any = await getAuth();
       onAuthStateChanged(auth, (user: any) => {
-        const getEventsForCurrentUser = async () => {
-          const q: any = doc(db, "Users", user.uid);
-          const userData = await getDoc(q);
-          // ON CLICK of the checkbox, the accepted and pending state will get update, a patch? request
-          // will get sent to firestore with the updated acceptedInvites and pendingInvites array
+        const updateInviteArrays = async () => {
           let checkedInvite = pending.splice(idx, 1);
           accepted.push(checkedInvite[0])
           setAccepted(accepted)
 
-          await setDoc(doc(db, "Users", user.uid), {
-            name: user.displayName,
-            email: user.email,
-            thumbnailPhotoURL: user.photoURL,
-            uid: user.uid,
-            rooms: arrayUnion(roomName),
+          await updateDoc(doc(db, "Users", user.uid), {
             acceptedInvites: accepted,
             pendingInvites: pending
-          }, { merge: true });
+          });
 
         }
-        getEventsForCurrentUser()
+        updateInviteArrays()
       })
     }
     asyncWrapper()
   }
 
 
-  const sendInviteToParticipant = () => {
-    //TODO send invite to other user - add to other users pendingInvites
-    //need to have access to other user's id??
-    let invitation = `${user} invited you to study ${selectedStudyGroup} on ${newMeetingDate} at ${time}`
+  const sendInviteToParticipant = async () => {
+    let invitation = `Meeting with ${user} on ${newMeetingDate} at ${time} to study ${selectedStudyGroup}`
 
+    const db = await getFirestore();
+    const auth: any = await getAuth();
+    const inputValue = (document.getElementById('participanttext') as HTMLInputElement).value
+    console.log('searchedUsersFullInfoINCale', searchedUsersFullInfo)
+    console.log('inputValue', inputValue)
+    const newArr = searchedUsersFullInfo.filter((user) => {
+      return user.name === inputValue
+    })
+
+    await updateDoc(doc(db, "Users", newArr[0].uid), {
+      pendingInvites: arrayUnion(invitation)
+    });
+
+    //TODO add string into own event list??
   }
 
   const sendInvite = () => (
@@ -178,13 +184,25 @@ export default function ExpandedCalendar({ setShowCalendar }) {
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
-        <TextField
+
+
+        <Autocomplete
+          disablePortal
+          id="participanttext"
+          // label="Invitee"
+          options={searchedUsers}
+          sx={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Invitee" />}
+        />
+
+        {/* <TextField
           id="participanttext"
           label="Invitee"
           value={participant}
           onChange={(e) => setParticipant(e.target.value)}
           sx={{ width: '230px' }}
-        />
+        /> */}
+
         <TextField
           id="meetingtimetext"
           label="Enter Meeting Time"
@@ -207,6 +225,7 @@ export default function ExpandedCalendar({ setShowCalendar }) {
               <Menu {...bindMenu(menu)}>
                 {roomsDropdown.map((room, idx) => (
                   <MenuItem onClick={(e) => {
+                    console.log('e.target.textContent', e.target.textContent)
                     menu.close; setSelectedStudyGroup(e.target.textContent)
                   }}
                     key={idx}>{room}</MenuItem>

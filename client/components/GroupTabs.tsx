@@ -59,15 +59,15 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
 
 
-      const q = query(collection(db, "Users"));
-      const Users: any = await getDocs(q);
+    const q = query(collection(db, "Users"));
+    const Users: any = await getDocs(q);
 
-      console.log('searchedUsers', searchedUsers)
+    // console.log('searchedUsers', searchedUsers)
 
     const Usersarr: string[] = [];
     const UsersFullInfo: any[] = []
     Users.forEach((user: any) => {
-      console.log('user.data().name', user.data().name)
+      // console.log('user.data().name', user.data().name)
       if (user.data().name) {
         const userName: string = user.data().name
         Usersarr.push(userName)
@@ -77,7 +77,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     })
     setSearchedUsersFullInfo(UsersFullInfo)
     setSearchedUsers(Usersarr)
-    console.log('users that match the current search', searchedUsers)
+    // console.log('users that match the current search', searchedUsers)
   };
 
   React.useEffect(() => {
@@ -121,9 +121,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   const addUserToCurrentRoom = async () => {
     const inputValue = (document.getElementById('usersSearch') as HTMLInputElement).value
-    console.log('searchedUsersFullInfo', searchedUsersFullInfo)
-    console.log('inputValue', inputValue)
-    const newArr = searchedUsersFullInfo.filter((user) =>{
+    const newArr = searchedUsersFullInfo.filter((user) => {
       return user.name === inputValue
     })
 
@@ -168,7 +166,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   if (showCalendar) {
     return (
-      <ExpandedCalendar setShowCalendar={setShowCalendar} />
+      <ExpandedCalendar setShowCalendar={setShowCalendar} searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} />
     )
   } else {
     return (

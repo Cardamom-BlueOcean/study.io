@@ -49,6 +49,7 @@ import {
 } from "@mui/material";
 
 import { fakeData } from './fakeGroupData';
+import { te } from 'date-fns/locale';
 
 export default function GroupList({ setCurrentRoom, currentRoom, setUserChats }) {
 
@@ -87,6 +88,10 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
           const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chats: any = [];
             querySnapshot.forEach((doc) => {
+
+              // let temp = doc.data()
+              // temp.documentID = doc.id
+              // console.log('doc.id', doc.data())
               chats.push(doc.data());
             });
             setUserChats(chats)

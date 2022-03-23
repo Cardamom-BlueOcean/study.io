@@ -23,6 +23,7 @@ import { bgcolor, grid } from "@mui/system";
 export default function GroupTabs({ userChats, showCalendar, setShowCalendar, currentRoom, setCurrentRoom }) {
   const db = getFirestore()
   const auth: any = getAuth();
+  const userId = useAppSelector((state) => state.userId.value);
 
   const [messageInput, setMessageInput] = React.useState<string>("");
   const [userAddInput, setUserAddInput] = React.useState<string>("");
@@ -107,7 +108,6 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   }
 
   const searchedForMatchedUsers = async () => {// this function will search for users when the input field changes
-
   }
 
   const addUserToCurrentRoom = async () => {
@@ -185,7 +185,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
           <Stack>
             {userChats ? userChats.map((message, index) => {
-              if (message.Sender === 'x8lR3zV56bR0FpFjmKuhs3xbvPl1') {
+              if (message.Sender === userId) {
                 let date = message.TimeStamp.toDate();
                 console.log('date', date);
                 return (

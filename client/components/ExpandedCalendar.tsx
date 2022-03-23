@@ -21,7 +21,6 @@ export default function ExpandedCalendar({ setShowCalendar }) {
   const [events, setEvents] = React.useState<Array<string>>(['meetup with Richard at 1pm', 'meetup with Tobin at 6pm']);
 
   //add meeting stuff
-  const [show, setShow] = React.useState<boolean>(false);
   const [scheduledMeeting, setScheduleMeeting] = React.useState<boolean>(false);
 
   const renderEvents = () => (
@@ -31,6 +30,14 @@ export default function ExpandedCalendar({ setShowCalendar }) {
       ))}
     </ul>
   )
+
+  const sendInvite = () => (
+    <Box>
+      <Typography variant="h4">do stuff</Typography>
+
+    </Box>
+  );
+
 
   return (
     <Box sx={{ width: '100%' }}>

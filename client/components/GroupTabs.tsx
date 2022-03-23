@@ -142,7 +142,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         <Box sx={{ height: '500px', overflow: 'scroll' }}>
           <Stack>
             {userChats ? userChats.map((message, index) => {
-              if (message.Sender === 'x8lR3zV56bR0FpFjmKuhs3xbvPl1') {
+              if (message.Sender === 'gq9hGT3kcnNvhsmZy01iay6YBD03') {
                 return (
                   <Tooltip title="Reply" placement="bottom-end">
                     <Box>
@@ -160,7 +160,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                   <Tooltip title="Reply" placement="bottom-start">
                     <Box>
                       <Stack>
-                        <Item>{message.Sender}</Item>
+                        <Item>{message.Name}</Item>
                         <Item>{message.Message}</Item>
                         {/* <Item>{message.TimeStamp.seconds}</Item> */}
                       </Stack>

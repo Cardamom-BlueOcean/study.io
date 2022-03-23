@@ -55,7 +55,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
   }
 
   const setTextField = function (e) {
-    console.log(e.target.value)
+    // console.log(e.target.value)
     setTextFieldTemp(e.target.value)
   }
 

@@ -106,7 +106,6 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   }
 
   const searchedForMatchedUsers = async () => {// this function will search for users when the input field changes
-
   }
 
   const addUserToCurrentRoom = async () => {

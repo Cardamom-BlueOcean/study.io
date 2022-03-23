@@ -46,7 +46,7 @@ const App = () => {
           </Routes>
         </Router >
       </ThemeProvider>
-    </Provider >
+    </Provider>
   );
 }
 

@@ -64,7 +64,7 @@ export default function UserPage() {
               acceptedInvites: [],
               pendingInvites: [],
               rooms: []
-            });
+            },{ merge: true });
           };
           addUserDbIfUserIsNotAlreadyAdded();
 

@@ -187,7 +187,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
             {userChats ? userChats.map((message, index) => {
               if (message.Sender === userId) {
                 let date = message.TimeStamp.toDate();
-                console.log('date', date);
+                //console.log('date', date);
                 return (
                   <Tooltip title="Reply" placement="bottom-end">
                     <Box sx={{ display: 'grid', gridTemplateColumns: '95% 5%', bgcolor: '#D3D3D3' }}>
@@ -202,7 +202,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                 )
               } else {
                 let date = message.TimeStamp.toDate();
-                console.log('date', date);
+                //console.log('date', date);
                 return (
                   <Tooltip title="Reply" placement="bottom-start">
                     <Box sx={{ display: 'grid', gridTemplateColumns: '5% 95%' }}>

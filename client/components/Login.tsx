@@ -5,6 +5,7 @@ import {
   CssBaseline,
   Paper,
   Typography,
+  Button
 } from "@mui/material";
 import { getFirestore, collection } from "firebase/firestore";
 import "firebase/auth";
@@ -14,6 +15,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import firebaseConfig from '../../config';
 import { useNavigate } from "react-router-dom";
+import GoogleIcon from '@mui/icons-material/Google';
 import logo from '../../src/logo.png'
 
 const app = initializeApp(firebaseConfig);
@@ -49,14 +51,7 @@ export default function Login({ }: Props) {
         alignItems="center"
         flexDirection="column"
       >
-        <Paper
-          elevation={20}
-          sx={{ padding: "1rem", backgroundColor: "secondary.light", marginTop: "50px" }}
-        >
-          <Typography color="primary.main" variant="h1" onClick={() => { signInWithGoogle() }}>
-            Sign in With Google
-          </Typography>
-        </Paper>
+        <Button variant="contained" startIcon={<GoogleIcon />} onClick={() => { signInWithGoogle() }}>Sign in with Google</Button>
       </Box>
     </div>
   );

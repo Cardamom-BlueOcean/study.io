@@ -22,6 +22,7 @@ import ExpandedCalendar from "./ExpandedCalendar";
 export default function GroupTabs({ userChats, showCalendar, setShowCalendar, currentRoom, setCurrentRoom }) {
   const db = getFirestore()
   const auth: any = getAuth();
+  const userId = useAppSelector((state) => state.userId.value);
 
   const [messageInput, setMessageInput] = React.useState<string>("");
   const [userAddInput, setUserAddInput] = React.useState<string>("");
@@ -156,7 +157,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         <Box sx={{ height: '500px', overflow: 'scroll' }}>
           <Stack>
             {userChats ? userChats.map((message, index) => {
-              if (message.Sender === 'gq9hGT3kcnNvhsmZy01iay6YBD03') {
+              if (message.Sender === userId) {
                 return (
                   <Tooltip title="Reply" placement="bottom-end">
                     <Box>

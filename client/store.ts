@@ -7,6 +7,7 @@ import arrayExampleReducer from './features/arrayExample/arrayExample';
 import globalFunctionsReducer from './features/globalFunctions/globalFunctions';
 import userRoomsReducer from './features/userRooms/userRooms';
 import userChatsReducer from './features/userChats/userChats';
+import userIdReducer from './features/userId/userId';
 
 export const store = configureStore({
   // THE REDUCER HERE IS WHERE WE STORE OUR GLOBAL VARIABLES.
@@ -20,6 +21,7 @@ export const store = configureStore({
     globalFunctions: globalFunctionsReducer,
     userRooms: userRoomsReducer,
     userChats: userChatsReducer,
+    userId: userIdReducer,
     // example2: example2Reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false, })

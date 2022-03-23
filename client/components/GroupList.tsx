@@ -61,7 +61,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
 
 
   React.useEffect(() => {
-    console.log('here')
+    //console.log('here')
     onAuthStateChanged(auth, (user: any) => {
       const subsribeToUpdatesForARoom = async (currentRoom) => {
         //The function can be called to subscribe to a room in
@@ -86,7 +86,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
   }, [currentRoom])
   let navigate = useNavigate();
   // const auth = getAuth()
-  console.log('auth.currentUser is', auth.currentUser)
+  //console.log('auth.currentUser is', auth.currentUser)
 
   function signOutUser() {
     signOut(auth).then(() => {
@@ -107,15 +107,15 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
   };
 
   const handleUsernameClick = (event) => {
-    console.log('you just clicked to change the user name', event)
+    //console.log('you just clicked to change the user name', event)
   }
 
   const handleSettingsClick = (event) => {
-    console.log('you just clicked to set the settings', event)
+    //console.log('you just clicked to set the settings', event)
   }
 
   const handleThemeClick = (event) => {
-    console.log('you just clicked to change the theme', event)
+    //console.log('you just clicked to change the theme', event)
   }
 
   return (

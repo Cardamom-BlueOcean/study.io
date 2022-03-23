@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useAppSelector, useAppDispatch } from "../hooks";
-import { Box, TextField, Stack, List, ListItem, ListItemText, Typography, Paper, styled, Button, Tooltip } from '@mui/material';
+import { Box, TextField, Stack, List, ListItem, ListItemText, Typography, Paper, styled, Button, Tooltip, Avatar } from '@mui/material';
 //import { group } from 'console';
 import {
   getFirestore,
@@ -70,6 +70,8 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
             Message: messageInput,
             MessageMediaContent: mediaContent,
             Sender: user.uid,
+            Name: user.displayName,
+            Avatar: user.photoURL,
             TimeStamp: chatID,
             MessageThread: []
           });
@@ -142,21 +144,27 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
               if (message.Sender === 'x8lR3zV56bR0FpFjmKuhs3xbvPl1') {
                 return (
                   <Tooltip title="Reply" placement="bottom-end">
-                    <Stack>
-                      <Item2>{message.Sender}</Item2>
-                      <Item2>{message.Message}</Item2>
-                      <Item2>{message.TimeStamp.seconds}</Item2>
-                    </Stack>
+                    <Box>
+                      <Stack>
+                        <Item2>{message.Name}</Item2>
+                        <Item2>{message.Message}</Item2>
+                        {/* <Item2>{message.TimeStamp.seconds}</Item2> */}
+                      </Stack>
+                      <Avatar sx={{ width: 32, height: 32 }} src={message.Avatar}></Avatar>
+                    </Box>
                   </Tooltip>
                 )
               } else {
                 return (
                   <Tooltip title="Reply" placement="bottom-start">
-                    <Stack>
-                      <Item>{message.Sender}</Item>
-                      <Item>{message.Message}</Item>
-                      <Item>{message.TimeStamp.seconds}</Item>
-                    </Stack>
+                    <Box>
+                      <Stack>
+                        <Item>{message.Sender}</Item>
+                        <Item>{message.Message}</Item>
+                        {/* <Item>{message.TimeStamp.seconds}</Item> */}
+                      </Stack>
+                      <Avatar sx={{ width: 32, height: 32 }} src={message.Avatar}></Avatar>
+                    </Box>
                   </Tooltip>
                 )
               }
@@ -164,16 +172,16 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
           </Stack>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-          <Box
+          {/* <Box
             component="form"
             sx={{ m: 0, width: '80%', }}
             noValidate
             autoComplete="off"
-          >
-            <TextField id="outlined-basic" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-              handleMessageInput(e.target.value)
-            } />
-          </Box>
+          > */}
+          <TextField id="outlined-basic" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            handleMessageInput(e.target.value)
+          } />
+          {/* </Box> */}
           <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom}>Send</Button>
         </Box >
       </Box>

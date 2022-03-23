@@ -69,7 +69,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
 
           const q = query(
             collection(db, "Rooms", currentRoom, "Chats")
-            // , orderBy("TimeStamp")
+            , orderBy("TimeStamp")
           ); //
           const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chats: any = [];

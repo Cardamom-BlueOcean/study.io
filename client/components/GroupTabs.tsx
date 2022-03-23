@@ -13,7 +13,8 @@ import {
   serverTimestamp,
   addDoc,
   getDocs,
-  getDoc
+  getDoc,
+  arrayUnion
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ExpandedCalendar from "./ExpandedCalendar";
@@ -24,6 +25,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   const [messageInput, setMessageInput] = React.useState<string>("");
   const [userAddInput, setUserAddInput] = React.useState<string>("");
+
   const [value, setValue] = React.useState<any>(null);
   const [currentRoomChats, setCurrentRoomChats] = React.useState<any>([]);
 
@@ -47,9 +49,28 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   const handleMessageInput = (messageBody) => {
     setMessageInput(messageBody);
   };
-
-  const handleAddUserInput = (userBody) => {
+  const [searchedUsers, setSearchedUsers] = React.useState<string[]>([])
+  const [searchedUsersFullInfo, setSearchedUsersFullInfo] = React.useState<any[]>([])
+  const handleAddUserInput = async (userBody) => {
     setUserAddInput(userBody);
+    const q = query(collection(db, "Users"));
+    const Users = await getDocs(q);
+    const matchedUsers: string[] = [];
+    const matchedUsersFullInfo: any[] =[]
+    Users.forEach((user) => {
+      console.log('user.data().name', user.data().name)
+      if (user.data().name) {
+        const userName: string = user.data().name
+        if (userName.toLocaleLowerCase().indexOf(userBody.toLowerCase()) !== -1) {
+          matchedUsers.push(userName)
+          matchedUsersFullInfo.push(user.data())
+        }
+      }
+
+    })
+    setSearchedUsersFullInfo(matchedUsersFullInfo)
+    setSearchedUsers(matchedUsers)
+    console.log('users that match the current search', searchedUsers)
   };
 
   React.useEffect(() => {
@@ -83,25 +104,19 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     })
 
   }
-  const [searchedUsers, setSearchedUsers] = React.useState<string[]>([])
+
   const searchedForMatchedUsers = async () => {// this function will search for users when the input field changes
-    const q = query(collection(db, "Users"));
-    const Users = await getDocs(q);
-    const matchedUsers: string[] = [];
-    Users.forEach((user) => {
-      const userName: string = user.data().name
-      if (userAddInput.toLocaleLowerCase().indexOf(userName.toLowerCase()) !== -1) {
-        matchedUsers.push(userName)
-      }
-    })
-    setSearchedUsers(matchedUsers)
-    console.log('users that match the current search', searchedUsers)
+
   }
 
   const addUserToCurrentRoom = async () => {
-    const q: any = query(collection(db, "Users"), where("name", '==', userAddInput));
-    const userToAdd = await getDoc(q);
-    addUserToRoom(userToAdd.data(), value, db)
+    console.log('here', searchedUsersFullInfo[0])
+    const ref = doc(db, "Users", searchedUsersFullInfo[0].uid)//right now this is just adding the first person in the searched object
+    const userToAdd = await getDoc(ref);
+    console.log('userToAdd', userToAdd.data())
+    await setDoc(doc(db, "Rooms", currentRoom), {
+      RoomParticipants: arrayUnion(searchedUsersFullInfo[0].uid)
+    }, { merge: true });
   }
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -133,7 +148,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
           </Typography>
           <input id="test"
             type="text"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): any =>
               handleAddUserInput(e.target.value)
             }
           ></input>
@@ -142,7 +157,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         <Box sx={{ height: '500px', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
           <Stack>
             {userChats ? userChats.map((message, index) => {
-              if (message.Sender === 'x8lR3zV56bR0FpFjmKuhs3xbvPl1') {
+              if (message.Sender === 'hBsEbC5ZzdT9kHeI6We9pJupyLt1') {
                 return (
                   <Tooltip title="Reply" placement="bottom-end">
                     <Box>

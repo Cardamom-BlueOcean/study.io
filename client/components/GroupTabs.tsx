@@ -118,7 +118,6 @@ export default function GroupTabs({ userChats, currentRoom, setCurrentRoom }) {
     })
     setSearchedUsers(matchedUsers)
     console.log('users that match the current search', searchedUsers)
-
   }
 
   const addUserToCurrentRoom = async () => {
@@ -126,7 +125,6 @@ export default function GroupTabs({ userChats, currentRoom, setCurrentRoom }) {
     const userToAdd = await getDoc(q);
     addUserToRoom(userToAdd.data(), value, db)
   }
-
 
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
@@ -141,7 +139,7 @@ export default function GroupTabs({ userChats, currentRoom, setCurrentRoom }) {
       <button onClick={addUserToCurrentRoom}>Add User</button>
       <Box>
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-          {/* {userChats[value] !== undefined ? userChats[value].map((message, i) => {
+          {userChats?.map((message, i) => {
             <ListItem alignItems="flex-start">
               <ListItemText
                 primary=" "
@@ -160,7 +158,7 @@ export default function GroupTabs({ userChats, currentRoom, setCurrentRoom }) {
                 }
               />
             </ListItem>
-          }) : null} */}
+          })}
         </List>
       </Box>
 

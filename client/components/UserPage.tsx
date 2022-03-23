@@ -46,6 +46,7 @@ export default function UserPage() {
   const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
   const [userChats, setUserChats] = useState([]);
   const [currentRoom, setCurrentRoom] = useState('');
+  console.log(currentRoom);
 
   useEffect(() => {
     const asyncGetAuth = async () => {
@@ -96,7 +97,7 @@ export default function UserPage() {
               // dispatch to update global array here.
               //console.log('THIS IS THE BIG OBJECT', objectWithRoomsAsKeysAndArraysOfChatsAsValues) //this is where the function should go to update the chats
               dispatch(setRoomsArray(Rooms));
-              setUserChats(objectWithRoomsAsKeysAndArraysOfChatsAsValues)
+              // setUserChats(objectWithRoomsAsKeysAndArraysOfChatsAsValues)
 
             });
           }

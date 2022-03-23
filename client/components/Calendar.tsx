@@ -34,7 +34,6 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function Calendar({ setShowCalendar }) {
 
-  const [openCalendarModal, setOpenCalendarModal] = React.useState<boolean>(false);
   const [accepted, setAccepted] = React.useState<Array<string>>([]);
   const [pending, setPending] = React.useState<Array<string>>([]);
   const [checked, setChecked] = React.useState<Array<any>>(pending.slice().fill(false));
@@ -48,8 +47,8 @@ export default function Calendar({ setShowCalendar }) {
           // console.log('auth', user.uid)
           const q: any = doc(db, "Users", user.uid);
           const userData = await getDoc(q);
-          console.log('userdata', userData.data())
-          //This is not working
+          // console.log('userdata', userData.data())
+
           setAccepted(userData.data().acceptedInvites)
           setPending(userData.data().pendingInvites)
         }
@@ -59,16 +58,14 @@ export default function Calendar({ setShowCalendar }) {
     asyncWrapper()
   }, [])
 
-  console.log('accepted', accepted)
-  console.log('pending', pending)
+  // console.log('accepted', accepted)
+  // console.log('pending', pending)
 
 
-
-
-  React.useEffect(() => {
-    setAccepted(['Meeting with John at 2pm to study Python', 'Meeting with Tobin at 5pm to study Firebase', 'Meeting with BJ at 6pm to study Material UI']);
-    setPending(['Alex invited you to study Typescript tomorrow at 12pm', 'Richard invited you to study Redux March 24 at 1pm']);
-  }, [])
+  // React.useEffect(() => {
+  //   setAccepted(['Meeting with John at 2pm to study Python', 'Meeting with Tobin at 5pm to study Firebase', 'Meeting with BJ at 6pm to study Material UI']);
+  //   setPending(['Alex invited you to study Typescript tomorrow at 12pm', 'Richard invited you to study Redux March 24 at 1pm']);
+  // }, [])
 
   const updateCheckedBox = async (idx) => {
     setChecked(checked.map((val, index) => (
@@ -94,35 +91,41 @@ export default function Calendar({ setShowCalendar }) {
         // width: 300,
         // border: 1,
       }}>
-      <Typography variant="h5">Today's Scheduled Events</Typography>
-      <Typography variant="h6">Accepted Invites</Typography>
-      <ul>
+      <Typography sx={{ fontSize: '20px', fontWeight: 'medium', textAlign: 'center' }}>Today's Scheduled Events</Typography>
+      <Typography sx={{ fontSize: '16px', fontWeight: 'light', textAlign: 'center' }}>Accepted Invites</Typography>
+      <ul style={{ margin: '0 auto' }}>
         {accepted.map((meeting, idx) => {
           if (idx < 2) {
             return (
-              <li key={idx} >{meeting} </li>
-
+              <li key={idx} style={{ fontSize: '14px', fontWeight: 'light' }}>{meeting} </li>
             )
-
           }
         })}
+        {/*TODO add onclick - open expanded calender */}
+        {accepted.length > 2 ? <Button variant="text" sx={{ fontWeight: 'light', fontSize: '10px' }}>...Show More</Button> : null}
       </ul>
       <Divider variant="middle" />
-      <Typography variant="h6">Pending Invites</Typography>
-      {pending.map((meeting, idx) => (
-        <Box key={idx} sx={{ display: 'flex' }}>
-          <Checkbox
-            checked={checked[idx]}
-            onChange={(e) => updateCheckedBox(idx)}
-            inputProps={{ 'aria-label': 'controlled' }}
-            key={idx}
-          />
-          <Box >{meeting} </Box>
+      <Typography sx={{ fontSize: '16px', fontWeight: 'light', textAlign: 'center' }} onClick={() => setShowCalendar(true)}>Pending Invites</Typography>
+      {pending.map((meeting, idx) => {
+        if (idx < 1) {
+          return (<Box key={idx} sx={{ display: 'flex' }}>
+            <Checkbox
+              checked={checked[idx]}
+              onChange={(e) => updateCheckedBox(idx)}
+              inputProps={{ 'aria-label': 'controlled' }}
+              key={idx}
+            />
+            <Box sx={{ fontSize: '14px', fontWeight: 'light' }}>{meeting} </Box>
+          </Box>)
+        }
+      })}
+      {/*TODO add onclick - open expanded calender */}
+      {pending.length > 2 ? <Button variant="text" sx={{ fontWeight: 'light', fontSize: '10px' }}>...Show More</Button> : null}
 
-        </Box>
-      ))}
-      {/* TODO button onclick, rerender chat view to show calendar */}
-      <Button variant="contained" onClick={() => setShowCalendar(true)}>Show Calendar</Button>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Button variant="contained" onClick={() => setShowCalendar(true)}>Show Calendar</Button>
+
+      </Box>
 
     </Box >
   );

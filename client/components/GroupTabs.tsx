@@ -16,9 +16,9 @@ import {
   getDoc
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { isNullOrUndefined } from "util";
+import ExpandedCalendar from "./ExpandedCalendar";
 
-export default function GroupTabs({ userChats, currentRoom, setCurrentRoom }) {
+export default function GroupTabs({ userChats, showCalendar, setShowCalendar, currentRoom, setCurrentRoom }) {
   const db = getFirestore()
   const auth: any = getAuth();
 
@@ -126,59 +126,66 @@ export default function GroupTabs({ userChats, currentRoom, setCurrentRoom }) {
     addUserToRoom(userToAdd.data(), value, db)
   }
 
-  return (
-    <Box sx={{ width: "100%", typography: "body1" }}>
-      <h1>{value}</h1>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}></Box>
-      <input id="test"
-        type="text"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-          handleAddUserInput(e.target.value)
-        }
-      ></input>
-      <button onClick={addUserToCurrentRoom}>Add User</button>
-      <Box>
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-          {userChats?.map((message, i) => {
-            <ListItem alignItems="flex-start">
-              <ListItemText
-                primary=" "
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      sx={{ display: 'inline' }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
+  if (showCalendar) {
+    return (
+      <ExpandedCalendar setShowCalendar={setShowCalendar} />
+    )
+  } else {
+    return (
+      <Box sx={{ width: "100%", typography: "body1" }}>
+        <h1>{value}</h1>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}></Box>
+        <input id="test"
+          type="text"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            handleAddUserInput(e.target.value)
+          }
+        ></input>
+        <button onClick={addUserToCurrentRoom}>Add User</button>
+        <Box>
+          <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            {userChats?.map((message, i) => {
+              <ListItem alignItems="flex-start">
+                <ListItemText
+                  primary=" "
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        sx={{ display: 'inline' }}
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
 
-                    </Typography>
-                    {message.Message}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-          })}
-        </List>
-      </Box>
+                      </Typography>
+                      {message.Message}
+                    </React.Fragment>
+                  }
+                />
+              </ListItem>
+            })}
+          </List>
+        </Box>
 
-      <input id="test"
-        type="text"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-          handleMessageInput(e.target.value)
-        }
-      ></input>
-      <button onClick={sendMessageToCurrentRoom}>Add Message</button>
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 0, width: '100%' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField id="outlined-basic" label="Message" variant="outlined" onSubmit={sendMessageToCurrentRoom} />
+        <input id="test"
+          type="text"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            handleMessageInput(e.target.value)
+          }
+        ></input>
+        <button onClick={sendMessageToCurrentRoom}>Add Message</button>
+        <Box
+          component="form"
+          sx={{
+            '& > :not(style)': { m: 0, width: '100%' },
+          }}
+          noValidate
+          autoComplete="off"
+        >
+          <TextField id="outlined-basic" label="Message" variant="outlined" onSubmit={sendMessageToCurrentRoom} />
+        </Box>
       </Box>
-    </Box>
-  );
+    );
+  }
+
 }

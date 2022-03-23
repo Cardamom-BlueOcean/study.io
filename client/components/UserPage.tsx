@@ -27,10 +27,10 @@ import {
   Box,
   CssBaseline,
   Paper,
-  ThemeProvider,
   Typography,
 } from "@mui/material";
 import logo from '../../src/logo.png'
+import ExpandedCalendar from "./ExpandedCalendar";
 
 type room = {
   RoomName: string;
@@ -46,6 +46,7 @@ export default function UserPage() {
   const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
   const [userChats, setUserChats] = useState([]);
   const [currentRoom, setCurrentRoom] = useState('');
+  const [showCalendar, setShowCalendar] = useState(false);
   console.log(currentRoom);
 
   useEffect(() => {
@@ -120,7 +121,7 @@ export default function UserPage() {
     <Box>
       <Box sx={{ backgroundColor: '#542F34' }}> <img src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
       <Box className="loginbar" sx={{ border: 1, height: '40px', width: 8 / 10, margin: '20px auto' }}>Login bar</Box>
-      <Box sx={{
+      <Box className="main" sx={{
         width: 8 / 10,
         height: 800,
         // border: 2,
@@ -132,12 +133,16 @@ export default function UserPage() {
       }}>
         <Box className="sidebar" sx={{ border: 1 }}>
           <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} />
-          <Calendar />
+
+          <Calendar setShowCalendar={setShowCalendar} />
+
         </Box>
         <Box className="chatview" sx={{ border: 1 }}>
-          <GroupTabs userChats={userChats} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
+          <GroupTabs userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
+
         </Box>
       </Box>
+
     </Box>
   );
 }

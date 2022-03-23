@@ -47,7 +47,7 @@ export default function UserPage() {
   const [userChats, setUserChats] = useState([]);
   const [currentRoom, setCurrentRoom] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
-  console.log(currentRoom);
+  //console.log(currentRoom);
 
   useEffect(() => {
     const asyncGetAuth = async () => {

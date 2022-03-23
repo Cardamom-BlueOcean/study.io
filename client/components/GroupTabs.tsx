@@ -31,37 +31,10 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   const userRooms = useAppSelector((state) => state.userRooms.value);
   // const userChats = useAppSelector((state) => state.userChats.value);
-  console.log('user rooms', userRooms)
+  //console.log('user rooms', userRooms)
   console.log('user chats', userChats)
-  //console.log('practice', practice)
 
-  // React.useEffect(() => {
-  //   if (userRooms[0] !== undefined) {
-  //     setValue(userRooms[0]);
-  //     setCurrentRoom(userRooms[0]);
-  //   }
-  // }, [userRooms])
 
-  // React.useEffect(() => {
-  //   if (value !== null) {
-  //     //console.log(value);
-  //     //console.log(typeof (value));
-  //     //console.log(userChats.english);
-  //     setCurrentRoomChats(userChats.english);
-  //   }
-  // }, [value])
-
-  // React.useEffect(() => {
-  //   //console.log('userChats now', userChats);
-  //   let current = value;
-  //   //console.log(current);
-  //   if (current !== undefined) {
-  //     //console.log('yay');
-  //     //console.log(typeof (value));
-  //     //console.log('here', userChats.english);
-  //     setCurrentRoomChats(userChats.english);
-  //   }
-  // }, [userChats[value]])
 
   const createRoomFunction = useAppSelector(
     (state) => state.globalFunctions.value.createRoom
@@ -69,12 +42,10 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   const addUserToRoom = useAppSelector((state) => state.globalFunctions.value.addNewUserToRoom);
 
-
   const dispatch = useAppDispatch();
 
   const handleMessageInput = (messageBody) => {
     setMessageInput(messageBody);
-    //console.log(userChats.english);
   };
 
   const handleAddUserInput = (userBody) => {

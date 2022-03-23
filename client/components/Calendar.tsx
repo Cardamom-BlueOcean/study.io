@@ -58,31 +58,51 @@ export default function Calendar({ setShowCalendar }) {
     asyncWrapper()
   }, [])
 
-  // console.log('accepted', accepted)
-  // console.log('pending', pending)
 
 
-  // React.useEffect(() => {
-  //   setAccepted(['Meeting with John at 2pm to study Python', 'Meeting with Tobin at 5pm to study Firebase', 'Meeting with BJ at 6pm to study Material UI']);
-  //   setPending(['Alex invited you to study Typescript tomorrow at 12pm', 'Richard invited you to study Redux March 24 at 1pm']);
-  // }, [])
-
+  //TODO on click, a post request should be sent to update the invite to true
   const updateCheckedBox = async (idx) => {
     setChecked(checked.map((val, index) => (
       index === idx ? !val : val
     )))
 
+    const asyncWrapper = async () => {
+      const db = await getFirestore();
+      const auth: any = await getAuth();
+      onAuthStateChanged(auth, (user: any) => {
+        const getEventsForCurrentUser = async () => {
+          const q: any = doc(db, "Users", user.uid);
+          const userData = await getDoc(q);
+          // ON CLICK of the checkbox, the accepted and pending state will get update, a patch? request
+          // will get sent to firestore with the updated acceptedInvites and pendingInvites array
+          let checkedInvite = pending.splice(idx, 1);
+          accepted.push(checkedInvite[0])
+          setAccepted(accepted)
+
+          await setDoc(doc(db, "Users", user.uid), {
+            name: user.displayName,
+            email: user.email,
+            thumbnailPhotoURL: user.photoURL,
+            uid: user.uid,
+            rooms: arrayUnion(roomName),
+            acceptedInvites: accepted,
+            pendingInvites: pending
+          }, { merge: true });
+
+        }
+        getEventsForCurrentUser()
+      })
+    }
+    asyncWrapper()
+
     // move the pending invite object to the accepted array
-    const db = await getFirestore();
-    const auth: any = await getAuth();
-    await setDoc(doc(db, "Users", user.uid), {
-      name: user.displayName,
-      email: user.email,
-      thumbnailPhotoURL: user.photoURL,
-      uid: user.uid,
-      rooms: arrayUnion(roomName)
-    }, { merge: true });
+
+
   }
+
+  // console.log('accepted', accepted)
+  // console.log('pending', pending)
+
 
   return (
     <Box

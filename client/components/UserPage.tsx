@@ -131,7 +131,7 @@ export default function UserPage() {
       <Box className="loginbar" sx={{ border: 1, height: '40px', width: 8 / 10, margin: '20px auto' }}>Login bar</Box>
       <Box className="main" sx={{
         width: 8 / 10,
-        height: 600,
+        height: 800,
         // border: 2,
         display: 'grid',
         margin: 'auto',

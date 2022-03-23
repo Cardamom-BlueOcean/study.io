@@ -43,10 +43,16 @@ export default function ExpandedCalendar({ setShowCalendar }) {
   const [events, setEvents] = React.useState<Array<string>>([]);
   const [pending, setPending] = React.useState<Array<string>>([]);
   const [checked, setChecked] = React.useState<Array<any>>(pending.slice().fill(false));
+  const [user, setUser] = React.useState<string>('');
 
   //add meeting stuff
   const [scheduledMeeting, setScheduleMeeting] = React.useState<boolean>(false);
+  const [roomsDropdown, setRoomsDropdown] = React.useState<Array<string>>([]);
+  //new meeting stuff
+  const [newMeetingDate, setNewMeetingDate] = React.useState<string>(new Date().toLocaleString('default', { month: 'long', day: 'numeric' }));
   const [participant, setParticipant] = React.useState<string>('');
+  const [time, setTime] = React.useState<string>('');
+  const [selectedStudyGroup, setSelectedStudyGroup] = React.useState<string>('')
 
   React.useEffect(() => {
     const asyncWrapper = async () => {
@@ -57,10 +63,12 @@ export default function ExpandedCalendar({ setShowCalendar }) {
           // console.log('auth', user.uid)
           const q: any = doc(db, "Users", user.uid);
           const userData = await getDoc(q);
-          console.log('userdata', userData.data())
+          // console.log('userdata', userData.data())
           //This is not working
           setEvents(userData.data().acceptedInvites)
           setPending(userData.data().pendingInvites)
+          setRoomsDropdown(userData.data().rooms)
+          setUser(userData.data().name)
         }
         getEventsForCurrentUser()
       })
@@ -68,8 +76,8 @@ export default function ExpandedCalendar({ setShowCalendar }) {
     asyncWrapper()
   }, [])
 
-  console.log('events', events)
-  console.log('pending', pending)
+  // console.log('events', events)
+  // console.log('pending', pending)
 
   const renderEvents = () => (
     <ul>
@@ -84,7 +92,10 @@ export default function ExpandedCalendar({ setShowCalendar }) {
         <Box key={idx} sx={{ display: 'flex' }}>
           <Checkbox
             checked={checked[idx]}
-            onChange={(e) => updateCheckedBox(idx)}
+            onChange={(e) => {
+              //move pending invite to the accepted invite array
+              updateCheckedBox(idx)
+            }}
             inputProps={{ 'aria-label': 'controlled' }}
             key={idx}
           />
@@ -98,53 +109,73 @@ export default function ExpandedCalendar({ setShowCalendar }) {
     setChecked(checked.map((val, index) => (
       index === idx ? !val : val
     )))
+
+  }
+  const sendInviteToParticipant = () => {
+    //TODO send invite to other user - add to other users pendingInvites
+    //need to have access to other user's id??
+    let invitation = `${user} invited you to study ${selectedStudyGroup} on ${newMeetingDate} at ${time}`
+
   }
 
-
   const sendInvite = () => (
-    <Box sx={{ placeSelf: 'center', alignContent: 'center' }}>
-      {/* <Typography variant="h6">Select Meeting Date</Typography> */}
+    <Box sx={{ placeSelf: 'center', alignContent: 'center', justifyContent: 'space-between' }}>
       <Box sx={{ display: 'flex' }}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
             label="Select Meeting Date"
             value={selectedDate}
             minDate={new Date('2017-01-01')}
-            onChange={(newValue: any) => {
-              setSelectedDate(newValue);
+            onChange={(meetupDate: any) => {
+              let meet = meetupDate.toLocaleString('default', { month: 'long', day: 'numeric' });
+              setNewMeetingDate(meet);
             }}
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
         <TextField
-          id="outlined-name"
-          label="Participant"
+          id="participanttext"
+          label="Invitee"
           value={participant}
           onChange={(e) => setParticipant(e.target.value)}
-          sx={{ width: '220px' }}
+          sx={{ width: '230px' }}
+        />
+        <TextField
+          id="meetingtimetext"
+          label="Enter Meeting Time"
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+          sx={{ width: '230px' }}
         />
       </Box>
-      <Typography variant="h6">Select Meeting Room</Typography>
-      <PopupState variant="popover" popupId="choose-room" >
-        {(menu) => (
-          <React.Fragment>
-            <Button variant="contained" {...bindTrigger(menu)}
-              endIcon={<KeyboardArrowDown />}
-              sx={{ marginBottom: '20px' }}
-            >
-              Study Groups
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Divider />
+        <PopupState variant="popover" popupId="choose-room" >
+          {(menu) => (
+            <React.Fragment>
+              <Button variant="outlined" {...bindTrigger(menu)}
+                endIcon={<KeyboardArrowDown />}
+                sx={{ marginBottom: '20px', width: '230px' }}
+              >
+                Study Groups
+              </Button>
+              <Menu {...bindMenu(menu)}>
+                {roomsDropdown.map((room, idx) => (
+                  <MenuItem onClick={(e) => {
+                    menu.close; setSelectedStudyGroup(e.target.textContent)
+                  }}
+                    key={idx}>{room}</MenuItem>
 
-            </Button>
-            {/*TODO render room names in menu */}
-            <Menu {...bindMenu(menu)}>
-              <MenuItem onClick={menu.close}>Profile</MenuItem>
-              <MenuItem onClick={menu.close}>My account</MenuItem>
-              <MenuItem onClick={menu.close}>Logout</MenuItem>
-            </Menu>
-          </React.Fragment>
-        )}
-      </PopupState>
-      <Divider />
+                ))}
+              </Menu>
+            </React.Fragment>
+          )}
+        </PopupState>
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Button variant="contained" sx={{ width: '230px', height: '50px' }} onClick={() => sendInviteToParticipant()}>Submit</Button>
+
+      </Box>
     </Box>
   );
 
@@ -161,7 +192,6 @@ export default function ExpandedCalendar({ setShowCalendar }) {
             orientation="portrait"
             openTo="day"
             value={selectedDate}
-            // shouldDisableDate={isWeekend}
             onChange={(newDate: any) => {
               console.log('aksd', newDate)
               setSelectedDate(newDate);
@@ -174,7 +204,7 @@ export default function ExpandedCalendar({ setShowCalendar }) {
         <Box>
           <Box sx={{ placeSelf: 'center', marginTop: '50px' }}>
             {selectedDate.toDateString() === (new Date()).toDateString() ?
-              <Typography variant="h4" sx={{ alignItems: 'center', justifyContent: 'center' }}>Today's Events</Typography>
+              <Typography variant="h4" sx={{ alignItems: 'center', justifyContent: 'center', fontWeight: 'light' }}>Today's Events</Typography>
               :
               <Typography variant="h4">{selectedDate.toLocaleString('default', { month: 'long', day: 'numeric' })} Events</Typography>
             }
@@ -186,7 +216,7 @@ export default function ExpandedCalendar({ setShowCalendar }) {
 
           <Box sx={{ placeSelf: 'center' }}>
 
-            <Typography variant="h4">Pending Invites</Typography>
+            <Typography variant="h4" sx={{ fontWeight: 'light' }}>Pending Invites</Typography>
 
           </Box>
           {pending.length === 0 ?
@@ -196,40 +226,15 @@ export default function ExpandedCalendar({ setShowCalendar }) {
         </Box>
       </Box>
 
-
-
       <Divider variant="middle" />
-
       <Box sx={{ display: 'grid', justifyContent: 'center' }}>
-        <Button variant="outlined"
-          sx={{ width: '500px', marginTop: '20px', marginBottom: '20px' }}
-          onClick={() => { setScheduleMeeting(prev => !prev) }}>Schedule Meeting</Button>
-        {scheduledMeeting ? sendInvite() : null}
+        <Box>
 
-
-        {/* <Box sx={{ placeSelf: 'center' }}>
-          {selectedDate.toDateString() === (new Date()).toDateString() ?
-            <Typography variant="h4" sx={{ alignItems: 'center', justifyContent: 'center' }}>Today's Events</Typography>
-            :
-            <Typography variant="h4">{selectedDate.toLocaleString('default', { month: 'long', day: 'numeric' })} Events</Typography>
-          }
+          <Button variant="outlined"
+            sx={{ width: '500px', marginTop: '20px', marginBottom: '20px' }}
+            onClick={() => { setScheduleMeeting(prev => !prev) }}>Schedule Meeting</Button>
+          {scheduledMeeting ? sendInvite() : null}
         </Box>
-        {
-          events.length === 0 ?
-            <Typography>No meet ups scheduled today</Typography>
-            : renderEvents()
-        }
-
-        <Box sx={{ placeSelf: 'center' }}>
-
-          <Typography variant="h4">Pending Invites</Typography>
-
-        </Box>
-        {
-          events.length === 0 ?
-            <Typography>No meet ups scheduled today</Typography>
-            : <Typography>stuff</Typography>
-        } */}
       </Box>
     </Box >
   );

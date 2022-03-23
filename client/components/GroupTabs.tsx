@@ -36,7 +36,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   const userRooms = useAppSelector((state) => state.userRooms.value);
   // const userChats = useAppSelector((state) => state.userChats.value);
   //console.log('user rooms', userRooms)
-  console.log('user chats', userChats)
+  // console.log('user chats', userChats)
 
 
 

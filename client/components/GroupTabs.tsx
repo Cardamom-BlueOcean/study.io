@@ -116,13 +116,17 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
           <Stack>
             {userChats ? userChats.map((message, index) => {
               if (message.Sender === userId) {
-                //let date = message.TimeStamp.toDate();
+                if (message?.TimeStamp) {
+                  let date = message.TimeStamp.toDate();
+                }
                 //console.log('date', date);
                 return (
                   <UserChatMessage key={index} message={message} />
                 )
               } else {
-                //let date = message.TimeStamp.toDate();
+                if (message?.TimeStamp) {
+                  let date = message.TimeStamp.toDate();
+                }
                 //console.log('date', date);
                 return (
                   <OtherChatMessage key={index} message={message} />

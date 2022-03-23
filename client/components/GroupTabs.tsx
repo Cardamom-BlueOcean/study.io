@@ -126,8 +126,6 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   const addUserToCurrentRoom = async () => {
     const inputValue = (document.getElementById('usersSearch') as HTMLInputElement).value
-    console.log('searchedUsersFullInfo', searchedUsersFullInfo)
-    console.log('inputValue', inputValue)
     const newArr = searchedUsersFullInfo.filter((user) =>{
       return user.name === inputValue
     })
@@ -204,9 +202,10 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
           <Stack>
             {userChats ? userChats.map((message, index) => {
               if (message.Sender === userId) {
-                if(message?.TimeStamp){
-                let date = message.TimeStamp.toDate();
+                if (message?.TimeStamp) {
+                  let date = message.TimeStamp.toDate();
                 }
+
                 //console.log('date', date);
                 return (
                   <Tooltip title="Reply" placement="bottom-end" key={index}>
@@ -221,9 +220,11 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                   </Tooltip>
                 )
               } else {
-                if(message?.TimeStamp){
+                if (message?.TimeStamp) {
                   let date = message.TimeStamp.toDate();
-                  }
+                }
+
+                //console.log('date', date);
                 return (
                   <Tooltip title="Reply" placement="bottom-start" key={index}>
                     <Box sx={{ display: 'grid', gridTemplateColumns: '5% 95%' }}>

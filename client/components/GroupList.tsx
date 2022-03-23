@@ -88,11 +88,11 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
           const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chats: any = [];
             querySnapshot.forEach((doc) => {
+              let temp = doc.data();
+              temp['Documentid'] = doc.id;
+              // console.log(temp);
 
-              // let temp = doc.data()
-              // temp.documentID = doc.id
-              // console.log('doc.id', doc.data())
-              chats.push(doc.data());
+              chats.push(temp);
             });
             setUserChats(chats)
           });
@@ -149,11 +149,11 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleUserMenuClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? 'account-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
+            // size="small"
+            // sx={{ ml: 2 }}
+            // aria-controls={open ? 'account-menu' : undefined}
+            // aria-haspopup="true"
+            // aria-expanded={open ? 'true' : undefined}
           >
             <Avatar sx={{ width: 32, height: 32 }} src={auth.currentUser?.photoURL} imgProps={{ referrerPolicy: 'noReferrer' }} ></Avatar>
           </IconButton>

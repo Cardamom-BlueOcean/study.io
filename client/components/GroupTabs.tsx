@@ -36,7 +36,7 @@ export default function GroupTabs({ practice, userChats }) {
     (state) => state.globalFunctions.value.createRoom
   );
   const addUserToRoom = useAppSelector((state) => state.globalFunctions.value.addNewUserToRoom);
-  const [value, setValue] = React.useState<string>('english');
+  const [value, setValue] = React.useState<string>('alexsroom');
 
   const handleChange = (event: any, newValue: string) => {
     console.log(newValue);

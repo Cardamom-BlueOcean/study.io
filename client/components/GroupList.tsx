@@ -1,17 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import Button from '@mui/material/Button';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import TextField from '@mui/material/TextField';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import { fakeData } from './fakeGroupData';
+import { useNavigate } from "react-router-dom";
 import {
   getFirestore,
   collection,
@@ -24,19 +13,42 @@ import {
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useAppSelector, useAppDispatch } from '../hooks'
-import { useNavigate } from "react-router-dom";
+
+import InboxIcon from '@mui/icons-material/Inbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
 import GoogleIcon from '@mui/icons-material/Google';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Logout from '@mui/icons-material/Logout';
-import Settings from '@mui/icons-material/Settings';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AddIcon from '@mui/icons-material/Add';
+
+import {
+  Logout,
+  PersonAdd,
+  Settings,
+} from "@mui/icons-material";
+
+import {
+  List,
+  Button,
+  ListItem,
+  ListItemButton,
+  TextField,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Switch,
+  Avatar,
+  Menu,
+  FormControlLabel,
+  MenuItem,
+  Tooltip,
+  IconButton,
+  Box,
+  Paper,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+
+import { fakeData } from './fakeGroupData';
 
 export default function GroupList({ setCurrentRoom, currentRoom, setUserChats }) {
 
@@ -108,98 +120,93 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
   };
 
   const handleUsernameClick = (event) => {
-    //console.log('you just clicked to change the user name', event)
+    console.log('you just clicked to change the user name', event)
   }
 
   const handleSettingsClick = (event) => {
-    //console.log('you just clicked to set the settings', event)
+    console.log('you just clicked to set the settings', event)
   }
 
   const handleThemeClick = (event) => {
-    //console.log('you just clicked to change the theme', event)
+    console.log('you just clicked to change the theme', event)
   }
+
+  //console.log(`theme is ${theme}`)
 
   return (
 
     <Box sx={{
       width: '100%',
-      maxWidth: 200,
-      bgcolor: 'background.paper',
+      bgColor: 'background.paper',
       flexDirection: 'column'
     }}>
-      <Tooltip title="Account settings">
-        <IconButton
-          onClick={handleUserMenuClick}
-          size="small"
-          sx={{ ml: 2 }}
-          aria-controls={open ? 'account-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }} >
+        <Tooltip title="Account settings">
+          <IconButton
+            onClick={handleUserMenuClick}
+            size="small"
+            sx={{ ml: 2 }}
+            aria-controls={open ? 'account-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+          >
+            <Avatar sx={{ width: 32, height: 32 }} src={auth.currentUser?.photoURL} imgProps={{ referrerPolicy: 'noReferrer' }} ></Avatar>
+          </IconButton>
+        </Tooltip>
+        <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={openMenu}
+          onClose={handleClose}
+          onClick={handleClose}
+          PaperProps={{
+            elevation: 0,
+            sx: {
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              mt: 1.5,
+              '& .MuiAvatar-root': {
+                width: 32,
+                height: 32,
+                ml: -0.5,
+                mr: 1,
+              },
+            },
+          }}
+          transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         >
-          <Avatar sx={{ width: 32, height: 32 }} src={auth.currentUser?.photoURL} imgProps={{ referrerPolicy: 'noReferrer' }} ></Avatar>
-        </IconButton>
-      </Tooltip>
-      <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={openMenu}
-        onClose={handleClose}
-        onClick={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: 1.5,
-            '& .MuiAvatar-root': {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
-            },
-            '&:before': {
-              content: '""',
-              display: 'block',
-              position: 'absolute',
-              top: 0,
-              left: 14,
-              width: 10,
-              height: 10,
-              bgColor: 'background.paper',
-              transform: 'translateY(-50%) rotate(45deg)',
-              zIndex: 0,
-            },
-          },
-        }}
-        transformOrigin={{ horizontal: 'left', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-      >
-        <MenuItem>
-          <Avatar src={auth.currentUser?.photoURL} /> {auth.currentUser?.displayName}
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Switch Accounts
-        </MenuItem>
-        <MenuItem onClick={handleUsernameClick}>
-          <ListItemIcon>
-            <AccountCircleIcon fontSize="small" />
-          </ListItemIcon>
-          Change User Name
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleThemeClick}>
-          <FormControlLabel control={<Switch />} label="Light Theme" />
-        </MenuItem>
-        <MenuItem onClick={() => signOutUser()}>
-          <ListItemIcon >
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          Logout
-        </MenuItem>
-      </Menu>
+          <MenuItem>
+            <Avatar src={auth.currentUser?.photoURL} /> {auth.currentUser?.displayName}
+          </MenuItem>
+          <MenuItem>
+            <ListItemIcon>
+              <PersonAdd fontSize="small" />
+            </ListItemIcon>
+            Switch Accounts
+          </MenuItem>
+          <MenuItem onClick={handleUsernameClick}>
+            <ListItemIcon>
+              <AccountCircleIcon fontSize="small" />
+            </ListItemIcon>
+            Change User Name
+          </MenuItem>
+          <Divider />
+          <MenuItem onClick={handleThemeClick}>
+            <FormControlLabel control={<Switch />} label="Light Theme" />
+          </MenuItem>
+          <MenuItem onClick={() => signOutUser()}>
+            <ListItemIcon >
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            Logout
+          </MenuItem>
+        </Menu>
+        <Typography onClick={handleUserMenuClick} sx={{ cursor: 'pointer' }}>
+          {auth.currentUser?.displayName}
+        </Typography>
+      </Box >
+      <Divider />
       <List>
         {userRooms.map((group, i) => (
           < ListItem disablePadding key={i} value={group} onClick={() => setCurrentRoom(group)}>
@@ -212,8 +219,11 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
         ))}
       </List>
       <Divider />
-      <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}>Add Group</Button>
-      <TextField id="outlined-basic" label="group name" variant="outlined" onChange={setTextField} />
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
+        <TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />
+        <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}><AddIcon /></Button>
+      </Box>
+      <Divider />
     </Box >
   );
 }

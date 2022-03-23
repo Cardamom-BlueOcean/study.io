@@ -1,5 +1,6 @@
 build
-
+package-lock.json
+fakeData.json
 
 # Logs
 logs
@@ -106,3 +107,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+config.ts
+
+.DS_Store

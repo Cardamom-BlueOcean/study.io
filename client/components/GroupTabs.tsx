@@ -107,7 +107,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
-    padding: theme.spacing(.5),
+    padding: theme.spacing(.2),
     textAlign: 'left',
     color: theme.palette.text.secondary,
   }));
@@ -115,7 +115,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   const Item2 = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
-    padding: theme.spacing(.5),
+    padding: theme.spacing(.2),
     textAlign: 'right',
     color: theme.palette.text.secondary,
   }));
@@ -139,7 +139,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
           ></input>
           <Button sx={{ alignSelf: 'end' }} onClick={addUserToCurrentRoom}>Add User</Button>
         </Box>
-        <Box sx={{ height: '500px', overflow: 'scroll' }}>
+        <Box sx={{ height: '500px', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
           <Stack>
             {userChats ? userChats.map((message, index) => {
               if (message.Sender === 'x8lR3zV56bR0FpFjmKuhs3xbvPl1') {
@@ -151,7 +151,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                         <Item2>{message.Message}</Item2>
                         {/* <Item2>{message.TimeStamp.seconds}</Item2> */}
                       </Stack>
-                      <Avatar sx={{ width: 32, height: 32 }} src={message.Avatar}></Avatar>
+                      <Avatar sx={{ width: 32, height: 32, alignSelf: 'right' }} src={message.Avatar}></Avatar>
                     </Box>
                   </Tooltip>
                 )
@@ -160,7 +160,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                   <Tooltip title="Reply" placement="bottom-start">
                     <Box>
                       <Stack>
-                        <Item>{message.Sender}</Item>
+                        <Item>{message.Name}</Item>
                         <Item>{message.Message}</Item>
                         {/* <Item>{message.TimeStamp.seconds}</Item> */}
                       </Stack>

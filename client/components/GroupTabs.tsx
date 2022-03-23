@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useAppSelector, useAppDispatch } from "../hooks";
-import { Box, TextField, Stack, List, ListItem, ListItemText, Typography, Paper, styled, Button, Tooltip, Avatar } from '@mui/material';
+import { Box, TextField, Stack, List, ListItem, ListItemText, Typography, Paper, styled, Button, Tooltip, Avatar, Autocomplete } from '@mui/material';
 //import { group } from 'console';
 import {
   getFirestore,
@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ExpandedCalendar from "./ExpandedCalendar";
+import { bgcolor, grid } from "@mui/system";
 
 export default function GroupTabs({ userChats, showCalendar, setShowCalendar, currentRoom, setCurrentRoom }) {
   const db = getFirestore()
@@ -122,18 +123,35 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
-    padding: theme.spacing(.5),
+    padding: theme.spacing(.2),
     textAlign: 'left',
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.secondary
   }));
 
   const Item2 = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#D3D3D3',
     ...theme.typography.body2,
-    padding: theme.spacing(.5),
+    padding: theme.spacing(.2),
     textAlign: 'right',
     color: theme.palette.text.secondary,
+    border: '0px'
   }));
+
+  const SearchResults = () => {
+    return (
+      <Autocomplete
+        disablePortal
+        id="usersSearch"
+        options={searchedUsers}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Search Users" onChange={(e: React.ChangeEvent<HTMLInputElement>): any => {
+          e.preventDefault();
+          handleAddUserInput(e.target.value)
+        }
+        } />}
+      />
+    );
+  }
 
   if (showCalendar) {
     return (
@@ -141,45 +159,59 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     )
   } else {
     return (
-      <Box sx={{ width: "100%", height: '600px', typography: "body1" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'inline-flex', height: '50px', gap: '100px' }}>
-          <Typography variant="h5" gutterBottom component="div">
+      <Box sx={{ width: "100%", height: '95%', typography: "body1" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '15% 30% 30% 25%', height: '50px' }}>
+          <Typography sx={{ alignSelf: 'center', justifySelf: 'center' }} variant="h5" gutterBottom component="div">
             {currentRoom}
           </Typography>
-          <input id="test"
+          <SearchResults />
+          {/* <input id="test"
             type="text"
             onChange={(e: React.ChangeEvent<HTMLInputElement>): any =>
               handleAddUserInput(e.target.value)
             }
-          ></input>
-          <Button sx={{ alignSelf: 'end' }} onClick={addUserToCurrentRoom}>Add User</Button>
+          ></input> */}
+          {/* <List>
+            {searchedUsers.length > 0 ? searchedUsers.map((user, index) => {
+              return (
+                <ListItem value={user}>
+                  <ListItemText primary={user}></ListItemText>
+                </ListItem>
+              )
+            }) : null}
+          </List> */}
+          <Button sx={{ width: '10%', alignSelf: 'end' }} onClick={addUserToCurrentRoom}>Add User</Button>
         </Box>
-        <Box sx={{ height: '500px', overflow: 'scroll' }}>
+        <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
           <Stack>
             {userChats ? userChats.map((message, index) => {
               if (message.Sender === userId) {
+                let date = message.TimeStamp.toDate();
+                //console.log('date', date);
                 return (
                   <Tooltip title="Reply" placement="bottom-end" key={index}>
-                    <Box>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: '95% 5%', bgcolor: '#D3D3D3' }}>
                       <Stack>
                         <Item2>{message.Name}</Item2>
                         <Item2>{message.Message}</Item2>
-                        {/* <Item2>{message.TimeStamp.seconds}</Item2> */}
+                        {/* <Item2>{date}</Item2> */}
                       </Stack>
-                      <Avatar sx={{ width: 32, height: 32 }} src={message.Avatar}></Avatar>
+                      <Avatar sx={{ width: 32, height: 32, alignSelf: 'center', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: 'noReferrer' }}></Avatar>
                     </Box>
                   </Tooltip>
                 )
               } else {
+                let date = message.TimeStamp.toDate();
+                //console.log('date', date);
                 return (
                   <Tooltip title="Reply" placement="bottom-start" key={index}>
-                    <Box>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: '5% 95%' }}>
+                      <Avatar sx={{ width: 32, height: 32, alignSelf: 'center', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: 'noReferrer' }}></Avatar>
                       <Stack>
                         <Item>{message.Name}</Item>
                         <Item>{message.Message}</Item>
-                        {/* <Item>{message.TimeStamp.seconds}</Item> */}
+                        {/* <Item>{date}</Item> */}
                       </Stack>
-                      <Avatar sx={{ width: 32, height: 32 }} src={message.Avatar}></Avatar>
                     </Box>
                   </Tooltip>
                 )
@@ -188,16 +220,9 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
           </Stack>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-          {/* <Box
-            component="form"
-            sx={{ m: 0, width: '80%', }}
-            noValidate
-            autoComplete="off"
-          > */}
-          <TextField id="outlined-basic" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+          <TextField sx={{ width: '90%' }} id="outlined-basic" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
             handleMessageInput(e.target.value)
           } />
-          {/* </Box> */}
           <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom}>Send</Button>
         </Box >
       </Box>

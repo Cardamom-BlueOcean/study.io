@@ -31,8 +31,8 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   const userRooms = useAppSelector((state) => state.userRooms.value);
   // const userChats = useAppSelector((state) => state.userChats.value);
-  console.log('user rooms', userRooms)
-  console.log('user chats', userChats)
+  // console.log('user rooms', userRooms)
+  // console.log('user chats', userChats)
   //console.log('practice', practice)
 
   React.useEffect(() => {
@@ -117,7 +117,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
       }
     })
     setSearchedUsers(matchedUsers)
-    console.log('users that match the current search', searchedUsers)
+    // console.log('users that match the current search', searchedUsers)
   }
 
   const addUserToCurrentRoom = async () => {

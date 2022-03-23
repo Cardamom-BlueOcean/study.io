@@ -55,13 +55,13 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
   }
 
   const setTextField = function (e) {
-    console.log(e.target.value)
+    // console.log(e.target.value)
     setTextFieldTemp(e.target.value)
   }
 
 
   React.useEffect(() => {
-    console.log('here')
+    // console.log('here')
     onAuthStateChanged(auth, (user: any) => {
       const subsribeToUpdatesForARoom = async (currentRoom) => {
         //The function can be called to subscribe to a room in
@@ -86,7 +86,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
   }, [currentRoom])
   let navigate = useNavigate();
   // const auth = getAuth()
-  console.log('auth.currentUser is', auth.currentUser)
+  // console.log('auth.currentUser is', auth.currentUser)
 
   function signOutUser() {
     signOut(auth).then(() => {

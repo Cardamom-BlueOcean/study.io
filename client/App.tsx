@@ -1,5 +1,5 @@
-
 import * as React from 'react';
+import { useState } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -18,12 +18,33 @@ import {
   Typography,
 } from "@mui/material";
 
-const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
+
+
+const theme2 = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      light: "#806543",
+      main: "#542F34",
+      dark: "#33266E",
+      contrastText: "#A6607C",
+    },
+    secondary: {
+      main: "#A6607C",
+      light: "#fff",
+      dark: "#542F34",
+      contrastText: "#542F34",
+    },
+  },
+});
 
 const App = () => {
+
+  const [toggleDark, settoggleDark] = useState(false);
+
   const theme = createTheme({
     palette: {
-      mode: 'dark',
+      mode: toggleDark ? "dark" : "light",
       primary: {
         light: "#806543",
         main: "#542F34",
@@ -37,24 +58,17 @@ const App = () => {
         contrastText: "#542F34",
       },
     },
-  });
-
-
-
-  const colorMode = React.useContext(ColorModeContext);
-
+  })
 
   return (
 
     < Provider store={store} >
-      <p> {theme.palette.mode} mode</p>
-      <p onClick={() => theme.palette.mode = 'light'}>change mode</p>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
           <Routes>
             <Route path="/about" />
-            <Route path="/userlogin" element={<UserPage />} />
+            <Route path="/userlogin" element={<UserPage toggleDark={toggleDark} settoggleDark={settoggleDark} currentMode={theme.palette.mode} />} />
             <Route path="/" element={<Login />} />
           </Routes>
         </Router >

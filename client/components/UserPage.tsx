@@ -40,7 +40,7 @@ type room = {
   RoomParticipants: string[];
 };
 
-export default function UserPage() {
+export default function UserPage(props) {
   const db = getFirestore();
 
   const userRooms = useAppSelector((state) => state.userRooms.value);
@@ -143,7 +143,7 @@ export default function UserPage() {
         gridTemplateRows: 'auto'
       }}>
         <Box className="sidebar" sx={{ border: 1 }}>
-          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} />
+          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} toggleDark={props.toggleDark} settoggleDark={props.settoggleDark} currentMode={props.currentMode} />
           <Calendar setShowCalendar={setShowCalendar} />
         </Box>
         <Box className="chatview" sx={{ border: 1, height: '60%' }}>

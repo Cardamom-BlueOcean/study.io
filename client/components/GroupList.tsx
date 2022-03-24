@@ -49,7 +49,7 @@ import {
 
 import { fakeData } from './fakeGroupData';
 
-export default function GroupList({ setCurrentRoom, currentRoom, setUserChats }) {
+export default function GroupList(props, { setCurrentRoom, currentRoom, setUserChats }) {
 
   const db = getFirestore();
   const auth: any = getAuth();
@@ -134,6 +134,12 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
     console.log('you just clicked to change the theme', event)
   }
 
+  const handleModeChange = () => {
+    console.log('in handleModeChange...')
+    props.settoggleDark(!props.toggleDark);
+    console.log(props.toggleDark)
+  };
+
   //console.log(`theme is ${theme}`)
 
   return (
@@ -194,8 +200,8 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
             Change User Name
           </MenuItem>
           <Divider />
-          <MenuItem onClick={handleThemeClick}>
-            <FormControlLabel control={<Switch />} label="Light Theme" />
+          <MenuItem>
+            <FormControlLabel control={<Switch checked={props.toggleDark} onChange={handleModeChange} />} label={props.currentMode + ' mode'} />
           </MenuItem>
           <MenuItem onClick={() => signOutUser()}>
             <ListItemIcon >

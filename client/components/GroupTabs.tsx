@@ -24,8 +24,15 @@ import ExpandedCalendar from "./ExpandedCalendar";
 import UserChatMessage from './UserChatMessage';
 import OtherChatMessage from './OtherChatMessage';
 import SearchUserToAdd from './SearchUserToAdd';
+<<<<<<< HEAD
 import VideoChat from "./videoChat/VideoChat";
 import VideocamIcon from '@mui/icons-material/Videocam';
+=======
+import $ from "jquery";
+import { UnpublishedOutlined, Send as SendIcon, UploadFile as UploadFileIcon, AddPhotoAlternateOutlined as AddPhotoAlternateOutlinedIcon } from "@mui/icons-material";
+//import UploadFileIcon from '@mui/icons-material/UploadFile';
+//import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+>>>>>>> 4261fcbb46964f6b1730655b61584994b715bb15
 
 export default function GroupTabs({ userChats, showCalendar, setShowCalendar, setCurrentRoom, currentRoom, currentUserName }) {
 
@@ -87,6 +94,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
           });
         }
         sendMessageOnceAuthorized()
+        $('#messageEntry').val("");
       }
     })
   }
@@ -136,13 +144,23 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
     display: 'none',
   });
 
+  $("#messageEntry").unbind().keyup(function (event) {
+    if (event.keyCode === 13) {
+
+      //$("#sendMessageButton").click();
+      sendMessageToCurrentRoom()
+      //$('#messageEntry').val("");
+      console.log('WOO');
+    }
+  });
+
   const UploadPhoto = () => {
     return (
       <Stack direction="row" alignItems="center" spacing={2}>
         <label htmlFor="photo-to-upload">
           <Input accept="image/*" id="photo-to-upload" multiple type="file" onChange={UploadPhotoToStorage} />
-          <Button variant="contained" component="span">
-            Upload
+          <Button component="span">
+            <UploadFileIcon />
           </Button>
         </label>
       </Stack>
@@ -202,14 +220,19 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
           </Stack>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-          <TextField sx={{ width: '90%' }} id="outlined-basic" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+          <TextField sx={{ width: '90%' }} id="messageEntry" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
             handleMessageInput(e.target.value)
           } />
-          <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom}>Send</Button>
+          <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom} id="sendMessageButton"><SendIcon /></Button>
+          <Button ><AddPhotoAlternateOutlinedIcon /></Button>
           <UploadPhoto />
         </Box >
+<<<<<<< HEAD
         {/* <Button >Video Chat</Button> */}
       </Box>
+=======
+      </Box >
+>>>>>>> 4261fcbb46964f6b1730655b61584994b715bb15
     );
   }}
 }

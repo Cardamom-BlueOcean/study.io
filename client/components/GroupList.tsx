@@ -14,13 +14,12 @@ import {
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useAppSelector, useAppDispatch } from '../hooks'
 
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import GoogleIcon from '@mui/icons-material/Google';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import AddIcon from '@mui/icons-material/Add';
-
 import {
+  Drafts as DraftsIcon,
+  Inbox as InboxIcon,
+  Google as GoogleIcon,
+  AccountCircle as AccountCircleIcon,
+  Add as AddIcon,
   Logout,
   PersonAdd,
   Settings,
@@ -134,21 +133,20 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
   //console.log(`theme is ${theme}`)
 
   return (
-
     <Box sx={{
       width: '100%',
-      bgColor: 'background.paper',
+      //      bgColor: 'background.paper',
       flexDirection: 'column'
     }}>
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }} >
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleUserMenuClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? 'account-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
+          //   size="small"
+          //   sx={{ ml: 2 }}
+          //   aria-controls={open ? 'account-menu' : undefined}
+          //   aria-haspopup="true"
+          //   aria-expanded={open ? 'true' : undefined}
           >
             <Avatar sx={{ width: 32, height: 32 }} src={auth.currentUser?.photoURL} imgProps={{ referrerPolicy: 'noReferrer' }} ></Avatar>
           </IconButton>
@@ -202,22 +200,24 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
             Logout
           </MenuItem>
         </Menu>
-        <Typography onClick={handleUserMenuClick} sx={{ cursor: 'pointer' }}>
+        <Typography onClick={handleUserMenuClick} sx={{ cursor: 'pointer', color: 'text.secondary' }}>
           {auth.currentUser?.displayName}
         </Typography>
       </Box >
       <Divider />
-      <List>
-        {userRooms.map((group, i) => (
-          < ListItem disablePadding key={i} value={group} onClick={() => setCurrentRoom(group)}>
-            <ListItemButton>
+      <Box sx={{ overflowY: 'scroll', maxHeight: '400px' }}>
+        <List>
+          {userRooms.map((group, i) => (
+            < ListItem disablePadding key={i} value={group} onClick={() => setCurrentRoom(group)}>
+              <ListItemButton>
 
-              <ListItemText primary={group} secondary="study group" />
+                <ListItemText primary={group} />
 
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
       <Divider />
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
         <TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />

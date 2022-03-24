@@ -138,16 +138,13 @@ export default function UserPage() {
       }}>
         <Box className="sidebar" sx={{ border: 1 }}>
           <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} />
-
           <Calendar setShowCalendar={setShowCalendar} />
-
         </Box>
+
         <Box className="chatview" sx={{ border: 1 }}>
           <GroupTabs userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
-
         </Box>
       </Box>
-
     </Box>
   );
 }

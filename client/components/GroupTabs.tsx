@@ -54,7 +54,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
     const Usersarr: string[] = [];
     const UsersFullInfo: any[] = []
     Users.forEach((user: any) => {
-      // console.log('user.data().name', user.data().name)
+      console.log('user.data().name', user.data().name)
       if (user.data().name) {
         const userName: string = user.data().name
         Usersarr.push(userName)
@@ -153,7 +153,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
 
   if (showCalendar) {
     return (
-      <ExpandedCalendar setShowCalendar={setShowCalendar} searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} />
+      <ExpandedCalendar setShowCalendar={setShowCalendar} />
     )
   } else {
     return (

@@ -14,6 +14,8 @@ import {
   doc,
   setDoc,
   orderBy,
+  updateDoc,
+  arrayUnion,
   getDoc
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -49,7 +51,7 @@ export default function UserPage(props) {
   const dispatch = useAppDispatch();
   const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
   const [userChats, setUserChats] = useState([]);
-  const [currentRoom, setCurrentRoom] = useState('');
+  const [currentRoom, setCurrentRoom] = useState('General');
   const [showCalendar, setShowCalendar] = useState(false);
   //console.log(currentRoom);
   const [currentUserUID, setcurrentUserUID] = useState<any>(null);
@@ -58,7 +60,13 @@ export default function UserPage(props) {
       const auth: any = await getAuth();
       onAuthStateChanged(auth, (user: any) => {
         if (user) {
-          setcurrentUserUID(user.uid)
+          setcurrentUserUID(user.uid);
+          const addToGeneral = async () => {
+            await updateDoc(doc(db, "Rooms", "General"),
+              { RoomParticipants: arrayUnion(user.uid) })
+          }
+          addToGeneral();
+
           const addUserDbIfUserIsNotAlreadyAdded = async () => {
             const ref = doc(db, "Users", user.uid)
             dispatch(setUserId(user.uid));
@@ -74,6 +82,8 @@ export default function UserPage(props) {
                 pendingInvites: [],
                 rooms: []
               }, { merge: true });
+              await updateDoc(doc(db, "Rooms", "General"),
+                { RoomParticipants: arrayUnion(user.uid) })
             }
           };
           addUserDbIfUserIsNotAlreadyAdded();

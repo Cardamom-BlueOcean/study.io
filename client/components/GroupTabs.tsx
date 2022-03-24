@@ -44,6 +44,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
   const [videoToggle, setVideoToggle] = React.useState(false);
 
 
+  console.log(userChats);
   // const mediaContent = useAppSelector((state) => state.mediaUrl.value)
   // console.log('at component level, ', mediaContent);
   // const dispatch = useAppDispatch();

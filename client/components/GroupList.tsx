@@ -54,7 +54,7 @@ import {
 import { fakeData } from './fakeGroupData';
 import { te } from 'date-fns/locale';
 
-export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, toggleDark, settoggleDark, currentMode }) {
+export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, setShowCalendar, toggleDark, settoggleDark, currentMode }) {
 
   const db = getFirestore();
   const auth: any = getAuth();
@@ -155,7 +155,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, t
       //      bgColor: 'background.paper',
       flexDirection: 'column'
     }}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }} >
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start', background: '#542F34', color: 'white' }} >
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleUserMenuClick}
@@ -238,7 +238,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, t
           <Box sx={{ overflowY: 'scroll', maxHeight: '400px' }}>
             <List>
               {userRooms.map((group, i) => (
-                < ListItem disablePadding key={i} value={group} onClick={() => setCurrentRoom(group)}>
+                < ListItem disablePadding key={i} value={group} onClick={() => { setCurrentRoom(group); setShowCalendar(false) }}>
                   <ListItemButton>
 
                     <ListItemText primary={group} />

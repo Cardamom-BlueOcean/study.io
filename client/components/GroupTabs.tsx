@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useAppSelector, useAppDispatch } from "../hooks";
+import { setMediaUrl } from '../features/mediaUrl/mediaUrl';
 import { Box, TextField, Stack, Typography, Button, styled } from '@mui/material';
 import {
   getFirestore,
@@ -18,7 +19,7 @@ import {
   updateDoc
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import ExpandedCalendar from "./ExpandedCalendar";
 import UserChatMessage from './UserChatMessage';
 import OtherChatMessage from './OtherChatMessage';
@@ -34,7 +35,10 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   const [fullListOfUsers, setFullListOfUsers] = React.useState([]);
   const [searchedUsers, setSearchedUsers] = React.useState<string[]>([]);
   const [searchedUsersFullInfo, setSearchedUsersFullInfo] = React.useState<any[]>([]);
-  const [mediaContent, setMediaContent] = React.useState([]);
+
+  // const mediaContent = useAppSelector((state) => state.mediaUrl.value)
+  // console.log('at component level, ', mediaContent);
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     handleAddUserInput('')
@@ -61,6 +65,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     setSearchedUsers(Usersarr)
   };
 
+  let randomUrl = '';
   const sendMessageToCurrentRoom = async () => {
     onAuthStateChanged(auth, (user: any) => {
       if (user) {
@@ -69,7 +74,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         const sendMessageOnceAuthorized = async () => {
           const newChat = await addDoc(collection(db, "Rooms", currentRoom, "Chats"), {
             Message: messageInput,
-            MessageMediaContent: mediaContent,
+            MessageMediaContent: randomUrl,
             Sender: user.uid,
             Name: user.displayName,
             Avatar: user.photoURL,
@@ -99,34 +104,35 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
   }
 
   const storage = getStorage();
-  const imagesRef = ref(storage, 'message');
-  //console.log(storage);
+  const imagesRef = ref(storage, (Math.random() * 1000000).toString());
   const [selectedFile, setSelectedFile] = React.useState(null)
 
   const UploadPhotoToStorage = (file) => {
     let photo = document.getElementById("photo-to-upload").files[0];
     console.log('trying')
-    uploadBytes(imagesRef, photo).then((snapshot) => {
-      console.log('uploaded file!');
-      //getImage();
-    });
+    uploadBytes(imagesRef, photo)
+      .then((snapshot) => {
+        console.log('uploaded file!');
+        getImage();
+      });
   }
 
-  // let img = storage.child(`images/images`).getDownloadURL()
-  // console.log('img', img)
-
-  // const getImage = () => {
-  //   imagesRef
-  //     .getDownloadURL()
-  //     .then((url) => {
-  //       console.log(url);
-  //     })
-  // }
+  const getImage = () => {
+    let locationUrl = getDownloadURL(imagesRef)
+      .then((url) => {
+        randomUrl = url;
+      })
+      .then(() => {
+        sendMessageToCurrentRoom()
+        // randomUrl = '';
+      })
+      .then(() => randomUrl = '');
+  }
+  console.log('userchats', userChats)
 
   const Input = styled('input')({
     display: 'none',
   });
-
 
   const UploadPhoto = () => {
     return (
@@ -191,6 +197,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
           } />
           <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom}>Send</Button>
           <UploadPhoto />
+          <img src={selectedFile}></img>
         </Box >
       </Box>
     );

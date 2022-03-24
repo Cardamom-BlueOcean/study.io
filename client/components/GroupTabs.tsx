@@ -157,7 +157,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
     )
   } else {
     return (
-      <Box sx={{ width: "100%", height: '90%', typography: "body1" }}>
+      <Box sx={{ width: "100%", height: '82%', typography: "body1" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '25% 40% 20% 15%', height: '65px' }}>
           <Typography sx={{ alignSelf: 'center', justifySelf: 'center' }} variant="h5" gutterBottom component="div">
             {currentRoom}

@@ -1,7 +1,7 @@
 import * as React from "react";
 import ReplyList from './replies/ReplyList';
 import { useState } from 'react';
-import { Box, Stack, Tooltip, Avatar, Button } from '@mui/material';
+import { Box, Stack, Avatar, Button } from '@mui/material';
 
 export default function UserChatMessage({ replyToThread, message, index }) {
 
@@ -12,12 +12,14 @@ export default function UserChatMessage({ replyToThread, message, index }) {
   }
 
   return (
-    <Tooltip title="Reply" placement="bottom-end" key={index}>
+    <Box>
       {!showReply
         ? <Box sx={{ display: 'grid', gridTemplateColumns: '95% 5%', bgcolor: '#fffcf7', borderBottom: 1, borderColor: "divider" }}>
           <Stack>
             <Box sx={{ textAlign: 'right' }}>{message.Name}</Box>
             <Box sx={{ textAlign: 'right' }}>{message.Message}</Box>
+            {message.MessageMediaContent.length > 0 ?
+              <img src={message.MessageMediaContent} height="240" width="180"></img> : null}
             {message.MessageThread.length > 0 ?
               <Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px' }}>Show {message.MessageThread.length} Replies</Button>
               : <Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px' }}>Reply</Button>}
@@ -29,14 +31,15 @@ export default function UserChatMessage({ replyToThread, message, index }) {
           <Stack>
             <Box sx={{ textAlign: 'right' }}>{message.Name}</Box>
             <Box sx={{ textAlign: 'right' }}>{message.Message}</Box>
+            {message.MessageMediaContent.length > 0 ?
+              <img src={message.MessageMediaContent} height="240" width="180"></img> : null}
             <ReplyList replyToThread={replyToThread} messageThread={message.MessageThread} documentId={message.Documentid} setShowReply={setShowReply} />
             {/* <Item2>{date}</Item2> */}
           </Stack>
           <Avatar sx={{ width: 32, height: 32, alignSelf: 'center', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: 'noReferrer' }}></Avatar>
         </Box>
       }
-
-    </Tooltip>
+    </Box>
   )
 }
 

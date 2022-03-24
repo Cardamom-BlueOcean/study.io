@@ -24,6 +24,8 @@ import ExpandedCalendar from "./ExpandedCalendar";
 import UserChatMessage from './UserChatMessage';
 import OtherChatMessage from './OtherChatMessage';
 import SearchUserToAdd from './SearchUserToAdd';
+import $ from "jquery";
+import { UnpublishedOutlined } from "@mui/icons-material";
 
 export default function GroupTabs({ userChats, showCalendar, setShowCalendar, setCurrentRoom, currentRoom }) {
 
@@ -83,6 +85,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
           });
         }
         sendMessageOnceAuthorized()
+        $('#messageEntry').val("");
       }
     })
   }
@@ -130,6 +133,16 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
 
   const Input = styled('input')({
     display: 'none',
+  });
+
+  $("#messageEntry").unbind().keyup(function (event) {
+    if (event.keyCode === 13) {
+
+      //$("#sendMessageButton").click();
+      sendMessageToCurrentRoom()
+      $('#messageEntry').val("");
+      console.log('WOO');
+    }
   });
 
   const UploadPhoto = () => {
@@ -190,13 +203,13 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
           </Stack>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-          <TextField sx={{ width: '90%' }} id="outlined-basic" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+          <TextField sx={{ width: '90%' }} id="messageEntry" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
             handleMessageInput(e.target.value)
           } />
-          <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom}>Send</Button>
+          <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom} id="sendMessageButton">Send</Button>
           <UploadPhoto />
         </Box >
-      </Box>
+      </Box >
     );
   }
 }

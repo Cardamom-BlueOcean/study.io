@@ -18,6 +18,7 @@ import {
   Drafts as DraftsIcon,
   Inbox as InboxIcon,
   Google as GoogleIcon,
+  ExpandMore as ExpandMoreIcon,
   AccountCircle as AccountCircleIcon,
   Add as AddIcon,
   Logout,
@@ -26,6 +27,9 @@ import {
 } from "@mui/icons-material";
 
 import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   List,
   Button,
   ListItem,
@@ -49,7 +53,7 @@ import {
 
 import { fakeData } from './fakeGroupData';
 
-export default function GroupList(props, { setCurrentRoom, currentRoom, setUserChats }) {
+export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, toggleDark, settoggleDark, currentMode }) {
 
   const db = getFirestore();
   const auth: any = getAuth();
@@ -136,11 +140,13 @@ export default function GroupList(props, { setCurrentRoom, currentRoom, setUserC
 
   const handleModeChange = () => {
     console.log('in handleModeChange...')
-    props.settoggleDark(!props.toggleDark);
-    console.log(props.toggleDark)
+    settoggleDark(!toggleDark);
+    console.log(toggleDark)
   };
 
   //console.log(`theme is ${theme}`)
+
+  const fakeDMList = ['DM with Richard', 'DM with John', 'DM with Peanut']
 
   return (
     <Box sx={{
@@ -201,7 +207,7 @@ export default function GroupList(props, { setCurrentRoom, currentRoom, setUserC
           </MenuItem>
           <Divider />
           <MenuItem>
-            <FormControlLabel control={<Switch checked={props.toggleDark} onChange={handleModeChange} />} label={props.currentMode + ' mode'} />
+            <FormControlLabel control={<Switch checked={toggleDark} onChange={handleModeChange} />} label={currentMode + ' mode'} />
           </MenuItem>
           <MenuItem onClick={() => signOutUser()}>
             <ListItemIcon >
@@ -215,19 +221,34 @@ export default function GroupList(props, { setCurrentRoom, currentRoom, setUserC
         </Typography>
       </Box >
       <Divider />
-      <Box sx={{ overflowY: 'scroll', maxHeight: '400px' }}>
-        <List>
-          {userRooms.map((group, i) => (
-            < ListItem disablePadding key={i} value={group} onClick={() => setCurrentRoom(group)}>
-              <ListItemButton>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} >
+          <Typography>Direct Messages</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>Coming Soon!</Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} >
+          <Typography>Group Chats</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ overflowY: 'scroll', maxHeight: '400px' }}>
+            <List>
+              {userRooms.map((group, i) => (
+                < ListItem disablePadding key={i} value={group} onClick={() => setCurrentRoom(group)}>
+                  <ListItemButton>
 
-                <ListItemText primary={group} />
+                    <ListItemText primary={group} />
 
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
       <Divider />
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
         <TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />

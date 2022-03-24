@@ -5,6 +5,7 @@ import ReduxExample from "./redux-examples/reduxExample";
 import AutreRedux from "./redux-examples/AutreRedux";
 // import ReduxExample from "./redux-examples/reduxExample";
 // import AutreRedux from "./redux-examples/AutreRedux";
+import VideoChat from "./videoChat/VideoChat";
 import {
   getFirestore,
   collection,
@@ -153,6 +154,7 @@ export default function UserPage() {
         </Box>
       </Box>
 
+      <VideoChat />
     </Box>
   );
 }

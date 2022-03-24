@@ -24,15 +24,12 @@ import ExpandedCalendar from "./ExpandedCalendar";
 import UserChatMessage from './UserChatMessage';
 import OtherChatMessage from './OtherChatMessage';
 import SearchUserToAdd from './SearchUserToAdd';
-<<<<<<< HEAD
 import VideoChat from "./videoChat/VideoChat";
 import VideocamIcon from '@mui/icons-material/Videocam';
-=======
 import $ from "jquery";
 import { UnpublishedOutlined, Send as SendIcon, UploadFile as UploadFileIcon, AddPhotoAlternateOutlined as AddPhotoAlternateOutlinedIcon } from "@mui/icons-material";
 //import UploadFileIcon from '@mui/icons-material/UploadFile';
 //import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
->>>>>>> 4261fcbb46964f6b1730655b61584994b715bb15
 
 export default function GroupTabs({ userChats, showCalendar, setShowCalendar, setCurrentRoom, currentRoom, currentUserName }) {
 
@@ -227,12 +224,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
           <Button ><AddPhotoAlternateOutlinedIcon /></Button>
           <UploadPhoto />
         </Box >
-<<<<<<< HEAD
-        {/* <Button >Video Chat</Button> */}
-      </Box>
-=======
       </Box >
->>>>>>> 4261fcbb46964f6b1730655b61584994b715bb15
     );
   }}
 }

@@ -38,7 +38,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   // const mediaContent = useAppSelector((state) => state.mediaUrl.value)
   // console.log('at component level, ', mediaContent);
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     handleAddUserInput('')
@@ -105,7 +105,6 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   const storage = getStorage();
   const imagesRef = ref(storage, (Math.random() * 1000000).toString());
-  const [selectedFile, setSelectedFile] = React.useState(null)
 
   const UploadPhotoToStorage = (file) => {
     let photo = document.getElementById("photo-to-upload").files[0];
@@ -124,11 +123,9 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
       })
       .then(() => {
         sendMessageToCurrentRoom()
-        // randomUrl = '';
       })
       .then(() => randomUrl = '');
   }
-  console.log('userchats', userChats)
 
   const Input = styled('input')({
     display: 'none',
@@ -197,7 +194,6 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
           } />
           <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom}>Send</Button>
           <UploadPhoto />
-          <img src={selectedFile}></img>
         </Box >
       </Box>
     );

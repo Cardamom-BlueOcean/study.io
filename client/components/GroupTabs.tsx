@@ -153,7 +153,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
 
   if (showCalendar) {
     return (
-      <ExpandedCalendar setShowCalendar={setShowCalendar} />
+      <ExpandedCalendar setShowCalendar={setShowCalendar} searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} />
     )
   } else {
     return (

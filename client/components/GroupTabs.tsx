@@ -49,7 +49,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     const Usersarr: string[] = [];
     const UsersFullInfo: any[] = []
     Users.forEach((user: any) => {
-      // console.log('user.data().name', user.data().name)
+      console.log('user.data().name', user.data().name)
       if (user.data().name) {
         const userName: string = user.data().name
         Usersarr.push(userName)
@@ -60,26 +60,6 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     setSearchedUsers(Usersarr)
   };
 
-<<<<<<< HEAD
-  React.useEffect(() => {
-    handleAddUserInput('')
-  }, [])
-
-  React.useEffect(() => {
-    if (userAddInput.length >= 3) {
-      searchedForMatchedUsers();
-    }
-  }, [userAddInput])
-
-  const [mediaContent, setMediaContent] = React.useState([])
-
-
-
-
-
-
-=======
->>>>>>> 04ed354f43dc71d78d23e30a88217f624c5d89eb
   const sendMessageToCurrentRoom = async () => {
     onAuthStateChanged(auth, (user: any) => {
       if (user) {
@@ -103,11 +83,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   const addUserToCurrentRoom = async () => {
     const inputValue = (document.getElementById('usersSearch') as HTMLInputElement).value
-<<<<<<< HEAD
-    const newArr = searchedUsersFullInfo.filter((user) =>{
-=======
     const newArr = searchedUsersFullInfo.filter((user) => {
->>>>>>> 04ed354f43dc71d78d23e30a88217f624c5d89eb
       return user.name === inputValue
     })
     await setDoc(doc(db, "Rooms", currentRoom), {
@@ -123,7 +99,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
   if (showCalendar) {
     return (
-      <ExpandedCalendar setShowCalendar={setShowCalendar} searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} />
+      <ExpandedCalendar setShowCalendar={setShowCalendar} />
     )
   } else {
     return (

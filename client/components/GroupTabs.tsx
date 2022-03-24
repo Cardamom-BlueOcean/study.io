@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useAppSelector, useAppDispatch } from "../hooks";
-import { Box, TextField, Stack, List, ListItem, ListItemText, Typography, Paper, styled, Button, Tooltip, Avatar, Autocomplete } from '@mui/material';
-//import { group } from 'console';
+import { Box, TextField, Stack, Typography, Button } from '@mui/material';
 import {
   getFirestore,
   collection,
@@ -14,56 +13,39 @@ import {
   addDoc,
   getDocs,
   getDoc,
-  arrayUnion
+  arrayUnion,
+  arrayRemove,
+  updateDoc
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ExpandedCalendar from "./ExpandedCalendar";
-import { bgcolor, grid } from "@mui/system";
+import UserChatMessage from './UserChatMessage';
+import OtherChatMessage from './OtherChatMessage';
+import SearchUserToAdd from './SearchUserToAdd';
 
-export default function GroupTabs({ userChats, showCalendar, setShowCalendar, currentRoom, setCurrentRoom }) {
-  const db = getFirestore()
+export default function GroupTabs({ userChats, showCalendar, setShowCalendar, currentRoom }) {
+
+  const db = getFirestore();
   const auth: any = getAuth();
   const userId = useAppSelector((state) => state.userId.value);
 
   const [messageInput, setMessageInput] = React.useState<string>("");
-  const [userAddInput, setUserAddInput] = React.useState<string>("");
+  const [fullListOfUsers, setFullListOfUsers] = React.useState([]);
+  const [searchedUsers, setSearchedUsers] = React.useState<string[]>([]);
+  const [searchedUsersFullInfo, setSearchedUsersFullInfo] = React.useState<any[]>([]);
+  const [mediaContent, setMediaContent] = React.useState([]);
 
-  const [value, setValue] = React.useState<any>(null);
-  const [currentRoomChats, setCurrentRoomChats] = React.useState<any>([]);
-
-
-
-  const userRooms = useAppSelector((state) => state.userRooms.value);
-  // const userChats = useAppSelector((state) => state.userChats.value);
-  //console.log('user rooms', userRooms)
-  console.log('user chats', userChats)
-
-
-
-  const createRoomFunction = useAppSelector(
-    (state) => state.globalFunctions.value.createRoom
-  );
-
-  const addUserToRoom = useAppSelector((state) => state.globalFunctions.value.addNewUserToRoom);
-
-  const dispatch = useAppDispatch();
+  React.useEffect(() => {
+    handleAddUserInput('')
+  }, [])
 
   const handleMessageInput = (messageBody) => {
     setMessageInput(messageBody);
   };
-  const [fullListOfUsers, setFullListOfUsers] = React.useState([])
-  const [searchedUsers, setSearchedUsers] = React.useState<string[]>([])
-  const [searchedUsersFullInfo, setSearchedUsersFullInfo] = React.useState<any[]>([])
+
   const handleAddUserInput = async (userBody) => {
-    //setUserAddInput(userBody);
-
-
-
-      const q = query(collection(db, "Users"));
-      const Users: any = await getDocs(q);
-
-      console.log('searchedUsers', searchedUsers)
-
+    const q = query(collection(db, "Users"));
+    const Users: any = await getDocs(q);
     const Usersarr: string[] = [];
     const UsersFullInfo: any[] = []
     Users.forEach((user: any) => {
@@ -73,13 +55,12 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         Usersarr.push(userName)
         UsersFullInfo.push(user.data())
       }
-
     })
     setSearchedUsersFullInfo(UsersFullInfo)
     setSearchedUsers(Usersarr)
-    console.log('users that match the current search', searchedUsers)
   };
 
+<<<<<<< HEAD
   React.useEffect(() => {
     handleAddUserInput('')
   }, [])
@@ -97,13 +78,14 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
 
 
 
+=======
+>>>>>>> 04ed354f43dc71d78d23e30a88217f624c5d89eb
   const sendMessageToCurrentRoom = async () => {
     onAuthStateChanged(auth, (user: any) => {
       if (user) {
         // const timesent: Date = new Date();
         const chatID = serverTimestamp()
         const sendMessageOnceAuthorized = async () => {
-          //console.log('THIS IS THE VALUE OF THE CURRENT ROOM', currentRoom)
           const newChat = await addDoc(collection(db, "Rooms", currentRoom, "Chats"), {
             Message: messageInput,
             MessageMediaContent: mediaContent,
@@ -113,61 +95,31 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
             TimeStamp: chatID,
             MessageThread: []
           });
-          //console.log('newChat', newChat)
         }
         sendMessageOnceAuthorized()
       }
     })
-
-  }
-
-  const searchedForMatchedUsers = async () => {// this function will search for users when the input field changes
   }
 
   const addUserToCurrentRoom = async () => {
     const inputValue = (document.getElementById('usersSearch') as HTMLInputElement).value
+<<<<<<< HEAD
     const newArr = searchedUsersFullInfo.filter((user) =>{
+=======
+    const newArr = searchedUsersFullInfo.filter((user) => {
+>>>>>>> 04ed354f43dc71d78d23e30a88217f624c5d89eb
       return user.name === inputValue
     })
-
     await setDoc(doc(db, "Rooms", currentRoom), {
       RoomParticipants: arrayUnion(newArr[0].uid)
     }, { merge: true });
   }
 
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(.2),
-    textAlign: 'left',
-    color: theme.palette.text.secondary
-  }));
-
-  const Item2 = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#D3D3D3',
-    ...theme.typography.body2,
-    padding: theme.spacing(.2),
-    textAlign: 'right',
-    color: theme.palette.text.secondary,
-    border: '0px'
-  }));
-
-  const SearchResults = () => {
-    return (
-      <Autocomplete
-        disablePortal
-        id="usersSearch"
-        options={searchedUsers}
-        sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Search Users" />}
-      />
-    );
+  const LeaveCurrentRoom = async () => {
+    await updateDoc(doc(db, "Rooms", currentRoom), {
+      RoomParticipants: arrayRemove(userId)
+    });
   }
-  // onChange={(e: React.ChangeEvent<HTMLInputElement>): any => {
-  //   e.preventDefault();
-  //   handleAddUserInput(e.target.value)
-  // }
-  // }
 
   if (showCalendar) {
     return (
@@ -175,67 +127,33 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     )
   } else {
     return (
-      <Box sx={{ width: "100%", height: '95%', typography: "body1" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '15% 30% 30% 25%', height: '50px' }}>
+      <Box sx={{ width: "100%", height: '90%', typography: "body1" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '25% 40% 20% 15%', height: '65px' }}>
           <Typography sx={{ alignSelf: 'center', justifySelf: 'center' }} variant="h5" gutterBottom component="div">
             {currentRoom}
           </Typography>
-          <SearchResults />
-          {/* <input id="test"
-            type="text"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>): any =>
-              handleAddUserInput(e.target.value)
-            }
-          ></input> */}
-          {/* <List>
-            {searchedUsers.length > 0 ? searchedUsers.map((user, index) => {
-              return (
-                <ListItem value={user}>
-                  <ListItemText primary={user}></ListItemText>
-                </ListItem>
-              )
-            }) : null}
-          </List> */}
-          <Button sx={{ width: '10%', alignSelf: 'end' }} onClick={addUserToCurrentRoom}>Add User</Button>
+          <SearchUserToAdd searchedUsers={searchedUsers} />
+          <Button sx={{ width: '20%', justifySelf: 'center', gridColumnStart: '3' }} onClick={addUserToCurrentRoom}>Add User</Button>
+          <Button sx={{ width: '20%', justifySelf: 'center', gridColumnStart: '4' }} onClick={LeaveCurrentRoom}>Leave</Button>
         </Box>
-        <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse' }}>
+        <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse', marginTop: '3px' }}>
           <Stack>
             {userChats ? userChats.map((message, index) => {
               if (message.Sender === userId) {
                 if (message?.TimeStamp) {
                   let date = message.TimeStamp.toDate();
                 }
-
                 //console.log('date', date);
                 return (
-                  <Tooltip title="Reply" placement="bottom-end" key={index}>
-                    <Box sx={{ display: 'grid', gridTemplateColumns: '95% 5%', bgcolor: '#D3D3D3' }}>
-                      <Stack>
-                        <Item2>{message.Name}</Item2>
-                        <Item2>{message.Message}</Item2>
-                        {/* <Item2>{date}</Item2> */}
-                      </Stack>
-                      <Avatar sx={{ width: 32, height: 32, alignSelf: 'center', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: 'noReferrer' }}></Avatar>
-                    </Box>
-                  </Tooltip>
+                  <UserChatMessage key={index} message={message} />
                 )
               } else {
                 if (message?.TimeStamp) {
                   let date = message.TimeStamp.toDate();
                 }
-
                 //console.log('date', date);
                 return (
-                  <Tooltip title="Reply" placement="bottom-start" key={index}>
-                    <Box sx={{ display: 'grid', gridTemplateColumns: '5% 95%' }}>
-                      <Avatar sx={{ width: 32, height: 32, alignSelf: 'center', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: 'noReferrer' }}></Avatar>
-                      <Stack>
-                        <Item>{message.Name}</Item>
-                        <Item>{message.Message}</Item>
-                        {/* <Item>{date}</Item> */}
-                      </Stack>
-                    </Box>
-                  </Tooltip>
+                  <OtherChatMessage key={index} message={message} />
                 )
               }
             }) : null}
@@ -250,5 +168,4 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
       </Box>
     );
   }
-
 }

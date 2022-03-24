@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useAppSelector, useAppDispatch } from "../hooks";
-import { Box, TextField, Stack, Typography, Button } from '@mui/material';
+import { Box, TextField, Stack, Typography, Button, styled } from '@mui/material';
 import {
   getFirestore,
   collection,
@@ -18,6 +18,7 @@ import {
   updateDoc
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import ExpandedCalendar from "./ExpandedCalendar";
 import UserChatMessage from './UserChatMessage';
 import OtherChatMessage from './OtherChatMessage';
@@ -78,6 +79,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         }
         sendMessageOnceAuthorized()
       }
+      setMessageInput('');
     })
   }
 
@@ -95,6 +97,49 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     await updateDoc(doc(db, "Rooms", currentRoom), {
       RoomParticipants: arrayRemove(userId)
     });
+  }
+
+  const storage = getStorage();
+  const imagesRef = ref(storage, 'message');
+  //console.log(storage);
+  const [selectedFile, setSelectedFile] = React.useState(null)
+
+  const UploadPhotoToStorage = (file) => {
+    let photo = document.getElementById("photo-to-upload").files[0];
+    console.log('trying')
+    uploadBytes(imagesRef, photo).then((snapshot) => {
+      console.log('uploaded file!');
+      //getImage();
+    });
+  }
+
+  // let img = storage.child(`images/images`).getDownloadURL()
+  // console.log('img', img)
+
+  // const getImage = () => {
+  //   imagesRef
+  //     .getDownloadURL()
+  //     .then((url) => {
+  //       console.log(url);
+  //     })
+  // }
+
+  const Input = styled('input')({
+    display: 'none',
+  });
+
+
+  const UploadPhoto = () => {
+    return (
+      <Stack direction="row" alignItems="center" spacing={2}>
+        <label htmlFor="photo-to-upload">
+          <Input accept="image/*" id="photo-to-upload" multiple type="file" onChange={UploadPhotoToStorage} />
+          <Button variant="contained" component="span">
+            Upload
+          </Button>
+        </label>
+      </Stack>
+    );
   }
 
   if (showCalendar) {
@@ -140,6 +185,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
             handleMessageInput(e.target.value)
           } />
           <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom}>Send</Button>
+          <UploadPhoto />
         </Box >
       </Box>
     );

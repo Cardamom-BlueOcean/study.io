@@ -167,6 +167,7 @@ export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searc
     });
 
     //TODO add string into own event list??
+    //if user accepts invite, add to own accepted invite array
   }
 
   const sendInvite = () => (
@@ -246,7 +247,7 @@ export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searc
 
   return (
     <Box sx={{ width: '100%' }}>
-
+      {/*TODO FIX BACK BUTTON */}
       <Button variant="text" onClick={() => setShowCalendar(false)}><ArrowBack />
         <Typography>  Back</Typography></Button>
       <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>

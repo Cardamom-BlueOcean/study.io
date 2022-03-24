@@ -129,7 +129,7 @@ export default function UserPage() {
   //put hook for state change here
 
   return (
-    <Box>
+    <Box sx={{ marginBottom: '50px' }}>
       <Box sx={{ backgroundColor: '#542F34' }}> <img src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
       <Box className="loginbar" sx={{ border: 1, height: '40px', width: 8 / 10, margin: '20px auto' }}>Login bar</Box>
       <Box className="main" sx={{
@@ -142,13 +142,13 @@ export default function UserPage() {
         gridTemplateColumns: '25% 75%',
         gridTemplateRows: 'auto'
       }}>
-        <Box className="sidebar" sx={{ border: 1 }}>
-          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} />
+        <Box className="sidebar" sx={{ border: 1, maxHeight: '800px' }}>
+          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} setShowCalendar={setShowCalendar} />
 
           <Calendar setShowCalendar={setShowCalendar} />
 
         </Box>
-        <Box className="chatview" sx={{ border: 1, height: '60%' }}>
+        <Box className="chatview" sx={{ border: 1, maxHeight: '800px' }}>
           <GroupTabs userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
         </Box>
       </Box>

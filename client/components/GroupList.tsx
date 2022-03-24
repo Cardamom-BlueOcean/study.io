@@ -50,7 +50,7 @@ import {
 
 import { fakeData } from './fakeGroupData';
 
-export default function GroupList({ setCurrentRoom, currentRoom, setUserChats }) {
+export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, setShowCalendar }) {
 
   const db = getFirestore();
   const auth: any = getAuth();
@@ -213,7 +213,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
       <Divider />
       <List>
         {userRooms.map((group, i) => (
-          < ListItem disablePadding key={i} value={group} onClick={() => setCurrentRoom(group)}>
+          < ListItem disablePadding key={i} value={group} onClick={() => { setCurrentRoom(group); setShowCalendar(false) }}>
             <ListItemButton>
 
               <ListItemText primary={group} secondary="study group" />

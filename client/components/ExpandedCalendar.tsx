@@ -247,7 +247,6 @@ export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searc
 
   return (
     <Box sx={{ width: '100%' }}>
-      {/*TODO FIX BACK BUTTON */}
       <Button variant="text" onClick={() => setShowCalendar(false)}><ArrowBack />
         <Typography>  Back</Typography></Button>
       <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
@@ -259,8 +258,7 @@ export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searc
             value={selectedDate}
             onChange={(newDate: any) => {
               setSelectedDate(newDate.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' }));
-              //TODO remove hard coded array
-              setAccepted(['is this working??', 'asdljasdjas'])
+              renderEvents()
             }}
             renderInput={(params) => <TextField {...params} />}
           />

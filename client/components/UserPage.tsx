@@ -5,6 +5,7 @@ import ReduxExample from "./redux-examples/reduxExample";
 import AutreRedux from "./redux-examples/AutreRedux";
 // import ReduxExample from "./redux-examples/reduxExample";
 // import AutreRedux from "./redux-examples/AutreRedux";
+import VideoChat from "./videoChat/VideoChat";
 import {
   getFirestore,
   collection,
@@ -153,13 +154,15 @@ export default function UserPage(props) {
         marginTop: '30px'
       }}>
         <Box className="sidebar" sx={{ border: '1px solid #542F34', maxHeight: '800px', boxShadow: '0 8px 6px -6px #542F34' }}>
-          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} setShowCalendar={setShowCalendar} toggleDark={props.toggleDark} settoggleDark={props.settoggleDark} currentMode={props.currentMode} />
+          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} toggleDark={props.toggleDark} settoggleDark={props.settoggleDark} currentMode={props.currentMode} setShowCalendar={setShowCalendar} />
           <Calendar setShowCalendar={setShowCalendar} />
         </Box>
         <Box className="chatview" sx={{ border: '1px solid #542F34', maxHeight: '800px', boxShadow: '0 8px 6px -6px #542F34' }}>
           <GroupTabs userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
         </Box>
       </Box>
+
+      {/* <VideoChat /> */}
     </Box>
   );
 }

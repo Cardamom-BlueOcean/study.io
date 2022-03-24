@@ -68,7 +68,7 @@ export default function Calendar({ setShowCalendar }) {
 
   return (
     <Box>
-      <Typography sx={{ fontSize: '18px', fontWeight: 'medium', textAlign: 'center' }}>Today's Scheduled Events</Typography>
+      <Typography sx={{ fontSize: '18px', fontWeight: 'medium', color: 'white', textAlign: 'center', background: '#542F34' }}>Today's Scheduled Events</Typography>
       <Typography sx={{ fontSize: '16px', fontWeight: 'light', textAlign: 'center' }}>Accepted Invites</Typography>
       <ul style={{ margin: '0 auto' }}>
         {accepted.map((meeting, idx) => {

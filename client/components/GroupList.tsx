@@ -144,7 +144,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       bgColor: 'background.paper',
       flexDirection: 'column'
     }}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }} >
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start', background: '#542F34', color: 'white' }} >
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleUserMenuClick}

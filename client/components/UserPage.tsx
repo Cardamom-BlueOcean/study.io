@@ -131,24 +131,24 @@ export default function UserPage() {
   return (
     <Box sx={{ marginBottom: '50px' }}>
       <Box sx={{ backgroundColor: '#542F34' }}> <img src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
-      <Box className="loginbar" sx={{ border: 1, height: '40px', width: 8 / 10, margin: '20px auto' }}>Login bar</Box>
+
       <Box className="main" sx={{
         width: 8 / 10,
         height: 800,
-        // border: 2,
         display: 'grid',
         margin: 'auto',
         columnGap: 2,
         gridTemplateColumns: '25% 75%',
-        gridTemplateRows: 'auto'
+        gridTemplateRows: 'auto',
+        marginTop: '30px'
       }}>
-        <Box className="sidebar" sx={{ border: 1, maxHeight: '800px' }}>
+        <Box className="sidebar" sx={{ border: '1px solid #542F34', maxHeight: '800px', boxShadow: '0 8px 6px -6px #542F34' }}>
           <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} setShowCalendar={setShowCalendar} />
 
           <Calendar setShowCalendar={setShowCalendar} />
 
         </Box>
-        <Box className="chatview" sx={{ border: 1, maxHeight: '800px' }}>
+        <Box className="chatview" sx={{ border: '1px solid #542F34', maxHeight: '800px', boxShadow: '0 8px 6px -6px #542F34' }}>
           <GroupTabs userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
         </Box>
       </Box>

@@ -25,7 +25,9 @@ import UserChatMessage from './UserChatMessage';
 import OtherChatMessage from './OtherChatMessage';
 import SearchUserToAdd from './SearchUserToAdd';
 import $ from "jquery";
-import { UnpublishedOutlined } from "@mui/icons-material";
+import { UnpublishedOutlined, Send as SendIcon, UploadFile as UploadFileIcon, AddPhotoAlternateOutlined as AddPhotoAlternateOutlinedIcon } from "@mui/icons-material";
+//import UploadFileIcon from '@mui/icons-material/UploadFile';
+//import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 export default function GroupTabs({ userChats, showCalendar, setShowCalendar, setCurrentRoom, currentRoom }) {
 
@@ -140,7 +142,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
 
       //$("#sendMessageButton").click();
       sendMessageToCurrentRoom()
-      $('#messageEntry').val("");
+      //$('#messageEntry').val("");
       console.log('WOO');
     }
   });
@@ -150,8 +152,8 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
       <Stack direction="row" alignItems="center" spacing={2}>
         <label htmlFor="photo-to-upload">
           <Input accept="image/*" id="photo-to-upload" multiple type="file" onChange={UploadPhotoToStorage} />
-          <Button variant="contained" component="span">
-            Upload
+          <Button component="span">
+            <UploadFileIcon />
           </Button>
         </label>
       </Stack>
@@ -206,7 +208,8 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
           <TextField sx={{ width: '90%' }} id="messageEntry" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
             handleMessageInput(e.target.value)
           } />
-          <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom} id="sendMessageButton">Send</Button>
+          <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom} id="sendMessageButton"><SendIcon /></Button>
+          <Button ><AddPhotoAlternateOutlinedIcon /></Button>
           <UploadPhoto />
         </Box >
       </Box >

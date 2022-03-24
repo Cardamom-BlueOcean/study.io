@@ -4,6 +4,7 @@ import {
   getFirestore,
   doc,
   setDoc,
+  updateDoc,
   arrayUnion
 } from "firebase/firestore";
 import "firebase/auth";
@@ -35,7 +36,8 @@ const initialState: globalFunctionsState = {
           const creatRoomOnceAuthorized = async () => {
             await setDoc(doc(db, "Rooms", roomName), {
               RoomName: roomName,
-              RoomParticipants: [user.uid]
+              RoomParticipants: [user.uid],
+              DM: false,
             });
 
           }
@@ -60,15 +62,47 @@ const initialState: globalFunctionsState = {
 
     },
 
+    async createDM(targetUser) {
+      const db = getFirestore();
+      const auth: any = await getAuth();
+      onAuthStateChanged(auth, (user: any) => {
+        if (user) {
+          const creatRoomOnceAuthorized = async () => {
+            await setDoc(doc(db, "Rooms", targetUser), {
+              RoomName: targetUser,
+              RoomParticipants: [user.uid],
+              DM: true,
+            });
+
+          }
+          const addRoomToUserArray = async () => {
+            await setDoc(doc(db, "Users", user.uid), {
+              name: user.displayName,
+              email: user.email,
+              thumbnailPhotoURL: user.photoURL,
+              uid: user.uid,
+              rooms: arrayUnion(targetUser)
+            }, { merge: true });
+
+          }
+
+          creatRoomOnceAuthorized()
+          addRoomToUserArray()
+
+        }
+
+
+
+      })
+
+
+    },
+
     async addNewUserToRoom(userToAdd, currentRoom, db) {
-      await setDoc(doc(db, "Users", userToAdd.uid), {
-        name: userToAdd.displayName,
-        email: userToAdd.email,
-        thumbnailPhotoURL: userToAdd.photoURL,
-        uid: userToAdd.uid,
+      await updateDoc(doc(db, "Users", userToAdd.uid), {
         rooms: arrayUnion(currentRoom)
-      }, { merge: true });
-    }
+      });
+    },
   }
 }
 

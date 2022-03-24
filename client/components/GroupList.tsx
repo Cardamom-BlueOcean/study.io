@@ -49,6 +49,7 @@ import {
   Paper,
   ThemeProvider,
   Typography,
+  Autocomplete,
 } from "@mui/material";
 
 import { fakeData } from './fakeGroupData';
@@ -61,19 +62,48 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
   const [groups, setGroups] = React.useState(fakeData);
   // const [newGroupName, setNewGroup] = useState('');
   const [textFieldTemp, setTextFieldTemp] = useState('');
+  const [DMTextField, setDMTextField] = useState('');
 
   const setNewGroup = useAppSelector((state) => state.globalFunctions.value.createRoom);
-  const userRooms = useAppSelector((state) => state.userRooms.value)
+  const addNewDM = useAppSelector((state) => state.globalFunctions.value.createDM);
+  const userRooms = useAppSelector((state) => state.userRooms.value);
+  const addToRoom = useAppSelector((state) => state.globalFunctions.value.addNewUserToRoom);
+  const userList = useAppSelector((state) => state.users.value.userList);
+  const userInfo = useAppSelector((state) => state.users.value.userInfo);
 
-  //console.log(`list of rooms: ${userRooms}`)
+  console.log(userList);
 
   function addRoom() {
     setNewGroup(textFieldTemp)
   }
 
+  const findUserInfo = () => {
+
+    for (let i = 0; i < userInfo.length; i++) {
+      if (userInfo[i].name === DMTextField) {
+        return userInfo[i];
+      }
+    }
+
+
+  }
+
+  const addDM = () => {
+    let currentUserInfo = findUserInfo();
+    console.log(currentUserInfo);
+
+    addNewDM(DMTextField);
+    addToRoom(currentUserInfo, DMTextField, db);
+
+  }
+
   const setTextField = function (e) {
     // console.log(e.target.value)
     setTextFieldTemp(e.target.value)
+  }
+
+  const setDMField = (e) => {
+    setDMTextField(e.target.value);
   }
 
 
@@ -254,6 +284,20 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
         <TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />
         <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}><AddIcon /></Button>
+        <Autocomplete
+          disablePortal
+          id="choosedmparticipant"
+          options={userList}
+          sx={{ width: 230 }}
+          inputValue={DMTextField}
+          onInputChange={(event, group: any) => {
+            setDMTextField(group)
+          }}
+          renderInput={(params) => <TextField {...params} label="Direct Message"
+          />}
+        />
+        {/* <TextField size="small" id="outlined-basic" label="Direct Message" onChange={setDMField} /> */}
+        <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addDM}><AddIcon /></Button>
       </Box>
       <Divider />
     </Box >

@@ -16,7 +16,7 @@ import {
   TextField,
   Menu,
   MenuItem,
-
+  Autocomplete,
 } from "@mui/material";
 import PopupState, {
   bindTrigger,
@@ -33,20 +33,32 @@ import {
   doc,
   setDoc,
   orderBy,
-  getDoc
+  getDoc,
+  updateDoc,
+  arrayUnion
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-export default function ExpandedCalendar({ setShowCalendar }) {
+export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searchedUsersFullInfo }) {
 
-  const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
-  const [events, setEvents] = React.useState<Array<string>>([]);
+  const [selectedDate, setSelectedDate] = React.useState<any>(new Date().toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' }));
+  console.log('selectedDate', selectedDate)
+  const [accepted, setAccepted] = React.useState<Array<string>>([]);
+
+  // const [events, setEvents] = React.useState<Array<string>>([]);
+
   const [pending, setPending] = React.useState<Array<string>>([]);
   const [checked, setChecked] = React.useState<Array<any>>(pending.slice().fill(false));
+  const [user, setUser] = React.useState<string>('');
 
   //add meeting stuff
   const [scheduledMeeting, setScheduleMeeting] = React.useState<boolean>(false);
+  const [roomsDropdown, setRoomsDropdown] = React.useState<Array<string>>([]);
+  //new meeting stuff
+  const [newMeetingDate, setNewMeetingDate] = React.useState<string>(new Date().toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' }));
   const [participant, setParticipant] = React.useState<string>('');
+  const [time, setTime] = React.useState<string>('');
+  const [selectedStudyGroup, setSelectedStudyGroup] = React.useState<string>('')
 
   React.useEffect(() => {
     const asyncWrapper = async () => {
@@ -56,11 +68,13 @@ export default function ExpandedCalendar({ setShowCalendar }) {
         const getEventsForCurrentUser = async () => {
           // console.log('auth', user.uid)
           const q: any = doc(db, "Users", user.uid);
-          const userData = await getDoc(q);
-          console.log('userdata', userData.data())
-          //This is not working
-          setEvents(userData.data().acceptedInvites)
-          setPending(userData.data().pendingInvites)
+          const unsubscribe = onSnapshot(q, (userData) => {
+            setAccepted(userData.data().acceptedInvites)
+            setPending(userData.data().pendingInvites)
+            setRoomsDropdown(userData.data().rooms)
+            setUser(userData.data().name)
+          });
+          // console.log('userdata', userData.data())
         }
         getEventsForCurrentUser()
       })
@@ -68,23 +82,38 @@ export default function ExpandedCalendar({ setShowCalendar }) {
     asyncWrapper()
   }, [])
 
-  console.log('events', events)
-  console.log('pending', pending)
 
+  // console.log('events', events)
+  // console.log('pending', pending)
+
+  //map not working right when the date is a date that is not today
   const renderEvents = () => (
     <ul>
-      {events.map((event, idx) => (
-        <li key={idx}>{event}</li>
-      ))}
+      {accepted.map((event, idx) => {
+        if (event.includes(selectedDate)) {
+          return (
+            <li key={idx}>{event}</li>
+
+          )
+        }
+      })}
     </ul>
   )
+
+  React.useEffect(() => {
+    renderEvents()
+  }, [selectedDate])
+
   const renderPending = () => (
     <ul style={{ paddingLeft: '5px' }}>
       {pending.map((meeting, idx) => (
         <Box key={idx} sx={{ display: 'flex' }}>
           <Checkbox
             checked={checked[idx]}
-            onChange={(e) => updateCheckedBox(idx)}
+            onChange={(e) => {
+              //move pending invite to the accepted invite array
+              updateCheckedBox(idx)
+            }}
             inputProps={{ 'aria-label': 'controlled' }}
             key={idx}
           />
@@ -98,53 +127,119 @@ export default function ExpandedCalendar({ setShowCalendar }) {
     setChecked(checked.map((val, index) => (
       index === idx ? !val : val
     )))
+
+    const asyncWrapper = async () => {
+      const db = await getFirestore();
+      const auth: any = await getAuth();
+      onAuthStateChanged(auth, (user: any) => {
+        const updateInviteArrays = async () => {
+          let checkedInvite = pending.splice(idx, 1);
+          accepted.push(checkedInvite[0])
+          setAccepted(accepted)
+
+          await updateDoc(doc(db, "Users", user.uid), {
+            acceptedInvites: accepted,
+            pendingInvites: pending
+          });
+
+        }
+        updateInviteArrays()
+      })
+    }
+    asyncWrapper()
   }
 
 
+  const sendInviteToParticipant = async () => {
+    let invitation = `Meeting with ${user} on ${newMeetingDate} at ${time} to study ${selectedStudyGroup}`
+
+    const db = await getFirestore();
+    const auth: any = await getAuth();
+    const inputValue = (document.getElementById('participanttext') as HTMLInputElement).value
+    console.log('searchedUsersFullInfoINCale', searchedUsersFullInfo)
+    console.log('inputValue', inputValue)
+    const newArr = searchedUsersFullInfo.filter((user) => {
+      return user.name === inputValue
+    })
+
+    await updateDoc(doc(db, "Users", newArr[0].uid), {
+      pendingInvites: arrayUnion(invitation)
+    });
+
+    //TODO add string into own event list??
+  }
+
   const sendInvite = () => (
-    <Box sx={{ placeSelf: 'center', alignContent: 'center' }}>
-      {/* <Typography variant="h6">Select Meeting Date</Typography> */}
+    <Box sx={{ placeSelf: 'center', alignContent: 'center', justifyContent: 'space-between' }}>
       <Box sx={{ display: 'flex' }}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
             label="Select Meeting Date"
             value={selectedDate}
-            minDate={new Date('2017-01-01')}
-            onChange={(newValue: any) => {
-              setSelectedDate(newValue);
+            minDate={new Date()}
+            onChange={(meetupDate: any) => {
+              let meet = meetupDate.toLocaleString('default', { month: 'long', day: 'numeric' });
+              setNewMeetingDate(meet);
             }}
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
-        <TextField
-          id="outlined-name"
-          label="Participant"
+
+
+        <Autocomplete
+          disablePortal
+          id="participanttext"
+          // label="Invitee"
+          options={searchedUsers}
+          sx={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Invitee" />}
+        />
+
+        {/* <TextField
+          id="participanttext"
+          label="Invitee"
           value={participant}
           onChange={(e) => setParticipant(e.target.value)}
-          sx={{ width: '220px' }}
+          sx={{ width: '230px' }}
+        /> */}
+
+        <TextField
+          id="meetingtimetext"
+          label="Enter Meeting Time"
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+          sx={{ width: '230px' }}
         />
       </Box>
-      <Typography variant="h6">Select Meeting Room</Typography>
-      <PopupState variant="popover" popupId="choose-room" >
-        {(menu) => (
-          <React.Fragment>
-            <Button variant="contained" {...bindTrigger(menu)}
-              endIcon={<KeyboardArrowDown />}
-              sx={{ marginBottom: '20px' }}
-            >
-              Study Groups
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Divider />
+        <PopupState variant="popover" popupId="choose-room" >
+          {(menu) => (
+            <React.Fragment>
+              <Button variant="outlined" {...bindTrigger(menu)}
+                endIcon={<KeyboardArrowDown />}
+                sx={{ marginBottom: '20px', width: '230px' }}
+              >
+                Study Groups
+              </Button>
+              <Menu {...bindMenu(menu)}>
+                {roomsDropdown.map((room, idx) => (
+                  <MenuItem onClick={(e) => {
+                    console.log('e.target.textContent', e.target.textContent)
+                    menu.close; setSelectedStudyGroup(e.target.textContent)
+                  }}
+                    key={idx}>{room}</MenuItem>
 
-            </Button>
-            {/*TODO render room names in menu */}
-            <Menu {...bindMenu(menu)}>
-              <MenuItem onClick={menu.close}>Profile</MenuItem>
-              <MenuItem onClick={menu.close}>My account</MenuItem>
-              <MenuItem onClick={menu.close}>Logout</MenuItem>
-            </Menu>
-          </React.Fragment>
-        )}
-      </PopupState>
-      <Divider />
+                ))}
+              </Menu>
+            </React.Fragment>
+          )}
+        </PopupState>
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Button variant="contained" sx={{ width: '230px', height: '50px' }} onClick={() => sendInviteToParticipant()}>Submit</Button>
+
+      </Box>
     </Box>
   );
 
@@ -161,32 +256,30 @@ export default function ExpandedCalendar({ setShowCalendar }) {
             orientation="portrait"
             openTo="day"
             value={selectedDate}
-            // shouldDisableDate={isWeekend}
             onChange={(newDate: any) => {
-              console.log('aksd', newDate)
-              setSelectedDate(newDate);
+              setSelectedDate(newDate.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' }));
               //TODO remove hard coded array
-              setEvents(['is this working??', 'asdljasdjas'])
+              setAccepted(['is this working??', 'asdljasdjas'])
             }}
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
         <Box>
           <Box sx={{ placeSelf: 'center', marginTop: '50px' }}>
-            {selectedDate.toDateString() === (new Date()).toDateString() ?
-              <Typography variant="h4" sx={{ alignItems: 'center', justifyContent: 'center' }}>Today's Events</Typography>
+            {selectedDate === (new Date()).toDateString() ?
+              <Typography variant="h4" sx={{ alignItems: 'center', justifyContent: 'center', fontWeight: 'light' }}>Today's Events</Typography>
               :
-              <Typography variant="h4">{selectedDate.toLocaleString('default', { month: 'long', day: 'numeric' })} Events</Typography>
+              <Typography variant="h4">{selectedDate} Events</Typography>
             }
           </Box>
-          {events.length === 0 ?
+          {accepted.length === 0 ?
             <Typography>No meet ups scheduled today</Typography>
             : renderEvents()
           }
 
           <Box sx={{ placeSelf: 'center' }}>
 
-            <Typography variant="h4">Pending Invites</Typography>
+            <Typography variant="h4" sx={{ fontWeight: 'light' }}>Pending Invites</Typography>
 
           </Box>
           {pending.length === 0 ?
@@ -196,40 +289,15 @@ export default function ExpandedCalendar({ setShowCalendar }) {
         </Box>
       </Box>
 
-
-
       <Divider variant="middle" />
-
       <Box sx={{ display: 'grid', justifyContent: 'center' }}>
-        <Button variant="outlined"
-          sx={{ width: '500px', marginTop: '20px', marginBottom: '20px' }}
-          onClick={() => { setScheduleMeeting(prev => !prev) }}>Schedule Meeting</Button>
-        {scheduledMeeting ? sendInvite() : null}
+        <Box>
 
-
-        {/* <Box sx={{ placeSelf: 'center' }}>
-          {selectedDate.toDateString() === (new Date()).toDateString() ?
-            <Typography variant="h4" sx={{ alignItems: 'center', justifyContent: 'center' }}>Today's Events</Typography>
-            :
-            <Typography variant="h4">{selectedDate.toLocaleString('default', { month: 'long', day: 'numeric' })} Events</Typography>
-          }
+          <Button variant="outlined"
+            sx={{ width: '500px', marginTop: '20px', marginBottom: '20px' }}
+            onClick={() => { setScheduleMeeting(prev => !prev) }}>Schedule Meeting</Button>
+          {scheduledMeeting ? sendInvite() : null}
         </Box>
-        {
-          events.length === 0 ?
-            <Typography>No meet ups scheduled today</Typography>
-            : renderEvents()
-        }
-
-        <Box sx={{ placeSelf: 'center' }}>
-
-          <Typography variant="h4">Pending Invites</Typography>
-
-        </Box>
-        {
-          events.length === 0 ?
-            <Typography>No meet ups scheduled today</Typography>
-            : <Typography>stuff</Typography>
-        } */}
       </Box>
     </Box >
   );

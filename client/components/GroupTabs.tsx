@@ -25,7 +25,7 @@ import UserChatMessage from './UserChatMessage';
 import OtherChatMessage from './OtherChatMessage';
 import SearchUserToAdd from './SearchUserToAdd';
 
-export default function GroupTabs({ userChats, showCalendar, setShowCalendar, currentRoom }) {
+export default function GroupTabs({ userChats, showCalendar, setShowCalendar, setCurrentRoom, currentRoom }) {
 
   const db = getFirestore();
   const auth: any = getAuth();
@@ -101,6 +101,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     await updateDoc(doc(db, "Rooms", currentRoom), {
       RoomParticipants: arrayRemove(userId)
     });
+    setCurrentRoom('General');
   }
 
   const storage = getStorage();

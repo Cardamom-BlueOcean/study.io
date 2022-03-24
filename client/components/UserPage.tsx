@@ -20,6 +20,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import { setRoomsArray } from "../features/userRooms/userRooms";
 import { setUserId } from "../features/userId/userId";
+import { setUserName } from '../features/userName/userName';
 //import { setChatsObject, addToChatsObject } from '../features/userChats/userChats';
 //Redux Imports Below:
 import { Provider } from 'react-redux';
@@ -61,6 +62,7 @@ export default function UserPage() {
           const addUserDbIfUserIsNotAlreadyAdded = async () => {
             const ref = doc(db, "Users", user.uid)
             dispatch(setUserId(user.uid));
+            dispatch(setUserName(user.displayName));
             const userDoc = await getDoc(ref);
             if (!userDoc) {
               await setDoc(doc(db, "Users", user.uid), {

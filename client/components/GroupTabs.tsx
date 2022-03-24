@@ -97,6 +97,13 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
     });
   }
 
+  const replyToThread = async (chatId, replyBody) => {
+    await updateDoc(doc(db, "Rooms", currentRoom, "Chats", chatId), {
+      MessageThread: arrayUnion(replyBody)
+    })
+
+  }
+
   if (showCalendar) {
     return (
       <ExpandedCalendar setShowCalendar={setShowCalendar} searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} />
@@ -121,7 +128,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                 }
                 //console.log('date', date);
                 return (
-                  <UserChatMessage key={index} message={message} />
+                  <UserChatMessage replyToThread={replyToThread} key={index} message={message} />
                 )
               } else {
                 if (message?.TimeStamp) {
@@ -129,7 +136,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
                 }
                 //console.log('date', date);
                 return (
-                  <OtherChatMessage key={index} message={message} />
+                  <OtherChatMessage replyToThread={replyToThread} key={index} message={message} />
                 )
               }
             }) : null}

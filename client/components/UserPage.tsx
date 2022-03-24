@@ -154,7 +154,7 @@ export default function UserPage(props) {
         marginTop: '30px'
       }}>
         <Box className="sidebar" sx={{ border: '1px solid #542F34', maxHeight: '800px', boxShadow: '0 8px 6px -6px #542F34' }}>
-          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} toggleDark={props.toggleDark} settoggleDark={props.settoggleDark} currentMode={props.currentMode} />
+          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} toggleDark={props.toggleDark} settoggleDark={props.settoggleDark} currentMode={props.currentMode} setShowCalendar={setShowCalendar} />
           <Calendar setShowCalendar={setShowCalendar} />
         </Box>
         <Box className="chatview" sx={{ border: '1px solid #542F34', maxHeight: '800px', boxShadow: '0 8px 6px -6px #542F34' }}>

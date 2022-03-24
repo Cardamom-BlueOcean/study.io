@@ -86,7 +86,11 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats })
           const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chats: any = [];
             querySnapshot.forEach((doc) => {
-              chats.push(doc.data());
+              let temp = doc.data();
+              temp['Documentid'] = doc.id;
+              // console.log(temp);
+
+              chats.push(temp);
             });
             setUserChats(chats)
           });

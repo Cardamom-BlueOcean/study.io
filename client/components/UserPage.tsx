@@ -19,6 +19,7 @@ import {
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import { setRoomsArray } from "../features/userRooms/userRooms";
+import { setUserId } from "../features/userId/userId";
 //import { setChatsObject, addToChatsObject } from '../features/userChats/userChats';
 //Redux Imports Below:
 import { Provider } from 'react-redux';
@@ -43,20 +44,23 @@ export default function UserPage() {
 
   const userRooms = useAppSelector((state) => state.userRooms.value);
   // const userChats = useAppSelector((state) => state.userChats.value);
+
   const dispatch = useAppDispatch();
   const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
   const [userChats, setUserChats] = useState([]);
   const [currentRoom, setCurrentRoom] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
   //console.log(currentRoom);
-
+  const [currentUserUID, setcurrentUserUID] = useState<any>(null);
   useEffect(() => {
     const asyncGetAuth = async () => {
       const auth: any = await getAuth();
       onAuthStateChanged(auth, (user: any) => {
         if (user) {
+          setcurrentUserUID(user.uid)
           const addUserDbIfUserIsNotAlreadyAdded = async () => {
             const ref = doc(db, "Users", user.uid)
+            dispatch(setUserId(user.uid));
             const userDoc = await getDoc(ref);
             if (!userDoc) {
               await setDoc(doc(db, "Users", user.uid), {
@@ -140,8 +144,7 @@ export default function UserPage() {
           <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} />
           <Calendar setShowCalendar={setShowCalendar} />
         </Box>
-
-        <Box className="chatview" sx={{ border: 1 }}>
+        <Box className="chatview" sx={{ border: 1, height: '60%' }}>
           <GroupTabs userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
         </Box>
       </Box>

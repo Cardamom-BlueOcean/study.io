@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useAppSelector, useAppDispatch } from "../hooks";
-import { Box, TextField, Stack, List, ListItem, ListItemText, Typography, Paper, styled, Button, Tooltip, Avatar } from '@mui/material';
-//import { group } from 'console';
+import { Box, TextField, Stack, Typography, Button } from '@mui/material';
 import {
   getFirestore,
   collection,
@@ -14,72 +13,52 @@ import {
   addDoc,
   getDocs,
   getDoc,
-  arrayUnion
+  arrayUnion,
+  arrayRemove,
+  updateDoc
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ExpandedCalendar from "./ExpandedCalendar";
+import UserChatMessage from './UserChatMessage';
+import OtherChatMessage from './OtherChatMessage';
+import SearchUserToAdd from './SearchUserToAdd';
 
-export default function GroupTabs({ userChats, showCalendar, setShowCalendar, currentRoom, setCurrentRoom }) {
-  const db = getFirestore()
+export default function GroupTabs({ userChats, showCalendar, setShowCalendar, currentRoom }) {
+
+  const db = getFirestore();
   const auth: any = getAuth();
+  const userId = useAppSelector((state) => state.userId.value);
 
   const [messageInput, setMessageInput] = React.useState<string>("");
-  const [userAddInput, setUserAddInput] = React.useState<string>("");
+  const [fullListOfUsers, setFullListOfUsers] = React.useState([]);
+  const [searchedUsers, setSearchedUsers] = React.useState<string[]>([]);
+  const [searchedUsersFullInfo, setSearchedUsersFullInfo] = React.useState<any[]>([]);
+  const [mediaContent, setMediaContent] = React.useState([]);
 
-  const [value, setValue] = React.useState<any>(null);
-  const [currentRoomChats, setCurrentRoomChats] = React.useState<any>([]);
-
-
-
-  const userRooms = useAppSelector((state) => state.userRooms.value);
-  // const userChats = useAppSelector((state) => state.userChats.value);
-  //console.log('user rooms', userRooms)
-  console.log('user chats', userChats)
-
-
-
-  const createRoomFunction = useAppSelector(
-    (state) => state.globalFunctions.value.createRoom
-  );
-
-  const addUserToRoom = useAppSelector((state) => state.globalFunctions.value.addNewUserToRoom);
-
-  const dispatch = useAppDispatch();
+  React.useEffect(() => {
+    handleAddUserInput('')
+  }, [])
 
   const handleMessageInput = (messageBody) => {
     setMessageInput(messageBody);
   };
-  const [searchedUsers, setSearchedUsers] = React.useState<string[]>([])
-  const [searchedUsersFullInfo, setSearchedUsersFullInfo] = React.useState<any[]>([])
+
   const handleAddUserInput = async (userBody) => {
-    setUserAddInput(userBody);
     const q = query(collection(db, "Users"));
-    const Users = await getDocs(q);
-    const matchedUsers: string[] = [];
-    const matchedUsersFullInfo: any[] = []
-    Users.forEach((user) => {
-      console.log('user.data().name', user.data().name)
+    const Users: any = await getDocs(q);
+    const Usersarr: string[] = [];
+    const UsersFullInfo: any[] = []
+    Users.forEach((user: any) => {
+      // console.log('user.data().name', user.data().name)
       if (user.data().name) {
         const userName: string = user.data().name
-        if (userName.toLocaleLowerCase().indexOf(userBody.toLowerCase()) !== -1) {
-          matchedUsers.push(userName)
-          matchedUsersFullInfo.push(user.data())
-        }
+        Usersarr.push(userName)
+        UsersFullInfo.push(user.data())
       }
-
     })
-    setSearchedUsersFullInfo(matchedUsersFullInfo)
-    setSearchedUsers(matchedUsers)
-    console.log('users that match the current search', searchedUsers)
+    setSearchedUsersFullInfo(UsersFullInfo)
+    setSearchedUsers(Usersarr)
   };
-
-  React.useEffect(() => {
-    if (userAddInput.length >= 3) {
-      searchedForMatchedUsers();
-    }
-  }, [userAddInput])
-
-  const [mediaContent, setMediaContent] = React.useState([])
 
   const sendMessageToCurrentRoom = async () => {
     onAuthStateChanged(auth, (user: any) => {
@@ -87,7 +66,6 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
         // const timesent: Date = new Date();
         const chatID = serverTimestamp()
         const sendMessageOnceAuthorized = async () => {
-          //console.log('THIS IS THE VALUE OF THE CURRENT ROOM', currentRoom)
           const newChat = await addDoc(collection(db, "Rooms", currentRoom, "Chats"), {
             Message: messageInput,
             MessageMediaContent: mediaContent,
@@ -97,110 +75,73 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, cu
             TimeStamp: chatID,
             MessageThread: []
           });
-          //console.log('newChat', newChat)
         }
         sendMessageOnceAuthorized()
       }
     })
-
-  }
-
-  const searchedForMatchedUsers = async () => {// this function will search for users when the input field changes
   }
 
   const addUserToCurrentRoom = async () => {
-    console.log('here', searchedUsersFullInfo[0])
-    const ref = doc(db, "Users", searchedUsersFullInfo[0].uid)//right now this is just adding the first person in the searched object
-    const userToAdd = await getDoc(ref);
-    console.log('userToAdd', userToAdd.data())
+    const inputValue = (document.getElementById('usersSearch') as HTMLInputElement).value
+    const newArr = searchedUsersFullInfo.filter((user) => {
+      return user.name === inputValue
+    })
     await setDoc(doc(db, "Rooms", currentRoom), {
-      RoomParticipants: arrayUnion(searchedUsersFullInfo[0].uid)
+      RoomParticipants: arrayUnion(newArr[0].uid)
     }, { merge: true });
   }
 
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(.5),
-    textAlign: 'left',
-    color: theme.palette.text.secondary,
-  }));
-
-  const Item2 = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(.5),
-    textAlign: 'right',
-    color: theme.palette.text.secondary,
-  }));
+  const LeaveCurrentRoom = async () => {
+    await updateDoc(doc(db, "Rooms", currentRoom), {
+      RoomParticipants: arrayRemove(userId)
+    });
+  }
 
   if (showCalendar) {
     return (
-      <ExpandedCalendar setShowCalendar={setShowCalendar} />
+      <ExpandedCalendar setShowCalendar={setShowCalendar} searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} />
     )
   } else {
     return (
-      <Box sx={{ width: "100%", height: '600px', typography: "body1" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'inline-flex', height: '50px', gap: '100px' }}>
-          <Typography variant="h5" gutterBottom component="div">
+      <Box sx={{ width: "100%", height: '90%', typography: "body1" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '25% 40% 20% 15%', height: '65px' }}>
+          <Typography sx={{ alignSelf: 'center', justifySelf: 'center' }} variant="h5" gutterBottom component="div">
             {currentRoom}
           </Typography>
-          <input id="test"
-            type="text"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>): any =>
-              handleAddUserInput(e.target.value)
-            }
-          ></input>
-          <Button sx={{ alignSelf: 'end' }} onClick={addUserToCurrentRoom}>Add User</Button>
+          <SearchUserToAdd searchedUsers={searchedUsers} />
+          <Button sx={{ width: '20%', justifySelf: 'center', gridColumnStart: '3' }} onClick={addUserToCurrentRoom}>Add User</Button>
+          <Button sx={{ width: '20%', justifySelf: 'center', gridColumnStart: '4' }} onClick={LeaveCurrentRoom}>Leave</Button>
         </Box>
-        <Box sx={{ height: '500px', overflow: 'scroll' }}>
+        <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse', marginTop: '3px' }}>
           <Stack>
             {userChats ? userChats.map((message, index) => {
-              if (message.Sender === 'hBsEbC5ZzdT9kHeI6We9pJupyLt1') {
+              if (message.Sender === userId) {
+                if (message?.TimeStamp) {
+                  let date = message.TimeStamp.toDate();
+                }
+                //console.log('date', date);
                 return (
-                  <Tooltip title="Reply" placement="bottom-end">
-                    <Box>
-                      <Stack>
-                        <Item2>{message.Name}</Item2>
-                        <Item2>{message.Message}</Item2>
-                        {/* <Item2>{message.TimeStamp.seconds}</Item2> */}
-                      </Stack>
-                      <Avatar sx={{ width: 32, height: 32 }} src={message.Avatar}></Avatar>
-                    </Box>
-                  </Tooltip>
+                  <UserChatMessage key={index} message={message} />
                 )
               } else {
+                if (message?.TimeStamp) {
+                  let date = message.TimeStamp.toDate();
+                }
+                //console.log('date', date);
                 return (
-                  <Tooltip title="Reply" placement="bottom-start">
-                    <Box>
-                      <Stack>
-                        <Item>{message.Name}</Item>
-                        <Item>{message.Message}</Item>
-                        {/* <Item>{message.TimeStamp.seconds}</Item> */}
-                      </Stack>
-                      <Avatar sx={{ width: 32, height: 32 }} src={message.Avatar}></Avatar>
-                    </Box>
-                  </Tooltip>
+                  <OtherChatMessage key={index} message={message} />
                 )
               }
             }) : null}
           </Stack>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-          {/* <Box
-            component="form"
-            sx={{ m: 0, width: '80%', }}
-            noValidate
-            autoComplete="off"
-          > */}
-          <TextField id="outlined-basic" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+          <TextField sx={{ width: '90%' }} id="outlined-basic" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
             handleMessageInput(e.target.value)
           } />
-          {/* </Box> */}
           <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom}>Send</Button>
         </Box >
       </Box>
     );
   }
-
 }

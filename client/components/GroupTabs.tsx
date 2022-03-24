@@ -41,7 +41,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
   const [fullListOfUsers, setFullListOfUsers] = React.useState([]);
   const [searchedUsers, setSearchedUsers] = React.useState<string[]>([]);
   const [searchedUsersFullInfo, setSearchedUsersFullInfo] = React.useState<any[]>([]);
-
+  console.log(userChats);
   // const mediaContent = useAppSelector((state) => state.mediaUrl.value)
   // console.log('at component level, ', mediaContent);
   // const dispatch = useAppDispatch();

@@ -179,15 +179,11 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
       <ExpandedCalendar setShowCalendar={setShowCalendar} searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} />
     )
   } else {
-    // if(videoToggle){
-    //   return (
-    //     <VideoChat currentRoom={currentRoom} currentUserName={currentUserName} setVideoToggle={setVideoToggle}/>
-    //   )
-    // }else{
+
     return (
       <Box className="animate__animated animate__fadeIn" sx={{ width: "99%", height: '82%', typography: "body1", margin: '8px' }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '25% 5% 40% 15% 15%', height: '65px' }}>
-          <Typography sx={{ alignSelf: 'center', justifySelf: 'center', gridColumnStart: '1' }} variant="h5" gutterBottom component="div">
+          <Typography color="primary.main" sx={{ alignSelf: 'center', justifySelf: 'center', gridColumnStart: '1' }} variant="h5" gutterBottom component="div">
             {currentRoom}
           </Typography>
           <VideocamIcon sx={{ width: '100%', justifySelf: 'center', gridColumnStart: '2' }} onClick={() => { setVideoToggle(!videoToggle) }} />
@@ -224,5 +220,6 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
         </Box >
       </Box >
     );
+
   }
 }

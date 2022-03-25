@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useAppSelector, useAppDispatch } from "../hooks";
+import { setUserList, setUserInfo } from '../features/users/users';
 import { setMediaUrl } from '../features/mediaUrl/mediaUrl';
 import { Box, TextField, Stack, Typography, Button, styled } from '@mui/material';
 import {
@@ -34,6 +35,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
   const db = getFirestore();
   const auth: any = getAuth();
   const userId = useAppSelector((state) => state.userId.value);
+  const dispatch = useAppDispatch();
 
   const [messageInput, setMessageInput] = React.useState<string>("");
   const [fullListOfUsers, setFullListOfUsers] = React.useState([]);
@@ -51,6 +53,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
     handleAddUserInput('')
   }, [])
 
+  // console.log('searched users:', searchedUsers, 'full info:', searchedUsersFullInfo);
   const handleMessageInput = (messageBody) => {
     setMessageInput(messageBody);
   };
@@ -68,8 +71,10 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
         UsersFullInfo.push(user.data())
       }
     })
-    setSearchedUsersFullInfo(UsersFullInfo)
-    setSearchedUsers(Usersarr)
+    setSearchedUsersFullInfo(UsersFullInfo);
+    setSearchedUsers(Usersarr);
+    dispatch(setUserList(Usersarr));
+    dispatch(setUserInfo(UsersFullInfo));
   };
 
   let randomUrl = '';

@@ -50,6 +50,7 @@ import {
   Paper,
   ThemeProvider,
   Typography,
+  Autocomplete,
 } from "@mui/material";
 
 import { fakeData } from './fakeGroupData';
@@ -62,19 +63,60 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
   const [groups, setGroups] = React.useState(fakeData);
   // const [newGroupName, setNewGroup] = useState('');
   const [textFieldTemp, setTextFieldTemp] = useState('');
+  const [DMTextField, setDMTextField] = useState('');
+  const [addChatToggle, setAddChatToggle] = useState(true);
 
   const setNewGroup = useAppSelector((state) => state.globalFunctions.value.createRoom);
-  const userRooms = useAppSelector((state) => state.userRooms.value)
+  const addNewDM = useAppSelector((state) => state.globalFunctions.value.createDM);
+  const userRooms = useAppSelector((state) => state.userRooms.value);
+  const userDMs = useAppSelector((state) => state.userDMs.value);
+  const addToRoom = useAppSelector((state) => state.globalFunctions.value.addNewUserToRoom);
+  const userList = useAppSelector((state) => state.users.value.userList);
+  const userInfo = useAppSelector((state) => state.users.value.userInfo);
+  const userName = useAppSelector((state) => state.userName.value);
 
-  //console.log(`list of rooms: ${userRooms}`)
+  // console.log('please show DMs 😭', userDMs);
 
   function addRoom() {
     setNewGroup(textFieldTemp)
   }
 
+  const findUserInfo = () => {
+
+    for (let i = 0; i < userInfo.length; i++) {
+      if (userInfo[i].name === DMTextField) {
+        return userInfo[i];
+      }
+    }
+
+
+  }
+
+  const trimName = (string) => {
+    let split = string.split(' ');
+
+    return split[0]
+
+  }
+
+
+  const addDM = () => {
+    let currentUserInfo = findUserInfo();
+    console.log(currentUserInfo);
+    let combined = trimName(DMTextField) + ' & ' + trimName(userName);
+
+    addNewDM(combined);
+    addToRoom(currentUserInfo, combined, db);
+
+  }
+
   const setTextField = function (e) {
     // console.log(e.target.value)
     setTextFieldTemp(e.target.value)
+  }
+
+  const setDMField = (e) => {
+    setDMTextField(e.target.value);
   }
 
 
@@ -145,6 +187,15 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
     settoggleDark(!toggleDark);
     console.log(toggleDark)
   };
+
+  const toggleAddDM = () => {
+    setAddChatToggle(false);
+
+  }
+
+  const toggleAddGroup = () => {
+    setAddChatToggle(true);
+  }
 
   //console.log(`theme is ${theme}`)
 
@@ -230,12 +281,24 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           <Typography>Direct Messages</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Coming Soon!</Typography>
+          <Box sx={{ overflowY: 'scroll', maxHeight: '200px' }}>
+            <List>
+              {userDMs.map((group, i) => (
+                < ListItem disablePadding key={i} value={group} onClick={() => { setCurrentRoom(group); setShowCalendar(false) }}>
+                  <ListItemButton>
+
+                    <ListItemText primary={group} />
+
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
         </AccordionDetails>
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} >
-          <Typography>Group Chats</Typography>
+          <Typography>Study Groups</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Box sx={{ overflowY: 'scroll', maxHeight: '200px' }}>
@@ -255,8 +318,28 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       </Accordion>
       <Divider />
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
-        <TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />
-        <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}><AddIcon /></Button>
+
+        {addChatToggle
+          ? <Box><TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />
+            <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}><AddIcon /></Button><Button onClick={toggleAddDM}>Add DM</Button></Box>
+          : <Box><Autocomplete
+            disablePortal
+            id="choosedmparticipant"
+            options={userList}
+            sx={{ width: 230 }}
+            inputValue={DMTextField}
+            onInputChange={(event, group: any) => {
+              setDMTextField(group)
+            }}
+            renderInput={(params) => <TextField {...params} label="direct message"
+            />}
+          />
+
+            <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addDM}><AddIcon /></Button><Button onClick={toggleAddGroup}>Add Group</Button></Box>
+        }
+
+        {/* <TextField size="small" id="outlined-basic" label="Direct Message" onChange={setDMField} /> */}
+
       </Box>
       <Divider />
     </Box >

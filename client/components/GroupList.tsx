@@ -220,8 +220,6 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       width: '100%',
       bgColor: 'background.paper',
       flexDirection: 'column',
-      minWidth: '200px',
-      maxWidth: '200px'
     }}>
       <Box backgroundColor="primary.main" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }} >
         <Tooltip title="Account settings">
@@ -303,7 +301,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
             <Autocomplete
               size="small"
-              sx={{ minWidth: '200px', maxWidth: '200px' }}
+              sx={{ minWidth: '200px', width: '100%' }}
               disablePortal
               id="chooseDMParticipant"
               options={userList}
@@ -354,7 +352,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
               id="outlined-basic"
               label="group name"
               onChange={setTextField}
-              sx={{ minWidth: '200px', maxWidth: '200px' }} />
+              sx={{ minWidth: '200px', width: '100%' }} />
             <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}
             ><AddIcon />
             </Button>

@@ -7,9 +7,10 @@ export default function PhotoModal({ url }) {
   const handleClose = () => setOpen(false);
 
   return (
-    <Box>
+    <Box >
       <img style={{ objectFit: 'contain' }} src={url} height="240" width="180" onClick={handleOpen}></img>
       <Modal
+        className="animate__animated animate__fadeInDown"
         open={open}
         onClose={handleClose}
         disableAutoFocus={true}

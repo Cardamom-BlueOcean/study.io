@@ -44,6 +44,7 @@ const App = () => {
             contrastText: "#fff",
           },
           divider: "#ebe5df",
+          border: "#d9a0b7",
           text: {
             primary: '#000',
             secondary: '#806543'

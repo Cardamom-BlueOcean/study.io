@@ -66,7 +66,7 @@ export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searc
       {accepted.map((event, idx) => {
         if (event.includes(selectedDate)) {
           return (
-            <li key={idx}>{event}</li>
+            <li key={idx} style={{ fontWeight: '300', fontSize: '16px' }}>{event}</li>
           )
         }
       })}
@@ -89,7 +89,7 @@ export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searc
             inputProps={{ 'aria-label': 'controlled' }}
             key={idx}
           />
-          <Box sx={{ fontSize: '16px', fontWeight: 'light' }}>{meeting} </Box>
+          <Box sx={{ fontSize: '16px', fontWeight: '300' }}>{meeting} </Box>
         </Box>
       ))}
     </ul>
@@ -123,7 +123,7 @@ export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searc
 
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box className="animate__animated animate__fadeIn" sx={{ width: '100%', padding: '8px' }}>
       <Button variant="text" onClick={() => setShowCalendar(false)}><ArrowBack />
         <Typography>  Back</Typography></Button>
       <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
@@ -144,10 +144,10 @@ export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searc
         <Box>
 
           <Box sx={{ placeSelf: 'center', marginTop: '50px' }}>
-            {selectedDate === (new Date()).toDateString() ?
-              <Typography variant="h4" sx={{ alignItems: 'center', justifyContent: 'center', fontWeight: 'light' }}>Today's Events</Typography>
+            {selectedDate === (new Date().toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' })) ?
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}><Typography variant="h4" sx={{ fontWeight: 'light' }}>Today's Events</Typography></Box>
               :
-              <Typography variant="h4" sx={{ fontWeight: 'light' }}>{selectedDate} Events</Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}><Typography variant="h4" sx={{ fontWeight: 'light' }}>{selectedDate} Events</Typography></Box>
             }
           </Box>
 
@@ -156,7 +156,7 @@ export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searc
             : renderEvents()
           }
 
-          <Box sx={{ placeSelf: 'center' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Typography variant="h4" sx={{ fontWeight: 'light' }}>Your Pending Invites</Typography>
           </Box>
 
@@ -171,12 +171,12 @@ export default function ExpandedCalendar({ setShowCalendar, searchedUsers, searc
       <Divider variant="middle" />
 
       <Box sx={{ display: 'grid', justifyContent: 'center' }}>
-        <Box>
-          <Button variant="outlined"
-            sx={{ width: '500px', marginTop: '20px', marginBottom: '20px' }}
-            onClick={() => { setScheduleMeeting(prev => !prev) }}>Schedule Meeting</Button>
-          {scheduledMeeting ? <InviteForm searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} /> : null}
-        </Box>
+
+        <Button variant="outlined"
+          sx={{ width: '728.39px', marginTop: '20px', marginBottom: '20px' }}
+          onClick={() => { setScheduleMeeting(prev => !prev) }}>Schedule Meeting</Button>
+        {scheduledMeeting ? <InviteForm searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} /> : null}
+
       </Box>
 
     </Box >

@@ -67,39 +67,45 @@ export default function Calendar({ setShowCalendar }) {
   }
 
   return (
-    <Box>
-      <Typography sx={{ fontSize: '18px', fontWeight: 'medium', color: 'white', textAlign: 'center', background: '#542F34' }}>Today's Scheduled Events</Typography>
-      <Typography sx={{ fontSize: '16px', fontWeight: 'light', textAlign: 'center' }}>Accepted Invites</Typography>
-      <ul style={{ margin: '0 auto' }}>
-        {accepted.map((meeting, idx) => {
-          if (idx < 2) {
-            return (
-              <li key={idx} style={{ fontSize: '14px', fontWeight: 'light' }}>{meeting} </li>
-            )
+    <>
+      <Typography color="primary.contrastText" backgroundColor="primary.main" sx={{ fontSize: '18px', fontWeight: '600', textAlign: 'center', fontFamily: "Montserrat, sans-serif" }}>Today's Scheduled Events</Typography>
+      <Box sx={{ padding: '5px', paddingRight: '8px' }}>
+        <Typography sx={{ fontSize: '16px', fontWeight: '400', textAlign: 'center', fontFamily: "Montserrat, sans-serif" }}>Accepted Invites</Typography>
+        <ul style={{ margin: '0 auto' }}>
+          {accepted.map((meeting, idx) => {
+            if (idx < 2) {
+              return (
+                <li key={idx} style={{ fontSize: '14px', fontWeight: '300', fontFamily: "Montserrat, sans-serif" }}>{meeting} </li>
+              )
+            }
+          })}
+          {accepted.length > 2 ?
+            <Box sx={{ display: 'flex', justifyContent: 'end' }}><Button variant="text" sx={{ fontWeight: 'light', fontSize: '10px' }} onClick={() => setShowCalendar(true)}>...Show More</Button> </Box>
+            : null}
+        </ul>
+        <Divider variant="middle" />
+        <Typography sx={{ fontSize: '16px', fontWeight: '400', textAlign: 'center', fontFamily: "Montserrat, sans-serif" }} onClick={() => setShowCalendar(true)}>Pending Invites</Typography>
+        {pending.map((meeting, idx) => {
+          if (idx < 1) {
+            return (<Box key={idx} sx={{ display: 'flex' }}>
+              <Checkbox
+                checked={checked[idx]}
+                onChange={(e) => updateCheckedBox(idx)}
+                inputProps={{ 'aria-label': 'controlled' }}
+                key={idx}
+              />
+              <Box sx={{ fontSize: '14px', fontWeight: '300', fontFamily: "Montserrat, sans-serif" }}>{meeting} </Box>
+            </Box>)
           }
         })}
-        {accepted.length > 2 ? <Button variant="text" sx={{ fontWeight: 'light', fontSize: '10px' }} onClick={() => setShowCalendar(true)}>...Show More</Button> : null}
-      </ul>
-      <Divider variant="middle" />
-      <Typography sx={{ fontSize: '16px', fontWeight: 'light', textAlign: 'center' }} onClick={() => setShowCalendar(true)}>Pending Invites</Typography>
-      {pending.map((meeting, idx) => {
-        if (idx < 1) {
-          return (<Box key={idx} sx={{ display: 'flex' }}>
-            <Checkbox
-              checked={checked[idx]}
-              onChange={(e) => updateCheckedBox(idx)}
-              inputProps={{ 'aria-label': 'controlled' }}
-              key={idx}
-            />
-            <Box sx={{ fontSize: '14px', fontWeight: 'light' }}>{meeting} </Box>
-          </Box>)
-        }
-      })}
-      {pending.length > 2 ? <Button variant="text" sx={{ fontWeight: 'light', fontSize: '10px' }} onClick={() => setShowCalendar(true)}>...Show More</Button> : null}
+        {pending.length > 2 ?
+          <Box sx={{ display: 'flex', justifyContent: 'end' }}><Button variant="text" sx={{ fontWeight: 'light', fontSize: '10px' }} onClick={() => setShowCalendar(true)}>...Show More</Button></Box>
+          : null}
 
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button variant="contained" onClick={() => setShowCalendar(true)}>Show Calendar</Button>
-      </Box>
-    </Box >
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button variant="contained" onClick={() => setShowCalendar(true)}>Show Calendar</Button>
+        </Box>
+      </Box >
+    </>
   );
 }

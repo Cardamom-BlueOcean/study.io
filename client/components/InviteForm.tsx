@@ -100,7 +100,7 @@ export default function InviteForm({ searchedUsers, searchedUsersFullInfo }) {
           disablePortal
           id="participanttext"
           options={searchedUsers}
-          sx={{ width: 300 }}
+          sx={{ width: 250 }}
           renderInput={(params) => <TextField {...params} label="Invitee" />}
         />
 
@@ -109,7 +109,7 @@ export default function InviteForm({ searchedUsers, searchedUsersFullInfo }) {
           label="Enter Meeting Time"
           value={time}
           onChange={(e) => setTime(e.target.value)}
-          sx={{ width: '230px' }}
+          sx={{ width: 230 }}
         />
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -119,7 +119,7 @@ export default function InviteForm({ searchedUsers, searchedUsersFullInfo }) {
           disablePortal
           id="choosestudygroup"
           options={roomsDropdown}
-          sx={{ width: 230 }}
+          sx={{ width: 230, marginTop: '5px' }}
           inputValue={selectedStudyGroup}
           onInputChange={(event, group: any) => {
             setSelectedStudyGroup(group)
@@ -129,7 +129,7 @@ export default function InviteForm({ searchedUsers, searchedUsersFullInfo }) {
         />
 
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '5px' }}>
         <Button variant="contained" sx={{ width: '230px', height: '50px' }} onClick={() => { sendInviteToParticipant(); setNewMeetingDate(new Date().toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' })); setTime(''); setSelectedStudyGroup('') }}>Submit</Button>
 
       </Box>

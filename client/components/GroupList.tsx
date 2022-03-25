@@ -24,6 +24,7 @@ import {
   Logout,
   PersonAdd,
   Settings,
+  StayPrimaryLandscape,
 } from "@mui/icons-material";
 
 import {
@@ -49,31 +50,74 @@ import {
   Paper,
   ThemeProvider,
   Typography,
+  PaletteMode,
+  Autocomplete,
 } from "@mui/material";
 
 import { fakeData } from './fakeGroupData';
 import { te } from 'date-fns/locale';
 
-export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, setShowCalendar, toggleDark, settoggleDark, currentMode }) {
+export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, setShowCalendar, toggleDark, settoggleDark, currentMode, mode, setMode, setLogoImg, logoImg }) {
 
   const db = getFirestore();
   const auth: any = getAuth();
   const [groups, setGroups] = React.useState(fakeData);
   // const [newGroupName, setNewGroup] = useState('');
   const [textFieldTemp, setTextFieldTemp] = useState('');
+  const [DMTextField, setDMTextField] = useState('');
+  const [addChatToggle, setAddChatToggle] = useState(true);
 
   const setNewGroup = useAppSelector((state) => state.globalFunctions.value.createRoom);
-  const userRooms = useAppSelector((state) => state.userRooms.value)
+  const addNewDM = useAppSelector((state) => state.globalFunctions.value.createDM);
+  const userRooms = useAppSelector((state) => state.userRooms.value);
+  const userDMs = useAppSelector((state) => state.userDMs.value);
+  const addToRoom = useAppSelector((state) => state.globalFunctions.value.addNewUserToRoom);
+  const userList = useAppSelector((state) => state.users.value.userList);
+  const userInfo = useAppSelector((state) => state.users.value.userInfo);
+  const userName = useAppSelector((state) => state.userName.value);
 
-  //console.log(`list of rooms: ${userRooms}`)
+  // console.log('please show DMs 😭', userDMs);
 
   function addRoom() {
     setNewGroup(textFieldTemp)
   }
 
+  const findUserInfo = () => {
+
+    for (let i = 0; i < userInfo.length; i++) {
+      if (userInfo[i].name === DMTextField) {
+        return userInfo[i];
+      }
+    }
+
+
+  }
+
+  const trimName = (string) => {
+    let split = string.split(' ');
+
+    return split[0]
+
+  }
+
+
+  const addDM = () => {
+    let currentUserInfo = findUserInfo();
+    console.log(currentUserInfo);
+    let combined = trimName(DMTextField) + ' & ' + trimName(userName);
+
+    addNewDM(combined);
+    addToRoom(currentUserInfo, combined, db);
+
+  }
+
   const setTextField = function (e) {
     // console.log(e.target.value)
     setTextFieldTemp(e.target.value)
+  }
+
+  const setDMField = (e) => {
+    setDMTextField(e.target.value);
   }
 
 
@@ -145,17 +189,28 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
     console.log(toggleDark)
   };
 
+  const toggleAddDM = () => {
+    setAddChatToggle(false);
+
+  }
+
+  const toggleAddGroup = () => {
+    setAddChatToggle(true);
+  }
+
   //console.log(`theme is ${theme}`)
 
   const fakeDMList = ['DM with Richard', 'DM with John', 'DM with Peanut']
 
   return (
+
     <Box sx={{
       width: '100%',
       //      bgColor: 'background.paper',
-      flexDirection: 'column'
+      flexDirection: 'column',
+
     }}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start', background: '#542F34', color: 'white' }} >
+      <Box backgroundColor="primary.main" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start', color: 'white' }} >
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleUserMenuClick}
@@ -177,6 +232,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           PaperProps={{
             elevation: 0,
             sx: {
+              backgroundColor: '#fff',
               overflow: 'visible',
               filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
               mt: 1.5,
@@ -191,33 +247,33 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           transformOrigin={{ horizontal: 'left', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         >
-          <MenuItem>
+          <MenuItem >
             <Avatar src={auth.currentUser?.photoURL} /> {auth.currentUser?.displayName}
           </MenuItem>
-          <MenuItem>
+          <MenuItem >
             <ListItemIcon>
               <PersonAdd fontSize="small" />
             </ListItemIcon>
             Switch Accounts
           </MenuItem>
-          <MenuItem onClick={handleUsernameClick}>
+          <MenuItem onClick={handleUsernameClick} sx={{ fontFamily: "Montserrat, sans-serif" }}>
             <ListItemIcon>
               <AccountCircleIcon fontSize="small" />
             </ListItemIcon>
             Change User Name
           </MenuItem>
           <Divider />
-          <MenuItem>
-            <FormControlLabel control={<Switch checked={toggleDark} onChange={handleModeChange} />} label={currentMode + ' mode'} />
+          <MenuItem >
+            <FormControlLabel className="animate__animated animate__fadeIn" control={<Switch checked={toggleDark} onChange={() => { settoggleDark(!toggleDark); setLogoImg(!logoImg); setMode((prevMode: PaletteMode) => prevMode === 'light' ? 'dark' : 'light') }} />} label={currentMode + ' mode'} />
           </MenuItem>
-          <MenuItem onClick={() => signOutUser()}>
+          <MenuItem onClick={() => signOutUser()} >
             <ListItemIcon >
               <Logout fontSize="small" />
             </ListItemIcon>
             Logout
           </MenuItem>
         </Menu>
-        <Typography onClick={handleUserMenuClick} sx={{ cursor: 'pointer', color: 'text.secondary' }}>
+        <Typography onClick={handleUserMenuClick} sx={{ cursor: 'pointer', color: 'white' }}>
           {auth.currentUser?.displayName}
         </Typography>
       </Box >
@@ -227,15 +283,27 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           <Typography>Direct Messages</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Coming Soon!</Typography>
+          <Box sx={{ overflowY: 'scroll', maxHeight: '200px' }}>
+            <List>
+              {userDMs.map((group, i) => (
+                < ListItem disablePadding key={i} value={group} onClick={() => { setCurrentRoom(group); setShowCalendar(false) }}>
+                  <ListItemButton>
+
+                    <ListItemText primary={group} />
+
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
         </AccordionDetails>
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} >
-          <Typography>Group Chats</Typography>
+          <Typography>Study Groups</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Box sx={{ overflowY: 'scroll', maxHeight: '400px' }}>
+          <Box sx={{ overflowY: 'scroll', maxHeight: '200px' }}>
             <List>
               {userRooms.map((group, i) => (
                 < ListItem disablePadding key={i} value={group} onClick={() => { setCurrentRoom(group); setShowCalendar(false) }}>
@@ -252,10 +320,31 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       </Accordion>
       <Divider />
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
-        <TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />
-        <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}><AddIcon /></Button>
+
+        {addChatToggle
+          ? <Box><TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />
+            <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}><AddIcon /></Button><Button onClick={toggleAddDM}>Add DM</Button></Box>
+          : <Box><Autocomplete
+            disablePortal
+            id="choosedmparticipant"
+            options={userList}
+            sx={{ width: 230 }}
+            inputValue={DMTextField}
+            onInputChange={(event, group: any) => {
+              setDMTextField(group)
+            }}
+            renderInput={(params) => <TextField {...params} label="direct message"
+            />}
+          />
+
+            <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addDM}><AddIcon /></Button><Button onClick={toggleAddGroup}>Add Group</Button></Box>
+        }
+
+        {/* <TextField size="small" id="outlined-basic" label="Direct Message" onChange={setDMField} /> */}
+
       </Box>
       <Divider />
     </Box >
+
   );
 }

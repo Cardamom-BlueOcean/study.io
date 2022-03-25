@@ -2,18 +2,38 @@ import React, { useState, useEffect } from 'react';
 import {
   connect,
   createLocalVideoTrack,
-  RemoteAudioTrack,
   RemoteParticipant,
-  RemoteTrack,
-  RemoteVideoTrack,
-  Room
 } from 'twilio-video';
+import { Box, TextField, Stack, Typography, Button, Grid } from '@mui/material'
+import styled from 'styled-components';
 
 // type Nullable<T> = T | null;
+const VideoFrame = styled('div')`
+{
+  box-sizing: border-box;
+  position: relative;
+  border-radius: 8px;
+  margin-left: .75vw;
+  margin-bottom: .75vw;
+  width: 50%;
+  overflow: hidden;
+  height: 50%;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  display: flex;
+  justify-content: center;
+}
+`;
+const VideoContainer = styled('div')`
+{
+  display:flex;
+  flex-wrap:wrap;
+  width:100%;
+  margin-left: -.75vw;
+}
+`;
 
 const VideoChat = ({currentRoom, currentUserName, setVideoToggle}) => {
   const [token, setToken] = useState('');
-  const [currentUserVideo, setCurrentUserVideo] = useState<any>(null);
 
 
   /**
@@ -34,9 +54,6 @@ const VideoChat = ({currentRoom, currentUserName, setVideoToggle}) => {
     main();
   }, []);
 
-  const [room, setRoom] = useState(null);
-  const [participants, setParticipants] = useState([]);
-
   const connectToRoom = async () => {
 
 
@@ -49,11 +66,10 @@ const VideoChat = ({currentRoom, currentUserName, setVideoToggle}) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
+      body: JSON.stringify(data)
     });
-    const roomToken = await response.json(); // parses JSON response into native JavaScript objects
+    const roomToken = await response.json();
     setToken(roomToken);
     // main()
     const conectedRoom = await connect(roomToken, {
@@ -75,7 +91,7 @@ const VideoChat = ({currentRoom, currentUserName, setVideoToggle}) => {
     const localMediaContainer = document.querySelector('#currentUserVideo') as HTMLDivElement;
     console.log('Participant "%s" connected', participant.identity);
 
-    const div = document.createElement('div');
+    const div = document.createElement("VideoFrame");
     div.id = participant.sid;
     div.innerText = participant.identity;
     // setDivList(divList => [...divList, div]);
@@ -133,19 +149,11 @@ const VideoChat = ({currentRoom, currentUserName, setVideoToggle}) => {
       <h2>{currentRoom}</h2>
       <button onClick={connectToRoom}>connectToRoom</button>
       <button  onClick ={() => setVideoToggle(false)}>Log out</button>
-      {/* <div className="local-participant">
-        {room ? (
-          <p key={room.localParticipant.sid}>{room.localParticipant.identity}</p>
-        ) : (
-          ''
-        )}
-      </div>
-      <h3>Remote Participants</h3>
-      <div className="remote-participants">{remoteParticipants}</div> */}
-      <div id="currentUserVideo"></div>
-      {/* {divList.map((div) => {
-        return div
-})} */}
+      <VideoContainer id="currentUserVideo">
+
+
+
+      </VideoContainer>
     </div>
   );
 

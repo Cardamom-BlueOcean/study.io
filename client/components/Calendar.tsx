@@ -68,7 +68,7 @@ export default function Calendar({ setShowCalendar }) {
 
   return (
     <>
-      <Typography color="primary.contrastText" sx={{ fontSize: '18px', fontWeight: '600', textAlign: 'center', background: '#542F34', fontFamily: "Montserrat, sans-serif" }}>Today's Scheduled Events</Typography>
+      <Typography color="primary.contrastText" backgroundColor="primary.main" sx={{ fontSize: '18px', fontWeight: '600', textAlign: 'center', fontFamily: "Montserrat, sans-serif" }}>Today's Scheduled Events</Typography>
       <Box sx={{ padding: '5px', paddingRight: '8px' }}>
         <Typography sx={{ fontSize: '16px', fontWeight: '400', textAlign: 'center', fontFamily: "Montserrat, sans-serif" }}>Accepted Invites</Typography>
         <ul style={{ margin: '0 auto' }}>

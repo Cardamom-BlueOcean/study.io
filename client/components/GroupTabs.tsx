@@ -44,7 +44,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
   const [videoToggle, setVideoToggle] = React.useState(false);
 
 
-  // console.log(userChats);
+  //console.log(userChats);
   // const mediaContent = useAppSelector((state) => state.mediaUrl.value)
   // console.log('at component level, ', mediaContent);
   // const dispatch = useAppDispatch();
@@ -64,7 +64,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
     const Usersarr: string[] = [];
     const UsersFullInfo: any[] = []
     Users.forEach((user: any) => {
-      // console.log('user.data().name', user.data().name)
+      //console.log('user.data().name', user.data().name)
       if (user.data().name) {
         const userName: string = user.data().name
         Usersarr.push(userName)
@@ -201,18 +201,10 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
             <Stack>
               {userChats ? userChats.map((message, index) => {
                 if (message.Sender === userId) {
-                  if (message?.TimeStamp) {
-                    let date = message.TimeStamp.toDate();
-                  }
-                  //console.log('date', date);
                   return (
                     <UserChatMessage replyToThread={replyToThread} key={index} message={message} />
                   )
                 } else {
-                  if (message?.TimeStamp) {
-                    let date = message.TimeStamp.toDate();
-                  }
-                  //console.log('date', date);
                   return (
                     <OtherChatMessage replyToThread={replyToThread} key={index} message={message} />
                   )

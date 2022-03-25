@@ -17,11 +17,13 @@ import {
   orderBy,
   updateDoc,
   arrayUnion,
-  getDoc
+  getDoc,
+  QuerySnapshot
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import { setRoomsArray } from "../features/userRooms/userRooms";
+import { setDMsArray } from "../features/userDMs/userDMs";
 import { setUserId } from "../features/userId/userId";
 import { setUserName } from '../features/userName/userName';
 
@@ -129,8 +131,24 @@ export default function UserPage(props) {
             });
           }
         };
+        const getUsersDMData = async () => {
+          if (user) {
+            const dmquery = query(
+              collection(db, "Rooms"),
+              where("RoomParticipants", "array-contains", user.uid),
+              where("DM", "==", true)
+            );
+            const unsubscribe = onSnapshot(dmquery, (querySnapshot) => {
+              const DMs: any = [];
+              querySnapshot.forEach((doc) => {
+                DMs.push(doc.data().RoomName)
+              });
+              dispatch(setDMsArray(DMs));
+            });
+          }
+        };
         getUsersRoomDataOnceAuthorized();
-
+        getUsersDMData();
 
         //example of what a call to subsribe to a room would look like
       });

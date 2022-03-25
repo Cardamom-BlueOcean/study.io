@@ -62,14 +62,14 @@ const initialState: globalFunctionsState = {
 
     },
 
-    async createDM(targetUser) {
+    async createDM(combinedNames) {
       const db = getFirestore();
       const auth: any = await getAuth();
       onAuthStateChanged(auth, (user: any) => {
         if (user) {
           const creatRoomOnceAuthorized = async () => {
-            await setDoc(doc(db, "Rooms", targetUser), {
-              RoomName: targetUser,
+            await setDoc(doc(db, "Rooms", combinedNames), {
+              RoomName: combinedNames,
               RoomParticipants: [user.uid],
               DM: true,
             });
@@ -81,7 +81,7 @@ const initialState: globalFunctionsState = {
               email: user.email,
               thumbnailPhotoURL: user.photoURL,
               uid: user.uid,
-              rooms: arrayUnion(targetUser)
+              rooms: arrayUnion(combinedNames)
             }, { merge: true });
 
           }
@@ -102,6 +102,9 @@ const initialState: globalFunctionsState = {
       await updateDoc(doc(db, "Users", userToAdd.uid), {
         rooms: arrayUnion(currentRoom)
       });
+      await updateDoc(doc(db, "Rooms", currentRoom), {
+        RoomParticipants: arrayUnion(userToAdd.uid)
+      })
     },
   }
 }

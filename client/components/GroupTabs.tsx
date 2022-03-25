@@ -44,7 +44,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
   const [videoToggle, setVideoToggle] = React.useState(false);
 
 
-  console.log(userChats);
+  // console.log(userChats);
   // const mediaContent = useAppSelector((state) => state.mediaUrl.value)
   // console.log('at component level, ', mediaContent);
   // const dispatch = useAppDispatch();
@@ -53,7 +53,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
     handleAddUserInput('')
   }, [])
 
-  console.log('searched users:', searchedUsers, 'full info:', searchedUsersFullInfo);
+  // console.log('searched users:', searchedUsers, 'full info:', searchedUsersFullInfo);
   const handleMessageInput = (messageBody) => {
     setMessageInput(messageBody);
   };
@@ -64,7 +64,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
     const Usersarr: string[] = [];
     const UsersFullInfo: any[] = []
     Users.forEach((user: any) => {
-      console.log('user.data().name', user.data().name)
+      // console.log('user.data().name', user.data().name)
       if (user.data().name) {
         const userName: string = user.data().name
         Usersarr.push(userName)
@@ -179,56 +179,57 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
       <ExpandedCalendar setShowCalendar={setShowCalendar} searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} />
     )
   } else {
-    if(videoToggle){
+    if (videoToggle) {
       return (
-        <VideoChat currentRoom={currentRoom} currentUserName={currentUserName} setVideoToggle={setVideoToggle}/>
+        <VideoChat currentRoom={currentRoom} currentUserName={currentUserName} setVideoToggle={setVideoToggle} />
       )
-    }else{
-    return (
-      <Box className="animate__animated animate__fadeIn" sx={{ width: "99%", height: '82%', typography: "body1", margin: '8px' }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '25% 5% 40% 15% 15%', height: '65px' }}>
-          <Typography sx={{ alignSelf: 'center', justifySelf: 'center', gridColumnStart: '1' }} variant="h5" gutterBottom component="div">
-            {currentRoom}
-          </Typography>
-          <VideocamIcon sx={{ width: '100%', justifySelf: 'center', gridColumnStart: '2' }} onClick={() => {setVideoToggle(!videoToggle)}}/>
-          <SearchUserToAdd  sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '3' }}  searchedUsers={searchedUsers}/>
+    } else {
+      return (
+        <Box className="animate__animated animate__fadeIn" sx={{ width: "99%", height: '82%', typography: "body1", margin: '8px' }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '25% 5% 40% 15% 15%', height: '65px' }}>
+            <Typography sx={{ alignSelf: 'center', justifySelf: 'center', gridColumnStart: '1' }} variant="h5" gutterBottom component="div">
+              {currentRoom}
+            </Typography>
+            <VideocamIcon sx={{ width: '100%', justifySelf: 'center', gridColumnStart: '2' }} onClick={() => { setVideoToggle(!videoToggle) }} />
+            <SearchUserToAdd sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '3' }} searchedUsers={searchedUsers} />
 
-          <Button sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '4' }} onClick={addUserToCurrentRoom}>Add User</Button>
-          <Button sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '5' }} onClick={LeaveCurrentRoom}>Leave</Button>
+            <Button sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '4' }} onClick={addUserToCurrentRoom}>Add User</Button>
+            <Button sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '5' }} onClick={LeaveCurrentRoom}>Leave</Button>
 
-        </Box>
-        <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse', marginTop: '3px' }}>
-          <Stack>
-            {userChats ? userChats.map((message, index) => {
-              if (message.Sender === userId) {
-                if (message?.TimeStamp) {
-                  let date = message.TimeStamp.toDate();
+          </Box>
+          <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse', marginTop: '3px' }}>
+            <Stack>
+              {userChats ? userChats.map((message, index) => {
+                if (message.Sender === userId) {
+                  if (message?.TimeStamp) {
+                    let date = message.TimeStamp.toDate();
+                  }
+                  //console.log('date', date);
+                  return (
+                    <UserChatMessage replyToThread={replyToThread} key={index} message={message} />
+                  )
+                } else {
+                  if (message?.TimeStamp) {
+                    let date = message.TimeStamp.toDate();
+                  }
+                  //console.log('date', date);
+                  return (
+                    <OtherChatMessage replyToThread={replyToThread} key={index} message={message} />
+                  )
                 }
-                //console.log('date', date);
-                return (
-                  <UserChatMessage replyToThread={replyToThread} key={index} message={message} />
-                )
-              } else {
-                if (message?.TimeStamp) {
-                  let date = message.TimeStamp.toDate();
-                }
-                //console.log('date', date);
-                return (
-                  <OtherChatMessage replyToThread={replyToThread} key={index} message={message} />
-                )
-              }
-            }) : null}
-          </Stack>
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-          <TextField sx={{ width: '90%' }} id="messageEntry" label="Message" variant="outlined" margin="none" size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-            handleMessageInput(e.target.value)
-          } />
-          <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom} id="sendMessageButton"><SendIcon /></Button>
-          <Button ><AddPhotoAlternateOutlinedIcon /></Button>
-          <UploadPhoto />
+              }) : null}
+            </Stack>
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+            <TextField sx={{ width: '90%' }} id="messageEntry" label="Message" variant="outlined" margin="none" size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+              handleMessageInput(e.target.value)
+            } />
+            <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom} id="sendMessageButton"><SendIcon /></Button>
+            <Button ><AddPhotoAlternateOutlinedIcon /></Button>
+            <UploadPhoto />
+          </Box >
         </Box >
-      </Box >
-    );
-  }}
+      );
+    }
+  }
 }

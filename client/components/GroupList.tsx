@@ -68,11 +68,13 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
   const setNewGroup = useAppSelector((state) => state.globalFunctions.value.createRoom);
   const addNewDM = useAppSelector((state) => state.globalFunctions.value.createDM);
   const userRooms = useAppSelector((state) => state.userRooms.value);
+  const userDMs = useAppSelector((state) => state.userDMs.value);
   const addToRoom = useAppSelector((state) => state.globalFunctions.value.addNewUserToRoom);
   const userList = useAppSelector((state) => state.users.value.userList);
   const userInfo = useAppSelector((state) => state.users.value.userInfo);
+  const userName = useAppSelector((state) => state.userName.value);
 
-  console.log(userList);
+  // console.log('please show DMs 😭', userDMs);
 
   function addRoom() {
     setNewGroup(textFieldTemp)
@@ -89,12 +91,21 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
 
   }
 
+  const trimName = (string) => {
+    let split = string.split(' ');
+
+    return split[0]
+
+  }
+
+
   const addDM = () => {
     let currentUserInfo = findUserInfo();
     console.log(currentUserInfo);
+    let combined = trimName(DMTextField) + ' & ' + trimName(userName);
 
-    addNewDM(DMTextField);
-    addToRoom(currentUserInfo, DMTextField, db);
+    addNewDM(combined);
+    addToRoom(currentUserInfo, combined, db);
 
   }
 
@@ -260,12 +271,24 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           <Typography>Direct Messages</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Coming Soon!</Typography>
+          <Box sx={{ overflowY: 'scroll', maxHeight: '200px' }}>
+            <List>
+              {userDMs.map((group, i) => (
+                < ListItem disablePadding key={i} value={group} onClick={() => { setCurrentRoom(group); setShowCalendar(false) }}>
+                  <ListItemButton>
+
+                    <ListItemText primary={group} />
+
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
         </AccordionDetails>
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} >
-          <Typography>Group Chats</Typography>
+          <Typography>Study Groups</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Box sx={{ overflowY: 'scroll', maxHeight: '200px' }}>

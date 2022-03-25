@@ -11,6 +11,7 @@ import userIdReducer from './features/userId/userId';
 import userNameReducer from './features/userName/userName';
 import mediaUrlReducer from './features/mediaUrl/mediaUrl';
 import usersReducer from './features/users/users';
+import userDMsReducer from './features/userDMs/userDMs';
 
 export const store = configureStore({
   // THE REDUCER HERE IS WHERE WE STORE OUR GLOBAL VARIABLES.
@@ -23,6 +24,7 @@ export const store = configureStore({
     // objectExample: objectExampleReducer,
     globalFunctions: globalFunctionsReducer,
     userRooms: userRoomsReducer,
+    userDMs: userDMsReducer,
     userChats: userChatsReducer,
     userId: userIdReducer,
     userName: userNameReducer,

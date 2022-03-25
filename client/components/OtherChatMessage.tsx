@@ -21,6 +21,7 @@ export default function OtherChatMessage({ replyToThread, message, index }) {
 
   let chatDate;
   let chatTime;
+  let suffix;
 
   if (message.TimeStamp !== null) {
     chatDate = message.TimeStamp.toDate().toDateString();

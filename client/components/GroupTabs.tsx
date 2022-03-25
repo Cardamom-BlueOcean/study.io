@@ -144,15 +144,18 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
     display: 'none',
   });
 
-  $("#messageEntry").unbind().keyup(function (event) {
+  $("#messageEntry").unbind().keyup(async function (event) {
     if (event.keyCode === 13) {
-
       //$("#sendMessageButton").click();
-      sendMessageToCurrentRoom()
-      //$('#messageEntry').val("");
-      console.log('WOO');
+      await sendMessageToCurrentRoom()
+      $('#messageEntry').val("");
     }
   });
+
+  const handleSendButton = async function () {
+    await sendMessageToCurrentRoom()
+    $('#messageEntry').val("");
+  }
 
   const UploadPhoto = () => {
     return (
@@ -215,7 +218,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
           <TextField sx={{ width: '90%' }} id="messageEntry" label="Message" variant="outlined" margin="none" size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
             handleMessageInput(e.target.value)
           } />
-          <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom} id="sendMessageButton"><SendIcon /></Button>
+          <Button sx={{ width: '40px' }} onClick={handleSendButton} id="sendMessageButton"><SendIcon /></Button>
           <Button ><AddPhotoAlternateOutlinedIcon /></Button>
           <UploadPhoto />
         </Box >}

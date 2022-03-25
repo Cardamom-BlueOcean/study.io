@@ -57,6 +57,7 @@ const AddMemes = ({
 	const createNewMeme = async (memeId, input1, input2) => {
 		input1 = input1 || '_';
 		input2 = input2 || '_';
+		console.log('memeId,input1,input2: ', memeId, input1, input2);
 
 		// const URL = `https://api.memegen.link/images/${memeId}/${input1}/${input2}.png`;
 		const getNewMeme = await fetch(

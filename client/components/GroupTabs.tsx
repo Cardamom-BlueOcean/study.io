@@ -25,8 +25,17 @@ import ExpandedCalendar from './ExpandedCalendar';
 import UserChatMessage from './UserChatMessage';
 import OtherChatMessage from './OtherChatMessage';
 import SearchUserToAdd from './SearchUserToAdd';
+import VideoChat from './videoChat/VideoChat';
+import VideocamIcon from '@mui/icons-material/Videocam';
 import ShareMemesButton from './meme-components/ShareMemesButton';
 import MemeModal from './meme-components/MemeModal';
+import $ from 'jquery';
+import {
+	UnpublishedOutlined,
+	Send as SendIcon,
+	UploadFile as UploadFileIcon,
+	AddPhotoAlternateOutlined as AddPhotoAlternateOutlinedIcon,
+} from '@mui/icons-material';
 
 export default function GroupTabs({
 	userChats,
@@ -34,10 +43,12 @@ export default function GroupTabs({
 	setShowCalendar,
 	setCurrentRoom,
 	currentRoom,
+	currentUserName,
 }) {
 	const db = getFirestore();
 	const auth: any = getAuth();
 	const userId = useAppSelector((state) => state.userId.value);
+	const dispatch = useAppDispatch();
 
 	const [messageInput, setMessageInput] = React.useState<string>('');
 	const [fullListOfUsers, setFullListOfUsers] = React.useState([]);
@@ -46,19 +57,19 @@ export default function GroupTabs({
 	const [toggleMemeModal, setToggleMemeModal] = React.useState(false);
 	const [allMemes, setAllMemes] = React.useState([]);
 	const [createdMeme, setCreatedMeme] = React.useState('');
+	const [videoToggle, setVideoToggle] = React.useState(false);
 
+	//console.log(userChats);
 	// const mediaContent = useAppSelector((state) => state.mediaUrl.value)
 	// console.log('at component level, ', mediaContent);
 	// const dispatch = useAppDispatch();
 
 	React.useEffect(() => {
 		handleAddUserInput('');
-	}, []);
-
-	React.useEffect(() => {
 		getAllMemes();
 	}, []);
 
+	// console.log('searched users:', searchedUsers, 'full info:', searchedUsersFullInfo);
 	const handleMessageInput = (messageBody) => {
 		setMessageInput(messageBody);
 	};
@@ -69,7 +80,7 @@ export default function GroupTabs({
 		const Usersarr: string[] = [];
 		const UsersFullInfo: any[] = [];
 		Users.forEach((user: any) => {
-			console.log('user.data().name', user.data().name);
+			//console.log('user.data().name', user.data().name)
 			if (user.data().name) {
 				const userName: string = user.data().name;
 				Usersarr.push(userName);
@@ -78,6 +89,8 @@ export default function GroupTabs({
 		});
 		setSearchedUsersFullInfo(UsersFullInfo);
 		setSearchedUsers(Usersarr);
+		dispatch(setUserList(Usersarr));
+		dispatch(setUserInfo(UsersFullInfo));
 	};
 
 	let randomUrl = '';
@@ -98,6 +111,7 @@ export default function GroupTabs({
 					});
 				};
 				sendMessageOnceAuthorized();
+				$('#messageEntry').val('');
 			}
 		});
 	};
@@ -150,6 +164,17 @@ export default function GroupTabs({
 		display: 'none',
 	});
 
+	$('#messageEntry')
+		.unbind()
+		.keyup(function (event) {
+			if (event.keyCode === 13) {
+				//$("#sendMessageButton").click();
+				sendMessageToCurrentRoom();
+				//$('#messageEntry').val("");
+				console.log('WOO');
+			}
+		});
+
 	const UploadPhoto = () => {
 		return (
 			<Stack direction='row' alignItems='center' spacing={2}>
@@ -161,18 +186,12 @@ export default function GroupTabs({
 						type='file'
 						onChange={UploadPhotoToStorage}
 					/>
-					<Button variant='contained' component='span'>
-						Upload
+					<Button component='span'>
+						<UploadFileIcon />
 					</Button>
 				</label>
 			</Stack>
 		);
-	};
-
-	const replyToThread = async (chatId, replyBody) => {
-		await updateDoc(doc(db, 'Rooms', currentRoom, 'Chats', chatId), {
-			MessageThread: arrayUnion(replyBody),
-		});
 	};
 
 	const getAllMemes = async () => {
@@ -186,11 +205,26 @@ export default function GroupTabs({
 		setToggleMemeModal(!toggleMemeModal);
 	};
 
+	const replyToThread = async (chatId, replyBody) => {
+		await updateDoc(doc(db, 'Rooms', currentRoom, 'Chats', chatId), {
+			MessageThread: arrayUnion(replyBody),
+		});
+	};
+
 	if (showCalendar) {
-		return <ExpandedCalendar setShowCalendar={setShowCalendar} />;
+		return (
+			<ExpandedCalendar
+				setShowCalendar={setShowCalendar}
+				searchedUsers={searchedUsers}
+				searchedUsersFullInfo={searchedUsersFullInfo}
+			/>
+		);
 	} else {
 		return (
-			<Box sx={{ width: '100%', height: '82%', typography: 'body1' }}>
+			<Box
+				className='animate__animated animate__fadeIn'
+				sx={{ width: '99%', height: '82%', typography: 'body1', margin: '8px' }}
+			>
 				<Box>
 					<MemeModal
 						allMemes={allMemes}
@@ -204,27 +238,38 @@ export default function GroupTabs({
 						borderBottom: 1,
 						borderColor: 'divider',
 						display: 'grid',
-						gridTemplateColumns: '25% 40% 20% 15%',
+						gridTemplateColumns: '25% 5% 40% 15% 15%',
 						height: '65px',
 					}}
 				>
 					<Typography
-						sx={{ alignSelf: 'center', justifySelf: 'center' }}
+						color='primary.main'
+						sx={{ alignSelf: 'center', justifySelf: 'center', gridColumnStart: '1' }}
 						variant='h5'
 						gutterBottom
 						component='div'
 					>
 						{currentRoom}
 					</Typography>
-					<SearchUserToAdd searchedUsers={searchedUsers} />
+					<VideocamIcon
+						sx={{ width: '100%', justifySelf: 'center', gridColumnStart: '2' }}
+						onClick={() => {
+							setVideoToggle(!videoToggle);
+						}}
+					/>
+					<SearchUserToAdd
+						sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '3' }}
+						searchedUsers={searchedUsers}
+					/>
+
 					<Button
-						sx={{ width: '20%', justifySelf: 'center', gridColumnStart: '3' }}
+						sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '4' }}
 						onClick={addUserToCurrentRoom}
 					>
 						Add User
 					</Button>
 					<Button
-						sx={{ width: '20%', justifySelf: 'center', gridColumnStart: '4' }}
+						sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '5' }}
 						onClick={LeaveCurrentRoom}
 					>
 						Leave
@@ -239,54 +284,67 @@ export default function GroupTabs({
 						marginTop: '3px',
 					}}
 				>
-					<Stack>
-						{userChats
-							? userChats.map((message, index) => {
-									if (message.Sender === userId) {
-										if (message?.TimeStamp) {
-											let date = message.TimeStamp.toDate();
+					{videoToggle ? (
+						<VideoChat
+							currentRoom={currentRoom}
+							currentUserName={currentUserName}
+							setVideoToggle={setVideoToggle}
+						/>
+					) : (
+						<Stack>
+							{userChats
+								? userChats.map((message, index) => {
+										if (message.Sender === userId) {
+											//console.log('date', date);
+											return (
+												<UserChatMessage
+													replyToThread={replyToThread}
+													key={index}
+													message={message}
+												/>
+											);
+										} else {
+											//console.log('date', date);
+											return (
+												<OtherChatMessage
+													replyToThread={replyToThread}
+													key={index}
+													message={message}
+												/>
+											);
 										}
-										//console.log('date', date);
-										return (
-											<UserChatMessage
-												replyToThread={replyToThread}
-												key={index}
-												message={message}
-											/>
-										);
-									} else {
-										if (message?.TimeStamp) {
-											let date = message.TimeStamp.toDate();
-										}
-										//console.log('date', date);
-										return (
-											<OtherChatMessage
-												replyToThread={replyToThread}
-												key={index}
-												message={message}
-											/>
-										);
-									}
-							  })
-							: null}
-					</Stack>
+								  })
+								: null}
+						</Stack>
+					)}
 				</Box>
-				<Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-					<TextField
-						sx={{ width: '90%' }}
-						id='outlined-basic'
-						label='Message'
-						variant='outlined'
-						onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-							handleMessageInput(e.target.value)
-						}
-					/>
-					<Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom}>
-						Send
-					</Button>
-					<UploadPhoto />
-					<ShareMemesButton showMemeModal={showMemeModal} />
-				</Box>
+				{!videoToggle && (
+					<Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+						<TextField
+							sx={{ width: '90%' }}
+							id='messageEntry'
+							label='Message'
+							variant='outlined'
+							margin='none'
+							size='small'
+							onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+								handleMessageInput(e.target.value)
+							}
+						/>
+						<Button
+							sx={{ width: '40px' }}
+							onClick={sendMessageToCurrentRoom}
+							id='sendMessageButton'
+						>
+							<SendIcon />
+						</Button>
+						<Button>
+							<AddPhotoAlternateOutlinedIcon />
+						</Button>
+						<UploadPhoto />
+						<ShareMemesButton showMemeModal={showMemeModal} />
+					</Box>
+				)}
 			</Box>
 		);
 	}

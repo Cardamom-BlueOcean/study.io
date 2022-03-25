@@ -15,7 +15,7 @@ const Button = styled.button`
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 900;
 	font-size: 15px;
-	height: 38px;
+	height: 35px;
 	line-height: 1.5;
 	/* margin-left: 10px; */
 	margin: 10px 10px auto 10px;

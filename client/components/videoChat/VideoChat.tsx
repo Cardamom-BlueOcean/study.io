@@ -6,47 +6,61 @@ import {
 } from 'twilio-video';
 import { Box, TextField, Stack, Typography, Button, Grid } from '@mui/material'
 import styled from 'styled-components';
+import '../../../src/video.css';
+import { isFSA } from '@reduxjs/toolkit/dist/createAction';
+import { isFuture } from 'date-fns';
 
 // type Nullable<T> = T | null;
 const VideoFrame = styled('div')`
 {
-  box-sizing: border-box;
-  position: relative;
-  border-radius: 8px;
-  margin-left: .75vw;
-  margin-bottom: .75vw;
-  width: 50%;
-  overflow: hidden;
-  height: 50%;
-  display: flex;
-  justify-content: center;
+  border: 3px solid #542F34;
+  width: 100%;
+  height: auto;
+  justify-self: center;
+  align-self: center;
+  margin: 2px;
 }
 `;
 const VideoContainer = styled('div')`
 {
-  display:flex;
-  flex-wrap:wrap;
+  display:grid;
+  grid-template-columns: repeat(3, 30%);
+  grid-template-rows: repreat(2, 250px);
   width:100%;
-  margin-left: -.75vw;
+  gap: 5px;
+  margin: auto;
 }
 `;
 
-const VideoChat = ({ currentRoom, currentUserName, setVideoToggle }) => {
-  const [token, setToken] = useState('');
 
-  async function main() {
+const VideoChat = ({ currentRoom, currentUserName, setVideoToggle }) => {
+
+  const [connectButton, setConnectButton] = useState<boolean>(false);
+  // const [token, setToken] = useState<any>(null);
+
+  const [activeRoom, setActiveRoom] = useState<any>(null);
+
+
+  async function setUpLocalVideo() {
     const localVideoTrack = await createLocalVideoTrack();
     console.log('localVideoTrack', localVideoTrack)
-
     const localMediaContainer = document.querySelector('#currentUserVideo') as HTMLDivElement;
     localMediaContainer.appendChild(localVideoTrack.attach());
   }
 
   useEffect(() => {
-    main();
+    setUpLocalVideo();
+
   }, []);
 
-  const connectToRoom = async () => {
+  // useEffect(() => {
+  //   if (connectButton) {
+
+  //   }
+  // });
+
+
+  const getToken = async () => {
     const data = {
       room: currentRoom,
       userName: currentUserName,
@@ -59,29 +73,49 @@ const VideoChat = ({ currentRoom, currentUserName, setVideoToggle }) => {
       body: JSON.stringify(data)
     });
     const roomToken = await response.json();
-    setToken(roomToken);
-    const conectedRoom = await connect(roomToken, {
+    return roomToken
+  }
+
+
+
+  const connectToRoom = async () => {
+    const token = await getToken();
+    const conectedRoom = await connect(token, {
       name: currentRoom,
       audio: false,
       video: { width: 1000 }
     })
+    if (!activeRoom) {
+      setActiveRoom(conectedRoom);
+    }
+
+    const arr = []
     conectedRoom.participants.forEach(
-      participant => participantConnected(participant)
+      participant => {participantConnected(participant); arr.push(participant) }
     );
-
-    console.log('conectedRoom', conectedRoom)
-    conectedRoom.on('participantConnected', participantConnected);
-    conectedRoom.on('participantDisconnected', participantDisconnected);
-    conectedRoom.once('disconnected', error => conectedRoom.participants.forEach(participantDisconnected));
-
+      setPeopleInDaRoom(arr)
+    console.log('arr', arr)
+    console.log('people in da room', peopleInDaRoom)
+    listenForRoomUpdates(conectedRoom)
   }
+const[peopleInDaRoom, setPeopleInDaRoom] = useState<any>([]);
+  const listenForRoomUpdates = async (room) => {
+    room.on('participantConnected', participantConnected);
+    room.on('participantDisconnected', participantDisconnected);
+    room.once('disconnected', error => room.participants.forEach(participantDisconnected));
+    window.onbeforeunload = () => room.disconnect();
+  }
+
+  useEffect(() => {
+
+  }, [peopleInDaRoom])
   function participantConnected(participant: RemoteParticipant) {
     const localMediaContainer = document.querySelector('#currentUserVideo') as HTMLDivElement;
     console.log('Participant "%s" connected', participant.identity);
 
     const div = document.createElement("VideoFrame");
     div.id = participant.sid;
-    div.innerText = participant.identity;
+    //div.innerText = participant.identity;
     // setDivList(divList => [...divList, div]);
     // console.log('divList', divList)
 
@@ -96,7 +130,9 @@ const VideoChat = ({ currentRoom, currentUserName, setVideoToggle }) => {
     });
 
     //document.body.appendChild(div);
-    localMediaContainer.appendChild(div);
+    if (localMediaContainer) {
+      localMediaContainer.appendChild(div);
+    }
   }
   type participant = {
     identity: string,
@@ -114,13 +150,13 @@ const VideoChat = ({ currentRoom, currentUserName, setVideoToggle }) => {
   }
 
 
-  function participantDisconnected(participant: RemoteParticipant) {
+  async function participantDisconnected(participant: RemoteParticipant) {
     console.log('Participant "%s" disconnected', participant.identity);
     const divToRemove = document.getElementById(participant.sid);
-    divToRemove?.remove()
+    await divToRemove?.remove()
+    participant.tracks.forEach(track => trackUnsubscribed(track));
 
-    // const newDivList = divList.filter(div => div.id !== participant.sid);
-    // setDivList(newDivList);
+    return null
   }
 
   function trackSubscribed(div, track) {
@@ -128,20 +164,42 @@ const VideoChat = ({ currentRoom, currentUserName, setVideoToggle }) => {
   }
 
   function trackUnsubscribed(track) {
+    console.log('track', track)
     track.detach().forEach(element => element.remove());
+  }
+  const leaveVideoChat = async () => {
+    // await participantDisconnected(activeRoom.localParticipant);
+    // await activeRoom.participants.forEach(participant => participantDisconnected(participant));
+    await activeRoom.disconnect();
+    // activeRoom.on('participantDisconnected', participantDisconnected);
+    // activeRoom.once('disconnected', error => activeRoom.participants.forEach(participantDisconnected));
+
+    setConnectButton(false)
+    setVideoToggle(false)
+
+
   }
 
   //onClick={handleLogout}
   return (
     <div className="room">
-      <h2>{currentRoom}</h2>
-      <button onClick={connectToRoom}>connectToRoom</button>
-      <button onClick={() => setVideoToggle(false)}>Log out</button>
       <VideoContainer id="currentUserVideo">
 
 
 
       </VideoContainer>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        {!connectButton ?
+          <Button variant="outlined" onClick={() => { connectToRoom(); setConnectButton(true);getToken(); }} >connectToRoom</Button>//
+          :
+          null
+        }
+        {connectButton ? <Button variant="outlined" onClick={() => leaveVideoChat()}>Log out</Button>
+          : null
+        }
+
+      </Box>
+
     </div>
   );
 

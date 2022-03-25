@@ -67,6 +67,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
   const [textFieldTemp, setTextFieldTemp] = useState('');
   const [DMTextField, setDMTextField] = useState('');
   const [addChatToggle, setAddChatToggle] = useState(true);
+  const [DMsToggle, setDMsToggle] = useState(false);
 
   const setNewGroup = useAppSelector((state) => state.globalFunctions.value.createRoom);
   const addNewDM = useAppSelector((state) => state.globalFunctions.value.createDM);
@@ -199,9 +200,9 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
     setAddChatToggle(true);
   }
 
-  //console.log(`theme is ${theme}`)
-
-  const fakeDMList = ['DM with Richard', 'DM with John', 'DM with Peanut']
+  const toggleDMs = () => {
+    setDMsToggle(!DMsToggle)
+  }
 
   $("#groupNameEntry").unbind().keyup(function (event) {
     if (event.keyCode === 13) {
@@ -209,7 +210,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       //$("#sendMessageButton").click();
       addRoom()
       $('#groupNameEntry').val("");
-      console.log('WOO');
+      console.log('jquery enter key captured!');
     }
   });
 
@@ -217,19 +218,15 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
 
     <Box sx={{
       width: '100%',
-      //      bgColor: 'background.paper',
+      bgColor: 'background.paper',
       flexDirection: 'column',
-
+      minWidth: '200px',
+      maxWidth: '200px'
     }}>
-      <Box backgroundColor="primary.main" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start', color: 'white' }} >
+      <Box backgroundColor="primary.main" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }} >
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleUserMenuClick}
-          //   size="small"
-          //   sx={{ ml: 2 }}
-          //   aria-controls={open ? 'account-menu' : undefined}
-          //   aria-haspopup="true"
-          //   aria-expanded={open ? 'true' : undefined}
           >
             <Avatar sx={{ width: 32, height: 32 }} src={auth.currentUser?.photoURL} imgProps={{ referrerPolicy: 'noReferrer' }} ></Avatar>
           </IconButton>
@@ -240,21 +237,6 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           open={openMenu}
           onClose={handleClose}
           onClick={handleClose}
-          PaperProps={{
-            elevation: 0,
-            sx: {
-              backgroundColor: '#fff',
-              overflow: 'visible',
-              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-              mt: 1.5,
-              '& .MuiAvatar-root': {
-                width: 32,
-                height: 32,
-                ml: -0.5,
-                mr: 1,
-              },
-            },
-          }}
           transformOrigin={{ horizontal: 'left', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         >
@@ -289,67 +271,98 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
         </Typography>
       </Box >
       <Divider />
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} >
-          <Typography>Direct Messages</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
+      {DMsToggle
+        ?
+        <Box>
           <Box sx={{ overflowY: 'scroll', maxHeight: '200px' }}>
+            <Typography
+              color="primary.contrastText"
+              backgroundColor="primary.main"
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                fontSize: '18px',
+                fontWeight: '600',
+                textAlign: 'center',
+                fontFamily: "Montserrat, sans-serif",
+                padding: '10px'
+              }}>
+              Direct Messages
+              <Button onClick={toggleDMs} size="small" variant="contained" sx={{ color: 'primary.contrastText' }}>Groups</Button></Typography>
             <List>
               {userDMs.map((group, i) => (
                 < ListItem disablePadding key={i} value={group} onClick={() => { setCurrentRoom(group); setShowCalendar(false) }}>
                   <ListItemButton>
-
                     <ListItemText primary={group} />
-
                   </ListItemButton>
                 </ListItem>
               ))}
             </List>
           </Box>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} >
-          <Typography>Study Groups</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+            <Autocomplete
+              size="small"
+              sx={{ minWidth: '200px', maxWidth: '200px' }}
+              disablePortal
+              id="chooseDMParticipant"
+              options={userList}
+              inputValue={DMTextField}
+              onInputChange={(event, group: any) => {
+                setDMTextField(group)
+              }}
+              renderInput={(params) => <TextField {...params} label="direct message"
+              />}
+            />
+            <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addDM}><AddIcon /></Button>
+          </Box>
+        </Box>
+        :
+        <Box>
           <Box sx={{ overflowY: 'scroll', maxHeight: '200px' }}>
+            <Typography
+              color="primary.contrastText"
+              backgroundColor="primary.main"
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                fontSize: '18px',
+                fontWeight: '600',
+                textAlign: 'center',
+                fontFamily: "Montserrat, sans-serif",
+                padding: '10px'
+              }}>
+              Study Groups
+              <Button onClick={toggleDMs} size="small" variant="contained" sx={{ color: 'primary.contrastText' }}>
+                DMs
+              </Button>
+            </Typography>
             <List>
               {userRooms.map((group, i) => (
                 < ListItem disablePadding key={i} value={group} onClick={() => { setCurrentRoom(group); setShowCalendar(false) }}>
                   <ListItemButton>
-
                     <ListItemText primary={group} />
-
                   </ListItemButton>
                 </ListItem>
               ))}
             </List>
           </Box>
-        </AccordionDetails>
-      </Accordion>
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+            <TextField
+              size="small"
+              id="outlined-basic"
+              label="group name"
+              onChange={setTextField}
+              sx={{ minWidth: '200px', maxWidth: '200px' }} />
+            <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}
+            ><AddIcon />
+            </Button>
+          </Box>
+        </Box>
+      }
       <Divider />
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
-
-        {addChatToggle
-          ? <Box><TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />
-            <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}><AddIcon /></Button><Button onClick={toggleAddDM}>Add DM</Button></Box>
-          : <Box><Autocomplete
-            disablePortal
-            id="choosedmparticipant"
-            options={userList}
-            sx={{ width: 230 }}
-            inputValue={DMTextField}
-            onInputChange={(event, group: any) => {
-              setDMTextField(group)
-            }}
-            renderInput={(params) => <TextField {...params} label="direct message"
-            />}
-          />
-
-            <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addDM}><AddIcon /></Button><Button onClick={toggleAddGroup}>Add Group</Button></Box>
-        }
 
         {/* <TextField size="small" id="outlined-basic" label="Direct Message" onChange={setDMField} /> */}
 

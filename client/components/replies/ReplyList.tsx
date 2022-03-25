@@ -7,19 +7,11 @@ import { Send as SendIcon } from "@mui/icons-material";
 
 import $ from "jquery";
 
-
-
 const ReplyDiv = styled.div`
   color: blue;
   font-size: 8px;
   text-decoration: underline;
-  position: absolute;
-  right: 18%;
-
-
 `;
-
-
 
 const ReplyList = ({ replyToThread, setShowReply, messageThread, documentId }) => {
   // console.log('this is in reply list', messageThread)
@@ -34,7 +26,7 @@ const ReplyList = ({ replyToThread, setShowReply, messageThread, documentId }) =
   const sendMessageToReplyThread = () => {
 
     replyToThread(documentId, { userName, message: replyInput })
-    $('#replyEntry').val("");
+
   }
 
   const handleReplyInput = (replyBody) => {
@@ -43,27 +35,44 @@ const ReplyList = ({ replyToThread, setShowReply, messageThread, documentId }) =
 
   $("#replyEntry").unbind().keyup(function (event) {
     if (event.keyCode === 13) {
-
       //$("#sendMessageButton").click();
       sendMessageToReplyThread()
-      $('#replyEntry').val("");
-      console.log('WOO');
     }
   });
 
   return (
-    <Box>
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start'
+    }}>
       {messageThread?.map((reply, key) => (
         <Box key={key}>
           <Reply reply={reply} key={key} />
         </Box>
       ))}
-      <TextField sx={{ width: '50%', height: '10%' }} id='replyEntry' label='Enter Reply' variant='outlined' margin="none" size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-        handleReplyInput(e.target.value)
-      } />
-      <Button sx={{ width: '40px' }} onClick={sendMessageToReplyThread}><SendIcon /></Button>
-      <br></br>
-      <Button onClick={handleHideReplies} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px', position: 'absolute', right: '18%' }}>Hide Replies</Button>
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
+      }}>
+        <TextField id='replyEntry' label='Enter Reply' variant='outlined' size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+          handleReplyInput(e.target.value)
+        } />
+        <Button sx={{ width: '40px' }} onClick={sendMessageToReplyThread}>
+          <SendIcon />
+        </Button>
+      </Box>
+      <Box sx={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
+      }}>
+        <Button onClick={handleHideReplies} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px' }}>
+          Hide Replies
+        </Button>
+      </Box>
 
     </Box>
   )

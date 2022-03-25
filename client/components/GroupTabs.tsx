@@ -95,7 +95,6 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
           });
         }
         sendMessageOnceAuthorized()
-        $('#messageEntry').val("");
       }
     })
   }

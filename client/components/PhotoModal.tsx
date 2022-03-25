@@ -6,11 +6,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
 };
 
 export default function PhotoModal({ url }) {
@@ -20,17 +16,16 @@ export default function PhotoModal({ url }) {
 
   return (
     <Box>
-      <img src={url} height="240" width="180" onClick={handleOpen}></img>
+      <img style={{ objectFit: 'contain' }} src={url} height="240" width="180" onClick={handleOpen}></img>
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        disableAutoFocus={true}
       >
         <Box sx={style}>
-          <img src={url} height="480" width="360"></img>
+          <img style={{ objectFit: 'contain' }} src={url} height="480" width="360"></img>
         </Box>
       </Modal>
-    </Box>
+    </Box >
   );
 }

@@ -35,7 +35,8 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import logo from '../../src/logo.png'
+import logo from '../../src/logo.png';
+import pinklogo from '../../src/pinklogo.png';
 import ExpandedCalendar from "./ExpandedCalendar";
 
 type room = {
@@ -54,6 +55,7 @@ export default function UserPage(props) {
   const [userChats, setUserChats] = useState([]);
   const [currentRoom, setCurrentRoom] = useState('General');
   const [showCalendar, setShowCalendar] = useState(false);
+  const [logoImg, setLogoImg] = useState(false)
   //console.log(currentRoom);
   const [currentUserUID, setcurrentUserUID] = useState<any>(null);
   useEffect(() => {
@@ -143,7 +145,7 @@ export default function UserPage(props) {
     <Box className="animate__animated animate__slideInUp " sx={{
       marginBottom: '50px', fontFamily: "Montserrat, sans-serif"
     }}>
-      <Box sx={{ backgroundColor: '#542F34' }}> <img src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
+      <Box backgroundColor="primary.main"> <img src={!logoImg ? logo : pinklogo} style={{ display: 'block', margin: 'auto' }}></img></Box>
 
       <Box className="main" sx={{
         width: 8 / 10,
@@ -156,7 +158,7 @@ export default function UserPage(props) {
         marginTop: '30px'
       }}>
         <Box className="sidebar" sx={{ border: '1px solid #542F34', maxHeight: '800px', boxShadow: '0 8px 6px -6px #542F34', }}>
-          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} toggleDark={props.toggleDark} settoggleDark={props.settoggleDark} currentMode={props.currentMode} setShowCalendar={setShowCalendar} />
+          <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} toggleDark={props.toggleDark} settoggleDark={props.settoggleDark} currentMode={props.currentMode} setShowCalendar={setShowCalendar} mode={props.mode} setMode={props.setMode} setLogoImg={setLogoImg} logoImg={logoImg} />
           <Calendar setShowCalendar={setShowCalendar} />
         </Box>
         <Box className="chatview" sx={{ border: '1px solid #542F34', maxHeight: '800px', boxShadow: '0 8px 6px -6px #542F34' }}>

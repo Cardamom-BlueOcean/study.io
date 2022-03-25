@@ -14,7 +14,7 @@ export default function UserChatMessage({ replyToThread, message, index }) {
   return (
     <Box>
       {!showReply
-        ? <Box sx={{ display: 'grid', gridTemplateColumns: '95% 5%', bgcolor: '#fffcf7', borderBottom: 1, borderColor: "divider" }}>
+        ? <Box sx={{ display: 'grid', gridTemplateColumns: '95% 5%', bgcolor: '#fafafa', borderBottom: 1, borderColor: "divider" }}>
           <Stack>
             <Box sx={{ textAlign: 'right' }}>{message.Name}</Box>
             <Box sx={{ textAlign: 'right' }}>{message.Message}</Box>
@@ -27,7 +27,7 @@ export default function UserChatMessage({ replyToThread, message, index }) {
           </Stack>
           <Avatar sx={{ width: 32, height: 32, alignSelf: 'center', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: 'noReferrer' }}></Avatar>
         </Box>
-        : <Box sx={{ display: 'grid', gridTemplateColumns: '95% 5%', bgcolor: '#fffcf7', borderBottom: 1, borderColor: "divider" }}>
+        : <Box sx={{ display: 'grid', gridTemplateColumns: '95% 5%', bgcolor: '#fafafa', borderBottom: 1, borderColor: "divider" }}>
           <Stack>
             <Box sx={{ textAlign: 'right' }}>{message.Name}</Box>
             <Box sx={{ textAlign: 'right' }}>{message.Message}</Box>

@@ -209,14 +209,14 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
             }) : null}
           </Stack>}
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+        {!videoToggle && <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
           <TextField sx={{ width: '90%' }} id="messageEntry" label="Message" variant="outlined" margin="none" size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
             handleMessageInput(e.target.value)
           } />
           <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom} id="sendMessageButton"><SendIcon /></Button>
           <Button ><AddPhotoAlternateOutlinedIcon /></Button>
           <UploadPhoto />
-        </Box >
+        </Box >}
       </Box >
     );
 

@@ -54,6 +54,7 @@ import {
 
 import { fakeData } from './fakeGroupData';
 import { te } from 'date-fns/locale';
+import $ from "jquery";
 
 export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, setShowCalendar, toggleDark, settoggleDark, currentMode }) {
 
@@ -149,6 +150,16 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
   //console.log(`theme is ${theme}`)
 
   const fakeDMList = ['DM with Richard', 'DM with John', 'DM with Peanut']
+
+  $("#groupNameEntry").unbind().keyup(function (event) {
+    if (event.keyCode === 13) {
+
+      //$("#sendMessageButton").click();
+      addRoom()
+      $('#groupNameEntry').val("");
+      console.log('WOO');
+    }
+  });
 
   return (
 
@@ -255,7 +266,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       </Accordion>
       <Divider />
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
-        <TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />
+        <TextField size="small" id="groupNameEntry" label="group name" onChange={setTextField} />
         <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}><AddIcon /></Button>
       </Box>
       <Divider />

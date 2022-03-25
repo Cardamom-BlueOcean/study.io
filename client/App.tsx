@@ -18,29 +18,30 @@ import {
   Typography,
 } from "@mui/material";
 
-
-
-const theme2 = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      light: "#806543",
-      main: "#542F34",
-      dark: "#33266E",
-      contrastText: "#A6607C",
-    },
-    secondary: {
-      main: "#A6607C",
-      light: "#fff",
-      dark: "#542F34",
-      contrastText: "#542F34",
-    },
-  },
-});
-
 const App = () => {
 
   const [toggleDark, settoggleDark] = useState(false);
+
+  // const toggleColorTheme = (mode) => ({
+  //   palette: {
+  //     mode,
+  //     primary: {
+  //       light: "#806543",
+  //       main: "#542F34",
+  //       dark: "#A6607C",
+  //       contrastText: "#fff",
+  //       ...(mode === 'dark' && {
+  //         main: '#542F34',
+  //       }),
+  //     },
+  //     ...(mode === 'dark' {
+  //       background: {
+  //         default: '#fff'
+
+  //       }
+  //     })
+  //   }
+  // })
 
   const theme = createTheme({
     palette: {
@@ -48,16 +49,19 @@ const App = () => {
       primary: {
         light: "#806543",
         main: "#542F34",
-        dark: "#33266E",
-        contrastText: "#A6607C",
+        dark: "#A6607C",
+        contrastText: "#fff",
       },
       secondary: {
-        main: "#A6607C",
         light: "#fff",
+        main: "#A6607C",
         dark: "#542F34",
-        contrastText: "#542F34",
+        contrastText: "#806543",
       },
     },
+    typography: {
+      fontFamily: ["Montserrat, sans-serif"]
+    }
   })
 
   return (
@@ -68,7 +72,7 @@ const App = () => {
         <Router>
           <Routes>
             <Route path="/about" />
-            <Route path="/userlogin" element={<UserPage toggleDark={toggleDark} settoggleDark={settoggleDark} currentMode={theme.palette.mode} />} />
+            <Route path="/userlogin" element={<UserPage toggleDark={toggleDark} settoggleDark={settoggleDark} currentMode={theme.palette.mode} theme={theme} />} />
             <Route path="/" element={<Login />} />
           </Routes>
         </Router >

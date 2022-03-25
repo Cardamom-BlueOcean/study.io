@@ -140,7 +140,9 @@ export default function UserPage(props) {
   //put hook for state change here
 
   return (
-    <Box sx={{ marginBottom: '50px' }}>
+    <Box className="animate__animated animate__slideInUp " sx={{
+      marginBottom: '50px', fontFamily: "Montserrat, sans-serif"
+    }}>
       <Box sx={{ backgroundColor: '#542F34' }}> <img src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
 
       <Box className="main" sx={{
@@ -153,7 +155,7 @@ export default function UserPage(props) {
         gridTemplateRows: 'auto',
         marginTop: '30px'
       }}>
-        <Box className="sidebar" sx={{ border: '1px solid #542F34', maxHeight: '800px', boxShadow: '0 8px 6px -6px #542F34' }}>
+        <Box className="sidebar" sx={{ border: '1px solid #542F34', maxHeight: '800px', boxShadow: '0 8px 6px -6px #542F34', }}>
           <GroupList setUserChats={setUserChats} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} toggleDark={props.toggleDark} settoggleDark={props.settoggleDark} currentMode={props.currentMode} setShowCalendar={setShowCalendar} />
           <Calendar setShowCalendar={setShowCalendar} />
         </Box>
@@ -163,6 +165,6 @@ export default function UserPage(props) {
       </Box>
 
       {/* <VideoChat /> */}
-    </Box>
+    </Box >
   );
 }

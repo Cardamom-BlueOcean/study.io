@@ -3,6 +3,7 @@ import ReplyList from './replies/ReplyList';
 import { useState } from 'react';
 import { Box, Stack, Avatar, Button } from '@mui/material';
 import styled from 'styled-components';
+import PhotoModal from "./PhotoModal";
 
 const ReplyDiv = styled.div`
   color: blue;
@@ -37,7 +38,7 @@ export default function OtherChatMessage({ replyToThread, message, index }) {
             <Box>{message.Message}</Box>
             <Box>{`${chatDate} at ${chatTime}`}</Box>
             {message.MessageMediaContent.length > 0 ?
-              <img src={message.MessageMediaContent} height="240" width="180"></img> : null}
+              <PhotoModal url={message.MessageMediaContent} /> : null}
             {message.MessageThread.length > 0 ?
               <Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px' }}>Show {message.MessageThread.length} Replies</Button>
               : <Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px' }}>Reply</Button>}
@@ -50,7 +51,7 @@ export default function OtherChatMessage({ replyToThread, message, index }) {
             <Box>{message.Message}</Box>
             <Box>{`${chatDate} at ${chatTime}`}</Box>
             {message.MessageMediaContent.length > 0 ?
-              <img src={message.MessageMediaContent} height="240" width="180"></img> : null}
+              <PhotoModal url={message.MessageMediaContent} /> : null}
             <br></br>
 
             <ReplyList replyToThread={replyToThread} messageThread={message.MessageThread} documentId={message.Documentid} setShowReply={setShowReply} />

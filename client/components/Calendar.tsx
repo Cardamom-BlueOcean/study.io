@@ -98,7 +98,7 @@ export default function Calendar({ setShowCalendar }) {
             </Box>)
           }
         })}
-        {pending.length > 2 ?
+        {pending.length > 1 ?
           <Box sx={{ display: 'flex', justifyContent: 'end' }}><Button variant="text" sx={{ fontWeight: 'light', fontSize: '10px' }} onClick={() => setShowCalendar(true)}>...Show More</Button></Box>
           : null}
 

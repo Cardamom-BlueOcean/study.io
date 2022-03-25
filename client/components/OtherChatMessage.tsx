@@ -18,6 +18,15 @@ export default function OtherChatMessage({ replyToThread, message, index }) {
     setShowReply(true);
   }
 
+  let chatDate;
+  let chatTime;
+
+  if (message.TimeStamp !== null) {
+    chatDate = message.TimeStamp.toDate().toDateString();
+    chatDate = chatDate.substring(0, chatDate.length - 4);
+    chatTime = message.TimeStamp.toDate().toLocaleTimeString();
+  }
+
   return (
     <Box>
       {!showReply
@@ -26,6 +35,7 @@ export default function OtherChatMessage({ replyToThread, message, index }) {
           <Stack>
             <Box>{message.Name}</Box>
             <Box>{message.Message}</Box>
+            <Box>{`${chatDate} at ${chatTime}`}</Box>
             {message.MessageMediaContent.length > 0 ?
               <img src={message.MessageMediaContent} height="240" width="180"></img> : null}
             {message.MessageThread.length > 0 ?
@@ -39,6 +49,7 @@ export default function OtherChatMessage({ replyToThread, message, index }) {
           <Stack>
             <Box>{message.Name}</Box>
             <Box>{message.Message}</Box>
+            <Box>{`${chatDate} at ${chatTime}`}</Box>
             {message.MessageMediaContent.length > 0 ?
               <img src={message.MessageMediaContent} height="240" width="180"></img> : null}
             <br></br>

@@ -64,6 +64,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
   // const [newGroupName, setNewGroup] = useState('');
   const [textFieldTemp, setTextFieldTemp] = useState('');
   const [DMTextField, setDMTextField] = useState('');
+  const [addChatToggle, setAddChatToggle] = useState(true);
 
   const setNewGroup = useAppSelector((state) => state.globalFunctions.value.createRoom);
   const addNewDM = useAppSelector((state) => state.globalFunctions.value.createDM);
@@ -187,6 +188,15 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
     console.log(toggleDark)
   };
 
+  const toggleAddDM = () => {
+    setAddChatToggle(false);
+
+  }
+
+  const toggleAddGroup = () => {
+    setAddChatToggle(true);
+  }
+
   //console.log(`theme is ${theme}`)
 
   const fakeDMList = ['DM with Richard', 'DM with John', 'DM with Peanut']
@@ -308,22 +318,28 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       </Accordion>
       <Divider />
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
-        <TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />
-        <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}><AddIcon /></Button>
-        <Autocomplete
-          disablePortal
-          id="choosedmparticipant"
-          options={userList}
-          sx={{ width: 230 }}
-          inputValue={DMTextField}
-          onInputChange={(event, group: any) => {
-            setDMTextField(group)
-          }}
-          renderInput={(params) => <TextField {...params} label="Direct Message"
-          />}
-        />
+
+        {addChatToggle
+          ? <Box><TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />
+            <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}><AddIcon /></Button><Button onClick={toggleAddDM}>Add DM</Button></Box>
+          : <Box><Autocomplete
+            disablePortal
+            id="choosedmparticipant"
+            options={userList}
+            sx={{ width: 230 }}
+            inputValue={DMTextField}
+            onInputChange={(event, group: any) => {
+              setDMTextField(group)
+            }}
+            renderInput={(params) => <TextField {...params} label="direct message"
+            />}
+          />
+
+            <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addDM}><AddIcon /></Button><Button onClick={toggleAddGroup}>Add Group</Button></Box>
+        }
+
         {/* <TextField size="small" id="outlined-basic" label="Direct Message" onChange={setDMField} /> */}
-        <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addDM}><AddIcon /></Button>
+
       </Box>
       <Divider />
     </Box >

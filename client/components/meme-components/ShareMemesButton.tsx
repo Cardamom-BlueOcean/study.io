@@ -3,25 +3,26 @@ import styled from 'styled-components';
 
 const ButtonDiv = styled.div`
 	cursor: pointer;
-	display: flex;
+	/* display: flex; */
 `;
 
 const Button = styled.button`
-	background: hsla(10, 70%, 70%, 0.5);
-	border-radius: 20px;
+	background: #542f34;
+	border-radius: 5px;
 	border: none;
-	color: purple;
+	color: hsla(10, 70%, 70%, 0.5);
 	cursor: pointer;
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 900;
-	font-size: 17px;
-	height: 50px;
+	font-size: 15px;
+	height: 35px;
 	line-height: 1.5;
-	margin-left: 10px;
-	padding: 10px 15px 10px 17px;
-	width: 175px;
+	/* margin-left: 10px; */
+	margin: 10px 10px auto 10px;
+	padding: 7px 15px 10px 15px;
+	width: 50px;
 	&:hover {
-		background: hsla(10, 70%, 70%, 0.5);
+		/* background: hsla(10, 70%, 70%, 0.5); */
 		opacity: 80%;
 	}
 `;
@@ -29,7 +30,7 @@ const Button = styled.button`
 const ShareMemesButton = ({ showMemeModal }) => {
 	return (
 		<ButtonDiv id='share-memes-btn-main'>
-			<Button onClick={() => showMemeModal()}>share meme 🤣</Button>
+			<Button onClick={() => showMemeModal()}>🤣</Button>
 		</ButtonDiv>
 	);
 };

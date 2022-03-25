@@ -28,8 +28,6 @@ import VideoChat from "./videoChat/VideoChat";
 import VideocamIcon from '@mui/icons-material/Videocam';
 import $ from "jquery";
 import { UnpublishedOutlined, Send as SendIcon, UploadFile as UploadFileIcon, AddPhotoAlternateOutlined as AddPhotoAlternateOutlinedIcon } from "@mui/icons-material";
-//import UploadFileIcon from '@mui/icons-material/UploadFile';
-//import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 export default function GroupTabs({ userChats, showCalendar, setShowCalendar, setCurrentRoom, currentRoom, currentUserName }) {
 
@@ -218,7 +216,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
           </Stack>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-          <TextField sx={{ width: '90%' }} id="messageEntry" label="Message" variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+          <TextField sx={{ width: '90%' }} id="messageEntry" label="Message" variant="outlined" margin="none" size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
             handleMessageInput(e.target.value)
           } />
           <Button sx={{ width: '40px' }} onClick={sendMessageToCurrentRoom} id="sendMessageButton"><SendIcon /></Button>

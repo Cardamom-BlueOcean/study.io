@@ -5,7 +5,7 @@ import ReduxExample from "./redux-examples/reduxExample";
 import AutreRedux from "./redux-examples/AutreRedux";
 // import ReduxExample from "./redux-examples/reduxExample";
 // import AutreRedux from "./redux-examples/AutreRedux";
-import VideoChat from "./videoChat/VideoChat";
+
 import {
   getFirestore,
   collection,
@@ -53,7 +53,8 @@ export default function UserPage(props) {
   const dispatch = useAppDispatch();
   const objectWithRoomsAsKeysAndArraysOfChatsAsValues = {}
   const [userChats, setUserChats] = useState([]);
-  const [currentRoom, setCurrentRoom] = useState('General');
+  const [currentUserName, setCurrentUserName] = useState('');
+  const [currentRoom, setCurrentRoom] = useState<string>('General');
   const [showCalendar, setShowCalendar] = useState(false);
   //console.log(currentRoom);
   const [currentUserUID, setcurrentUserUID] = useState<any>(null);
@@ -62,6 +63,7 @@ export default function UserPage(props) {
       const auth: any = await getAuth();
       onAuthStateChanged(auth, (user: any) => {
         if (user) {
+          setCurrentUserName(user.displayName);
           setcurrentUserUID(user.uid);
           const addToGeneral = async () => {
             await updateDoc(doc(db, "Rooms", "General"),
@@ -162,11 +164,11 @@ export default function UserPage(props) {
           <Calendar setShowCalendar={setShowCalendar} />
         </Box>
         <Box className="chatview" sx={{ border: '1px solid #542F34', maxHeight: '800px', boxShadow: '0 8px 6px -6px #542F34' }}>
-          <GroupTabs userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
+          <GroupTabs userChats={userChats} showCalendar={showCalendar} setShowCalendar={setShowCalendar} setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} currentUserName={currentUserName} />
         </Box>
       </Box>
 
-      {/* <VideoChat /> */}
+
     </Box >
   );
 }

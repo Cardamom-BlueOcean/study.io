@@ -25,10 +25,12 @@ import ExpandedCalendar from "./ExpandedCalendar";
 import UserChatMessage from './UserChatMessage';
 import OtherChatMessage from './OtherChatMessage';
 import SearchUserToAdd from './SearchUserToAdd';
+import VideoChat from "./videoChat/VideoChat";
+import VideocamIcon from '@mui/icons-material/Videocam';
 import $ from "jquery";
 import { UnpublishedOutlined, Send as SendIcon, UploadFile as UploadFileIcon, AddPhotoAlternateOutlined as AddPhotoAlternateOutlinedIcon } from "@mui/icons-material";
 
-export default function GroupTabs({ userChats, showCalendar, setShowCalendar, setCurrentRoom, currentRoom }) {
+export default function GroupTabs({ userChats, showCalendar, setShowCalendar, setCurrentRoom, currentRoom, currentUserName }) {
 
   const db = getFirestore();
   const auth: any = getAuth();
@@ -39,6 +41,9 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
   const [fullListOfUsers, setFullListOfUsers] = React.useState([]);
   const [searchedUsers, setSearchedUsers] = React.useState<string[]>([]);
   const [searchedUsersFullInfo, setSearchedUsersFullInfo] = React.useState<any[]>([]);
+  const [videoToggle, setVideoToggle] = React.useState(false);
+
+
   console.log(userChats);
   // const mediaContent = useAppSelector((state) => state.mediaUrl.value)
   // console.log('at component level, ', mediaContent);
@@ -174,15 +179,23 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
       <ExpandedCalendar setShowCalendar={setShowCalendar} searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} />
     )
   } else {
+    if(videoToggle){
+      return (
+        <VideoChat currentRoom={currentRoom} currentUserName={currentUserName} setVideoToggle={setVideoToggle}/>
+      )
+    }else{
     return (
       <Box className="animate__animated animate__fadeIn" sx={{ width: "99%", height: '82%', typography: "body1", margin: '8px' }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '25% 40% 20% 15%', height: '65px' }}>
-          <Typography sx={{ alignSelf: 'center', justifySelf: 'center' }} variant="h5" gutterBottom component="div">
+        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '25% 5% 40% 15% 15%', height: '65px' }}>
+          <Typography sx={{ alignSelf: 'center', justifySelf: 'center', gridColumnStart: '1' }} variant="h5" gutterBottom component="div">
             {currentRoom}
           </Typography>
-          <SearchUserToAdd searchedUsers={searchedUsers} />
-          <Button sx={{ width: '20%', justifySelf: 'center', gridColumnStart: '3' }} onClick={addUserToCurrentRoom}>Add User</Button>
-          <Button sx={{ width: '20%', justifySelf: 'center', gridColumnStart: '4' }} onClick={LeaveCurrentRoom}>Leave</Button>
+          <VideocamIcon sx={{ width: '100%', justifySelf: 'center', gridColumnStart: '2' }} onClick={() => {setVideoToggle(!videoToggle)}}/>
+          <SearchUserToAdd  sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '3' }}  searchedUsers={searchedUsers}/>
+
+          <Button sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '4' }} onClick={addUserToCurrentRoom}>Add User</Button>
+          <Button sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '5' }} onClick={LeaveCurrentRoom}>Leave</Button>
+
         </Box>
         <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse', marginTop: '3px' }}>
           <Stack>
@@ -217,5 +230,5 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
         </Box >
       </Box >
     );
-  }
+  }}
 }

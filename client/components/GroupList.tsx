@@ -329,10 +329,6 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       </Accordion>
       <Divider />
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
-<<<<<<< HEAD
-        <TextField size="small" id="groupNameEntry" label="group name" onChange={setTextField} />
-        <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={addRoom}><AddIcon /></Button>
-=======
 
         {addChatToggle
           ? <Box><TextField size="small" id="outlined-basic" label="group name" onChange={setTextField} />
@@ -355,7 +351,6 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
 
         {/* <TextField size="small" id="outlined-basic" label="Direct Message" onChange={setDMField} /> */}
 
->>>>>>> ada030b481efdeb4e77763d653745815f3beddd6
       </Box>
       <Divider />
     </Box >

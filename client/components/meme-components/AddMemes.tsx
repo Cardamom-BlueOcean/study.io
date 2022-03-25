@@ -3,17 +3,17 @@ import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 
 const MemeCreateButton = styled.button`
-	background: hsla(10, 50%, 70%, 0.5);
+	background: #542f34;
 	border: none;
-	border-radius: 20px;
-	color: purple;
+	border-radius: 5px;
+	color: hsla(10, 70%, 70%, 0.5);
 	cursor: pointer;
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 900;
-	font-size: 20px;
+	font-size: 15px;
 	padding: 10px 20px;
 	&:hover {
-		background: hsla(10, 70%, 70%, 0.5);
+		/* background: hsla(10, 70%, 70%, 0.5); */
 		opacity: 80%;
 	}
 `;
@@ -55,24 +55,16 @@ const AddMemes = ({
 	useEffect(() => {});
 	//
 	const createNewMeme = async (memeId, input1, input2) => {
-		console.log('i got clicked');
-		//
-		console.log('memeId: ', memeId);
-		console.log('input1: ', input1);
-		console.log('input2: ', input2);
-
 		input1 = input1 || '_';
 		input2 = input2 || '_';
 
-		const URL = `https://api.memegen.link/images/${memeId}/${input1}/${input2}.png`;
-		console.log('URL STRINGG REQUEST', URL);
+		// const URL = `https://api.memegen.link/images/${memeId}/${input1}/${input2}.png`;
 		const getNewMeme = await fetch(
 			`https://api.memegen.link/images/${memeId}/${input1}/${input2}.png`
 		);
 
 		const memeResponse = await getNewMeme;
-		console.log('getNewMemeResponse: ', memeResponse.url);
-
+		// console.log('getNewMemeResponse: ', memeResponse.url);
 		setCreatedMeme(memeResponse.url);
 		setToggleMemeModal(!toggleMemeModal);
 	};
@@ -95,10 +87,8 @@ const AddMemes = ({
 					value={messageOne}
 					onChange={onInputChange}
 				/>
-
 				<br />
 				<br />
-
 				<AddMemeInput
 					name='messageTwo'
 					placeholder='Enter Text Two'
@@ -109,7 +99,6 @@ const AddMemes = ({
 			</AddMemeDiv>
 			<br />
 			<br />
-
 			<MemeCreateButton
 				onClick={() => {
 					createNewMeme(memeID, messageOne, messageTwo);
@@ -117,7 +106,7 @@ const AddMemes = ({
 					setMessageTwo('');
 				}}
 			>
-				send meme 🤣
+				SEND 🤣
 			</MemeCreateButton>
 		</div>
 	);

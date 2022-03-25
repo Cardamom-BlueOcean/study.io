@@ -18,7 +18,6 @@ const VideoFrame = styled('div')`
   width: 50%;
   overflow: hidden;
   height: 50%;
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
   display: flex;
   justify-content: center;
 }
@@ -32,17 +31,10 @@ const VideoContainer = styled('div')`
 }
 `;
 
-const VideoChat = ({currentRoom, currentUserName, setVideoToggle}) => {
+const VideoChat = ({ currentRoom, currentUserName, setVideoToggle }) => {
   const [token, setToken] = useState('');
 
-
-  /**
-   * Entry point.
-   */
-  //  const localMediaContainer = document.querySelector('#local-media-container') as HTMLDivElement;
-
   async function main() {
-    // Provides a camera preview window.
     const localVideoTrack = await createLocalVideoTrack();
     console.log('localVideoTrack', localVideoTrack)
 
@@ -55,9 +47,6 @@ const VideoChat = ({currentRoom, currentUserName, setVideoToggle}) => {
   }, []);
 
   const connectToRoom = async () => {
-
-
-    // main()
     const data = {
       room: currentRoom,
       userName: currentUserName,
@@ -71,15 +60,14 @@ const VideoChat = ({currentRoom, currentUserName, setVideoToggle}) => {
     });
     const roomToken = await response.json();
     setToken(roomToken);
-    // main()
     const conectedRoom = await connect(roomToken, {
       name: currentRoom,
       audio: false,
-      video: {width: 640}
+      video: { width: 1000 }
     })
     conectedRoom.participants.forEach(
       participant => participantConnected(participant)
-  );
+    );
 
     console.log('conectedRoom', conectedRoom)
     conectedRoom.on('participantConnected', participantConnected);
@@ -126,7 +114,7 @@ const VideoChat = ({currentRoom, currentUserName, setVideoToggle}) => {
   }
 
 
-  function participantDisconnected(participant:RemoteParticipant) {
+  function participantDisconnected(participant: RemoteParticipant) {
     console.log('Participant "%s" disconnected', participant.identity);
     const divToRemove = document.getElementById(participant.sid);
     divToRemove?.remove()
@@ -148,7 +136,7 @@ const VideoChat = ({currentRoom, currentUserName, setVideoToggle}) => {
     <div className="room">
       <h2>{currentRoom}</h2>
       <button onClick={connectToRoom}>connectToRoom</button>
-      <button  onClick ={() => setVideoToggle(false)}>Log out</button>
+      <button onClick={() => setVideoToggle(false)}>Log out</button>
       <VideoContainer id="currentUserVideo">
 
 

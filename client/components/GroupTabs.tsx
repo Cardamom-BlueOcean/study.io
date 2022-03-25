@@ -181,15 +181,17 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
 
     return (
       <Box className="animate__animated animate__fadeIn" sx={{ width: "99%", height: '82%', typography: "body1", margin: '8px' }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '25% 5% 40% 15% 15%', height: '65px' }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '25% 10% 30% 20% 15%', height: '65px' }}>
           <Typography color="primary.main" sx={{ alignSelf: 'center', justifySelf: 'center', gridColumnStart: '1' }} variant="h5" gutterBottom component="div">
             {currentRoom}
           </Typography>
-          <VideocamIcon sx={{ width: '100%', justifySelf: 'center', gridColumnStart: '2' }} onClick={() => { setVideoToggle(!videoToggle) }} />
+          <Button variant="outlined" sx={{ marginBottom: '8px', marginRight: '5px', height: '55.98px' }}>
+            <VideocamIcon sx={{ width: '100%', justifySelf: 'center', gridColumnStart: '2' }} onClick={() => { setVideoToggle(!videoToggle) }} />
+          </Button>
           <SearchUserToAdd sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '3' }} searchedUsers={searchedUsers} />
 
-          <Button sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '4' }} onClick={addUserToCurrentRoom}>Add User</Button>
-          <Button sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '5' }} onClick={LeaveCurrentRoom}>Leave</Button>
+          <Button variant="outlined" sx={{ width: '90%', justifySelf: 'center', gridColumnStart: '4', marginBottom: '8px', height: '55.98px' }} onClick={addUserToCurrentRoom}>Add User</Button>
+          <Button variant="outlined" sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '5', marginBottom: '8px', height: '55.98px' }} onClick={LeaveCurrentRoom}>Leave</Button>
 
         </Box>
         <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse', marginTop: '3px' }}>

@@ -24,6 +24,7 @@ import {
   Logout,
   PersonAdd,
   Settings,
+  StayPrimaryLandscape,
 } from "@mui/icons-material";
 
 import {
@@ -150,10 +151,12 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
   const fakeDMList = ['DM with Richard', 'DM with John', 'DM with Peanut']
 
   return (
+
     <Box sx={{
       width: '100%',
       //      bgColor: 'background.paper',
-      flexDirection: 'column'
+      flexDirection: 'column',
+
     }}>
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start', background: '#542F34', color: 'white' }} >
         <Tooltip title="Account settings">
@@ -191,33 +194,33 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           transformOrigin={{ horizontal: 'left', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         >
-          <MenuItem>
+          <MenuItem >
             <Avatar src={auth.currentUser?.photoURL} /> {auth.currentUser?.displayName}
           </MenuItem>
-          <MenuItem>
+          <MenuItem >
             <ListItemIcon>
               <PersonAdd fontSize="small" />
             </ListItemIcon>
             Switch Accounts
           </MenuItem>
-          <MenuItem onClick={handleUsernameClick}>
+          <MenuItem onClick={handleUsernameClick} sx={{ fontFamily: "Montserrat, sans-serif" }}>
             <ListItemIcon>
               <AccountCircleIcon fontSize="small" />
             </ListItemIcon>
             Change User Name
           </MenuItem>
           <Divider />
-          <MenuItem>
-            <FormControlLabel control={<Switch checked={toggleDark} onChange={handleModeChange} />} label={currentMode + ' mode'} />
+          <MenuItem >
+            <FormControlLabel className="animate__animated animate__fadeIn" control={<Switch checked={toggleDark} onChange={handleModeChange} />} label={currentMode + ' mode'} />
           </MenuItem>
-          <MenuItem onClick={() => signOutUser()}>
+          <MenuItem onClick={() => signOutUser()} >
             <ListItemIcon >
               <Logout fontSize="small" />
             </ListItemIcon>
             Logout
           </MenuItem>
         </Menu>
-        <Typography onClick={handleUserMenuClick} sx={{ cursor: 'pointer', color: 'text.secondary' }}>
+        <Typography onClick={handleUserMenuClick} sx={{ cursor: 'pointer', color: 'white' }}>
           {auth.currentUser?.displayName}
         </Typography>
       </Box >
@@ -235,7 +238,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           <Typography>Group Chats</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Box sx={{ overflowY: 'scroll', maxHeight: '400px' }}>
+          <Box sx={{ overflowY: 'scroll', maxHeight: '200px' }}>
             <List>
               {userRooms.map((group, i) => (
                 < ListItem disablePadding key={i} value={group} onClick={() => { setCurrentRoom(group); setShowCalendar(false) }}>
@@ -257,5 +260,6 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       </Box>
       <Divider />
     </Box >
+
   );
 }

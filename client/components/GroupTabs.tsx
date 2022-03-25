@@ -37,7 +37,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
   const [fullListOfUsers, setFullListOfUsers] = React.useState([]);
   const [searchedUsers, setSearchedUsers] = React.useState<string[]>([]);
   const [searchedUsersFullInfo, setSearchedUsersFullInfo] = React.useState<any[]>([]);
-
+  console.log(userChats);
   // const mediaContent = useAppSelector((state) => state.mediaUrl.value)
   // console.log('at component level, ', mediaContent);
   // const dispatch = useAppDispatch();
@@ -166,11 +166,11 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
 
   if (showCalendar) {
     return (
-      <ExpandedCalendar setShowCalendar={setShowCalendar} />
+      <ExpandedCalendar setShowCalendar={setShowCalendar} searchedUsers={searchedUsers} searchedUsersFullInfo={searchedUsersFullInfo} />
     )
   } else {
     return (
-      <Box sx={{ width: "100%", height: '82%', typography: "body1" }}>
+      <Box className="animate__animated animate__fadeIn" sx={{ width: "99%", height: '82%', typography: "body1", margin: '8px' }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider", display: 'grid', gridTemplateColumns: '25% 40% 20% 15%', height: '65px' }}>
           <Typography sx={{ alignSelf: 'center', justifySelf: 'center' }} variant="h5" gutterBottom component="div">
             {currentRoom}

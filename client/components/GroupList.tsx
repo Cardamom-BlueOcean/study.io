@@ -50,6 +50,7 @@ import {
   Paper,
   ThemeProvider,
   Typography,
+  PaletteMode,
   Autocomplete,
 } from "@mui/material";
 
@@ -57,7 +58,7 @@ import { fakeData } from './fakeGroupData';
 import { te } from 'date-fns/locale';
 import $ from "jquery";
 
-export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, setShowCalendar, toggleDark, settoggleDark, currentMode }) {
+export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, setShowCalendar, toggleDark, settoggleDark, currentMode, mode, setMode, setLogoImg, logoImg }) {
 
   const db = getFirestore();
   const auth: any = getAuth();
@@ -220,7 +221,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       flexDirection: 'column',
 
     }}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start', background: '#542F34', color: 'white' }} >
+      <Box backgroundColor="primary.main" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start', color: 'white' }} >
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleUserMenuClick}
@@ -242,6 +243,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           PaperProps={{
             elevation: 0,
             sx: {
+              backgroundColor: '#fff',
               overflow: 'visible',
               filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
               mt: 1.5,
@@ -273,7 +275,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           </MenuItem>
           <Divider />
           <MenuItem >
-            <FormControlLabel className="animate__animated animate__fadeIn" control={<Switch checked={toggleDark} onChange={handleModeChange} />} label={currentMode + ' mode'} />
+            <FormControlLabel className="animate__animated animate__fadeIn" control={<Switch checked={toggleDark} onChange={() => { settoggleDark(!toggleDark); setLogoImg(!logoImg); setMode((prevMode: PaletteMode) => prevMode === 'light' ? 'dark' : 'light') }} />} label={currentMode + ' mode'} />
           </MenuItem>
           <MenuItem onClick={() => signOutUser()} >
             <ListItemIcon >

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -16,63 +16,71 @@ import {
   Paper,
   ThemeProvider,
   Typography,
+  PaletteMode
 } from "@mui/material";
 
 const App = () => {
 
   const [toggleDark, settoggleDark] = useState(false);
 
-  // const toggleColorTheme = (mode) => ({
-  //   palette: {
-  //     mode,
-  //     primary: {
-  //       light: "#806543",
-  //       main: "#542F34",
-  //       dark: "#A6607C",
-  //       contrastText: "#fff",
-  //       ...(mode === 'dark' && {
-  //         main: '#542F34',
-  //       }),
-  //     },
-  //     ...(mode === 'dark' {
-  //       background: {
-  //         default: '#fff'
+  const [mode, setMode] = useState('light');
 
-  //       }
-  //     })
-  //   }
-  // })
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColor: () => {
+        setMode((prevMode: PaletteMode) => prevMode === 'light' ? 'dark' : 'light')
+      }
+    }), [])
 
-  const theme = createTheme({
+  const customColorTheme = (mode: PaletteMode) => ({
     palette: {
-      mode: toggleDark ? "dark" : "light",
-      primary: {
-        light: "#806543",
-        main: "#542F34",
-        dark: "#A6607C",
-        contrastText: "#fff",
-      },
-      secondary: {
-        light: "#fff",
-        main: "#A6607C",
-        dark: "#542F34",
-        contrastText: "#806543",
-      },
+      mode,
+      ...(mode === 'light'
+        ? {
+          primary: {
+            light: "#C2B9B0",
+            main: "#542F34",
+            dark: "#A6607C",
+            contrastText: "#fff",
+          },
+          divider: "#ebe5df",
+          text: {
+            primary: '#000',
+            secondary: '#806543'
+          }
+        } : {
+          primary: {
+            light: "#C2B9B0",
+            main: "#E7717D",
+            dark: "#C2CAD0",
+            contrastText: "#fff",
+          },
+          divider: "#ebe5df",
+          background: '#ffffff',
+          border: "#E7717D",
+          text: {
+            primary: '#000',
+            secondary: '#7e685a'
+          }
+        })
     },
     typography: {
       fontFamily: ["Montserrat, sans-serif"]
     }
   })
 
+  const theme = React.useMemo(() => createTheme(customColorTheme(mode)), [mode]);
+
   return (
 
-    < Provider store={store} >
+    <Provider store={store} >
+
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
           <Routes>
             <Route path="/about" />
-            <Route path="/userlogin" element={<UserPage toggleDark={toggleDark} settoggleDark={settoggleDark} currentMode={theme.palette.mode} theme={theme} />} />
+            <Route path="/userlogin" element={<UserPage toggleDark={toggleDark} settoggleDark={settoggleDark} currentMode={theme.palette.mode} mode={mode} theme={theme} setMode={setMode} />} />
             <Route path="/" element={<Login />} />
           </Routes>
         </Router >

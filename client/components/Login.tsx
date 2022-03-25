@@ -42,8 +42,8 @@ export default function Login({ }: Props) {
 
 
   return (
-    <div style={{ background: '#542F34', justifyContent: "center", padding: "400px 0 50px 0" }}>
-      <Box sx={{ backgroundColor: '#542F34' }}> <img className="animate__animated animate__fadeInDown" src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
+    <Box backgroundColor="primary.main" sx={{ justifyContent: "center", padding: "400px 0 50px 0" }}>
+      <Box color="primary.dark"> <img className="animate__animated animate__fadeInDown" src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
       {/* <CssBaseline /> */}
       <Box
         height="100vh"
@@ -52,8 +52,10 @@ export default function Login({ }: Props) {
         alignItems="center"
         flexDirection="column"
       >
-        <Button variant="contained" startIcon={<GoogleIcon />} onClick={() => { signInWithGoogle() }}>Sign in with Google</Button>
+        <Button sx={{ width: 300, height: 50, backgroundColor: '#fff', color: '#542F34' }} variant="contained" startIcon={<GoogleIcon />} onClick={() => { signInWithGoogle() }}>Sign in with Google</Button>
       </Box>
-    </div>
+    </Box>
   );
 }
+
+//sx={{ backgroundColor: '#542F34' }}

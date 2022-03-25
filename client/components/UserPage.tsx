@@ -38,7 +38,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import logo from '../../src/logo.png';
+import logo2 from '../../src/logo2.png';
 import pinklogo from '../../src/pinklogo.png';
 import ExpandedCalendar from "./ExpandedCalendar";
 
@@ -167,7 +167,7 @@ export default function UserPage(props) {
     <Box className="animate__animated animate__slideInUp " sx={{
       marginBottom: '50px', fontFamily: "Montserrat, sans-serif"
     }}>
-      <Box backgroundColor="primary.main"> <img src={!logoImg ? logo : pinklogo} style={{ display: 'block', margin: 'auto' }}></img></Box>
+      <Box backgroundColor="primary.main"> <img src={!logoImg ? logo2 : pinklogo} style={{ display: 'block', margin: 'auto' }}></img></Box>
 
       <Box className="main" sx={{
         width: 8 / 10,

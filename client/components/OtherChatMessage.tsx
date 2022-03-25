@@ -41,7 +41,6 @@ export default function OtherChatMessage({ replyToThread, message, index }) {
             {message.MessageThread.length > 0 ?
               <Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px' }}>Show {message.MessageThread.length} Replies</Button>
               : <Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px' }}>Reply</Button>}
-            {/* <Item>{date}</Item> */}
           </Stack>
         </Box>
         : <Box sx={{ display: 'grid', gridTemplateColumns: '5% 95%', borderBottom: 1, borderColor: "divider" }}>
@@ -55,7 +54,6 @@ export default function OtherChatMessage({ replyToThread, message, index }) {
             <br></br>
 
             <ReplyList replyToThread={replyToThread} messageThread={message.MessageThread} documentId={message.Documentid} setShowReply={setShowReply} />
-            {/* <Item>{date}</Item> */}
           </Stack>
         </Box>}
     </Box>

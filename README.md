@@ -2,15 +2,11 @@
 # study.io
 Study | Learn | Grow
 ### Table of Contents
-1. [General Info](#General-Info)
-2. [Demo](#Demo)
-3. [Technologies](#Technologies)
-4. [Installation](#Installation)
-5. [FAQs](#FAQS)
-6. [Contributors](#Contributors)
+1. [Demo](#Demo)
+2. [Technologies](#Technologies)
+3. [Installation](#Installation)
+4. [Contributors](#Contributors)
 
-
-### General Info
 
 
 ### Demo✨
@@ -28,6 +24,9 @@ Study | Learn | Grow
 
 #### Video Chat
 ![](https://imgur.com/fuYmzEK.gif)
+
+#### Create Memes
+![](https://imgur.com/apLnobo.gif)
 
 #### Logout
 ![](https://imgur.com/QIRAXZ7.gif)
@@ -60,9 +59,6 @@ Set up a config.ts with the following:
 * firebase config
 
 
-### FAQs🧐
-
-
 ### Contributors🤝
 - [BJ White](https://www.linkedin.com/in/bj-white/)
   - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="60"/> [Github](https://github.com/BJWhite85)
@@ -73,6 +69,6 @@ Set up a config.ts with the following:
 - [John Bronson](https://www.linkedin.com/in/john-bronson/)
   - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="60"/> [Github](https://github.com/victorsmonster)
 - [Tobin Lee](https://www.linkedin.com/in/amy-shi218/)
-  - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="60"/> [Github](https://github.com/rjLinley)
+  - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="60"/> [Github](https://github.com/iamtobin)
 - [Amy Shi](https://www.linkedin.com/in/amy-shi218/)
-  - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="60"/> [Github](https://github.com/rjLinley)
+  - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="60"/> [Github](https://github.com/amyshi218)

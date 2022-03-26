@@ -30,7 +30,7 @@ Study | Learn | Grow
 ![](https://imgur.com/fuYmzEK.gif)
 
 #### Create Memes
-![](https://imgur.com/ekIe4yv)
+![](https://imgur.com/ekIe4yv.gif)
 
 #### Logout
 ![](https://imgur.com/QIRAXZ7.gif)

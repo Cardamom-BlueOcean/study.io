@@ -91,14 +91,14 @@ const VideoChat = ({ currentRoom, currentUserName, setVideoToggle }) => {
 
     const arr = []
     conectedRoom.participants.forEach(
-      participant => {participantConnected(participant); arr.push(participant) }
+      participant => { participantConnected(participant); arr.push(participant) }
     );
-      setPeopleInDaRoom(arr)
+    setPeopleInDaRoom(arr)
     console.log('arr', arr)
     console.log('people in da room', peopleInDaRoom)
     listenForRoomUpdates(conectedRoom)
   }
-const[peopleInDaRoom, setPeopleInDaRoom] = useState<any>([]);
+  const [peopleInDaRoom, setPeopleInDaRoom] = useState<any>([]);
   const listenForRoomUpdates = async (room) => {
     room.on('participantConnected', participantConnected);
     room.on('participantDisconnected', participantDisconnected);
@@ -190,7 +190,7 @@ const[peopleInDaRoom, setPeopleInDaRoom] = useState<any>([]);
       </VideoContainer>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         {!connectButton ?
-          <Button variant="outlined" onClick={() => { connectToRoom(); setConnectButton(true);getToken(); }} >connectToRoom</Button>//
+          <Button variant="outlined" onClick={() => { connectToRoom(); setConnectButton(true); getToken(); }} >connect</Button>//
           :
           null
         }

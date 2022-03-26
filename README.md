@@ -27,7 +27,7 @@ Study | Learn | Grow
 ![](https://imgur.com/Id5uw7w.gif)
 
 #### Video Chat
-![](https://imgur.com/FHvNpMH.gif)
+![](https://imgur.com/fuYmzEK.gif)
 
 #### Logout
 ![](https://imgur.com/QIRAXZ7.gif)

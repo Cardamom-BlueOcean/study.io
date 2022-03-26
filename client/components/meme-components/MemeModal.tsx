@@ -87,13 +87,15 @@ const jokerMeme = {
 
 const MemeModal = ({ allMemes, toggleMemeModal, setToggleMemeModal, setCreatedMeme }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
-	const [currentMeme, setCurrentMeme] = useState(jokerMeme);
+	const [currentMeme, setCurrentMeme] = useState({});
 	const [messageOne, setMessageOne] = useState('');
 	const [messageTwo, setMessageTwo] = useState('');
 	const [captions, setCaptions] = useState([]);
 	const [memeID, setMemeID] = useState('');
 
 	const ref = useRef();
+
+	useEffect(() => setCurrentMeme(jokerMeme), []);
 
 	useEffect(() => {
 		setCurrentMeme(allMemes[currentIndex]);
@@ -104,8 +106,6 @@ const MemeModal = ({ allMemes, toggleMemeModal, setToggleMemeModal, setCreatedMe
 		document.addEventListener('keydown', escapeKey);
 		return () => document.removeEventListener('keydown', escapeKey);
 	}, []);
-
-	useEffect(() => console.log('memeID: ', memeID), [currentMeme]);
 
 	const animation = useSpring({
 		config: {

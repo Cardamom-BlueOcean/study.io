@@ -1,6 +1,8 @@
 build
 package-lock.json
 fakeData.json
+twillioSID
+package-lock.json
 
 # Logs
 logs

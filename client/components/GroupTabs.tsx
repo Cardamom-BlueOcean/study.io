@@ -54,10 +54,10 @@ export default function GroupTabs({
 	const [fullListOfUsers, setFullListOfUsers] = React.useState([]);
 	const [searchedUsers, setSearchedUsers] = React.useState<string[]>([]);
 	const [searchedUsersFullInfo, setSearchedUsersFullInfo] = React.useState<any[]>([]);
+	const [videoToggle, setVideoToggle] = React.useState(false);
 	const [toggleMemeModal, setToggleMemeModal] = React.useState(false);
 	const [allMemes, setAllMemes] = React.useState([]);
 	const [createdMeme, setCreatedMeme] = React.useState('');
-	const [videoToggle, setVideoToggle] = React.useState(false);
 
 	//console.log(userChats);
 	// const mediaContent = useAppSelector((state) => state.mediaUrl.value)
@@ -166,14 +166,18 @@ export default function GroupTabs({
 
 	$('#messageEntry')
 		.unbind()
-		.keyup(function (event) {
+		.keyup(async function (event) {
 			if (event.keyCode === 13) {
 				//$("#sendMessageButton").click();
-				sendMessageToCurrentRoom();
-				//$('#messageEntry').val("");
-				console.log('WOO');
+				await sendMessageToCurrentRoom();
+				$('#messageEntry').val('');
 			}
 		});
+
+	const handleSendButton = async function () {
+		await sendMessageToCurrentRoom();
+		$('#messageEntry').val('');
+	};
 
 	const UploadPhoto = () => {
 		return (
@@ -194,6 +198,12 @@ export default function GroupTabs({
 		);
 	};
 
+	const replyToThread = async (chatId, replyBody) => {
+		await updateDoc(doc(db, 'Rooms', currentRoom, 'Chats', chatId), {
+			MessageThread: arrayUnion(replyBody),
+		});
+	};
+
 	const getAllMemes = async () => {
 		const memesRequest = await fetch('https://api.memegen.link/templates/');
 		const memes = await memesRequest.json();
@@ -203,12 +213,6 @@ export default function GroupTabs({
 
 	const showMemeModal = () => {
 		setToggleMemeModal(!toggleMemeModal);
-	};
-
-	const replyToThread = async (chatId, replyBody) => {
-		await updateDoc(doc(db, 'Rooms', currentRoom, 'Chats', chatId), {
-			MessageThread: arrayUnion(replyBody),
-		});
 	};
 
 	if (showCalendar) {
@@ -238,7 +242,7 @@ export default function GroupTabs({
 						borderBottom: 1,
 						borderColor: 'divider',
 						display: 'grid',
-						gridTemplateColumns: '25% 5% 40% 15% 15%',
+						gridTemplateColumns: '25% 10% 30% 20% 15%',
 						height: '65px',
 					}}
 				>
@@ -251,25 +255,44 @@ export default function GroupTabs({
 					>
 						{currentRoom}
 					</Typography>
-					<VideocamIcon
-						sx={{ width: '100%', justifySelf: 'center', gridColumnStart: '2' }}
-						onClick={() => {
-							setVideoToggle(!videoToggle);
-						}}
-					/>
+					<Button
+						variant='outlined'
+						sx={{ marginBottom: '8px', marginRight: '5px', height: '55.98px' }}
+					>
+						<VideocamIcon
+							sx={{ width: '100%', justifySelf: 'center', gridColumnStart: '2' }}
+							onClick={() => {
+								setVideoToggle(!videoToggle);
+							}}
+						/>
+					</Button>
 					<SearchUserToAdd
 						sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '3' }}
 						searchedUsers={searchedUsers}
 					/>
 
 					<Button
-						sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '4' }}
+						variant='outlined'
+						sx={{
+							width: '90%',
+							justifySelf: 'center',
+							gridColumnStart: '4',
+							marginBottom: '8px',
+							height: '55.98px',
+						}}
 						onClick={addUserToCurrentRoom}
 					>
 						Add User
 					</Button>
 					<Button
-						sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '5' }}
+						variant='outlined'
+						sx={{
+							width: '10%',
+							justifySelf: 'center',
+							gridColumnStart: '5',
+							marginBottom: '8px',
+							height: '55.98px',
+						}}
 						onClick={LeaveCurrentRoom}
 					>
 						Leave
@@ -331,11 +354,7 @@ export default function GroupTabs({
 								handleMessageInput(e.target.value)
 							}
 						/>
-						<Button
-							sx={{ width: '40px' }}
-							onClick={sendMessageToCurrentRoom}
-							id='sendMessageButton'
-						>
+						<Button sx={{ width: '40px' }} onClick={handleSendButton} id='sendMessageButton'>
 							<SendIcon />
 						</Button>
 						<Button>

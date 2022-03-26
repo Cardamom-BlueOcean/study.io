@@ -32,6 +32,7 @@ Study | Learn | Grow
 ![](https://imgur.com/QIRAXZ7.gif)
 
 ### 🧪 Technologies
+<img src="https://www.drupal.org/files/project-images/animate.png" width="200"/>
 ![animate.css](https://www.drupal.org/files/project-images/animate.png)
 ![Babel](https://www.vectorlogo.zone/logos/babeljs/babeljs-ar21.svg)
 ![date-fns](https://www.bypeople.com/wp-content/uploads/2018/10/date-fns-js-featured-4.png)

@@ -13,7 +13,7 @@ Study | Learn | Grow
 ### General Info
 
 
-#### ✨ Login
+####  Login ✨
 ![](https://imgur.com/Svwvsi7.gif)
 
 #### Group Chats & DMs
@@ -31,7 +31,7 @@ Study | Learn | Grow
 #### Logout
 ![](https://imgur.com/QIRAXZ7.gif)
 
-### 🧪 Technologies
+###  Technologies 🧪
 <img src="https://www.drupal.org/files/project-images/animate.png" width="200"/><img src="https://www.vectorlogo.zone/logos/babeljs/babeljs-ar21.svg" width="200"/>
 <img src="https://www.bypeople.com/wp-content/uploads/2018/10/date-fns-js-featured-4.png" width="200"/>
 <img src="https://github.com/faker-js/faker/raw/main/docs/public/logo.svg" width="200"/>
@@ -47,7 +47,7 @@ Study | Learn | Grow
 <img src="https://www.vectorlogo.zone/logos/js_webpack/js_webpack-ar21.svg" width="200"/>
 
 
-### 🚀 Installation and Setup
+###  Installation and Setup 🚀
 ```
 $ git clone https://github.com/Cardamom-BlueOcean/study.io
 $ npm install
@@ -59,10 +59,10 @@ Set up a config.ts with the following:
 * firebase config
 
 
-### FAQs
+### FAQs 🧐
 
 
-### 🤝 Contributors
+### Contributors 🤝
 - [BJ White](https://www.linkedin.com/in/bj-white/)
   - ![Github](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png) [Github]()
 - [Richard Linley](https://www.linkedin.com/in/richard-linley/)

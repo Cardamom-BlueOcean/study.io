@@ -5,6 +5,8 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
 const MemeThumbnailDiv = styled.div`
+	background: white;
+	color: #000000;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: start;
@@ -36,8 +38,6 @@ const MemeThumbnailImage = styled.img`
 		opacity: 50%;
 	}
 `;
-
-const MemeHeadText = styled.h1``;
 
 const MemeThumbnail = ({ allMemes, setCurrentMeme, setCurrentIndex, messageOne, messageTwo }) => {
 	//

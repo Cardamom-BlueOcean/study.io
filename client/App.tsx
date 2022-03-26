@@ -18,6 +18,7 @@ import {
   Typography,
   PaletteMode
 } from "@mui/material";
+import { AnyRecord } from 'dns';
 
 const App = () => {
 
@@ -28,7 +29,7 @@ const App = () => {
   const colorMode = React.useMemo(
     () => ({
       toggleColor: () => {
-        setMode((prevMode: PaletteMode) => prevMode === 'light' ? 'dark' : 'light')
+        setMode((prevMode: any) => prevMode === 'light' ? 'dark' : 'light')
       }
     }), [])
 

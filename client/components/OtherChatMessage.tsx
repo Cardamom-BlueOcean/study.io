@@ -47,7 +47,7 @@ export default function OtherChatMessage({ replyToThread, message, index }) {
           </Stack>
         </Box >
         : <Box sx={{ display: 'flex', gridTemplateColumns: '5% 95%', border: "1px solid #e3dcd5", width: '60%', overflowX: 'wrap', padding: '8px', marginBottom: '5px', borderRadius: '4px' }}>
-          <Avatar sx={{ width: 40, height: 40, alignSelf: 'top', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: "no-referrer" }}></Avatar>
+          <Avatar sx={{ width: 40, height: 40, alignSelf: 'top', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: 'no-referrer' }}></Avatar>
           <Stack>
             <Box sx={{ fontWeight: 300, marginLeft: '8px' }}>{message.Name}</Box>
             <Box sx={{ fontSize: '10px', fontWeight: 200, marginLeft: '8px' }}>{`${chatDate} at ${chatTime}`}</Box>

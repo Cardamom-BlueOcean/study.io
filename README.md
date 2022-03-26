@@ -33,20 +33,19 @@ Study | Learn | Grow
 
 ### 🧪 Technologies
 <img src="https://www.drupal.org/files/project-images/animate.png" width="200"/>
-![animate.css](https://www.drupal.org/files/project-images/animate.png)
-![Babel](https://www.vectorlogo.zone/logos/babeljs/babeljs-ar21.svg)
-![date-fns](https://www.bypeople.com/wp-content/uploads/2018/10/date-fns-js-featured-4.png)
-![faker.js](https://github.com/faker-js/faker/raw/main/docs/public/logo.svg)
-![Firebase](https://www.vectorlogo.zone/logos/firebase/firebase-ar21.svg)
-![jquery](https://www.vectorlogo.zone/logos/jquery/jquery-ar21.svg)
-![Material UI](https://mui.com/static/logo.png)
-![nodemon](https://www.vectorlogo.zone/logos/babeljs/babeljs-ar21.svg)
-![React](https://www.vectorlogo.zone/logos/reactjs/reactjs-ar21.svg)
-![Redux](https://redux.js.org/img/redux-logo-landscape.png)
-![styled components](https://raw.githubusercontent.com/styled-components/brand/master/styled-components.png)
-![Typescript](https://www.vectorlogo.zone/logos/typescriptlang/typescriptlang-ar21.svg)
-![twilio](https://www.vectorlogo.zone/logos/twilio/twilio-ar21.svg)
-![webpack](https://www.vectorlogo.zone/logos/js_webpack/js_webpack-ar21.svg)
+<img src="https://www.vectorlogo.zone/logos/babeljs/babeljs-ar21.svg" width="200"/>
+<img src="https://www.bypeople.com/wp-content/uploads/2018/10/date-fns-js-featured-4.png" width="200"/>
+<img src="https://github.com/faker-js/faker/raw/main/docs/public/logo.svg" width="200"/>
+<img src="https://www.vectorlogo.zone/logos/firebase/firebase-ar21.svg" width="200"/>
+<img src="https://www.vectorlogo.zone/logos/jquery/jquery-ar21.svg" width="200"/>
+<img src="https://mui.com/static/logo.png" width="200"/>
+<img src="https://www.vectorlogo.zone/logos/babeljs/babeljs-ar21.svg" width="200"/>
+<img src="https://www.vectorlogo.zone/logos/reactjs/reactjs-ar21.svg" width="200"/>
+<img src="https://redux.js.org/img/redux-logo-landscape.png" width="200"/>
+<img src="https://raw.githubusercontent.com/styled-components/brand/master/styled-components.png" width="200"/>
+<img src="https://www.vectorlogo.zone/logos/typescriptlang/typescriptlang-ar21.svg" width="200"/>
+<img src="https://www.vectorlogo.zone/logos/twilio/twilio-ar21.svg" width="200"/>
+<img src="https://www.vectorlogo.zone/logos/js_webpack/js_webpack-ar21.svg" width="200"/>
 
 
 ### 🚀 Installation and Setup

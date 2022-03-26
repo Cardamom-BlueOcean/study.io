@@ -58,7 +58,7 @@ export default function GroupTabs({
 	const [toggleMemeModal, setToggleMemeModal] = React.useState(false);
 	const [allMemes, setAllMemes] = React.useState([]);
 	const [createdMeme, setCreatedMeme] = React.useState('');
-
+	let randomUrl = '';
 	//console.log(userChats);
 	// const mediaContent = useAppSelector((state) => state.mediaUrl.value)
 	// console.log('at component level, ', mediaContent);
@@ -68,6 +68,15 @@ export default function GroupTabs({
 		handleAddUserInput('');
 		getAllMemes();
 	}, []);
+
+	React.useEffect(() => {
+		if (createdMeme !== '') {
+			randomUrl = createdMeme;
+			sendMessageToCurrentRoom();
+			setCreatedMeme('');
+			randomUrl = '';
+		}
+	}, [createdMeme]);
 
 	// console.log('searched users:', searchedUsers, 'full info:', searchedUsersFullInfo);
 	const handleMessageInput = (messageBody) => {
@@ -93,7 +102,7 @@ export default function GroupTabs({
 		dispatch(setUserInfo(UsersFullInfo));
 	};
 
-	let randomUrl = '';
+	//let randomUrl = '';
 	const sendMessageToCurrentRoom = async () => {
 		onAuthStateChanged(auth, (user: any) => {
 			if (user) {

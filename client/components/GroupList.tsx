@@ -221,12 +221,12 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
       bgColor: 'background.paper',
       flexDirection: 'column',
     }}>
-      <Box backgroundColor="primary.main" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }} >
+      <Box sx={{ backgroundColor: "primary.main", display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-start' }} >
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleUserMenuClick}
           >
-            <Avatar sx={{ width: 32, height: 32 }} src={auth.currentUser?.photoURL} imgProps={{ referrerPolicy: 'noReferrer' }} ></Avatar>
+            <Avatar sx={{ width: 32, height: 32 }} src={auth.currentUser?.photoURL} imgProps={{ referrerPolicy: 'no-referrer' }} ></Avatar>
           </IconButton>
         </Tooltip>
         <Menu
@@ -274,9 +274,9 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
         <Box>
           <Box sx={{ overflowY: 'scroll', maxHeight: '200px' }}>
             <Typography
-              color="primary.contrastText"
-              backgroundColor="primary.main"
               sx={{
+                color: "primary.contrastText",
+                backgroundColor: "primary.main",
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -319,9 +319,9 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
         <Box>
           <Box sx={{ overflowY: 'scroll', maxHeight: '350px' }}>
             <Typography
-              color="primary.contrastText"
-              backgroundColor="primary.main"
               sx={{
+                color: "primary.contrastText",
+                backgroundColor: "primary.main",
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',

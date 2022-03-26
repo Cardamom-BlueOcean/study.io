@@ -80,7 +80,7 @@ export default function UserPage(props) {
             dispatch(setUserId(user.uid));
             dispatch(setUserName(user.displayName));
             const userDoc = await getDoc(ref);
-            if (!userDoc) {
+            if (!userDoc.data()) {
               await setDoc(doc(db, "Users", user.uid), {
                 name: user.displayName,
                 email: user.email,

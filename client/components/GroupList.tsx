@@ -238,26 +238,26 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
           transformOrigin={{ horizontal: 'left', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         >
-          <MenuItem >
+          <MenuItem sx={{ backgroundColor: '#fff' }}>
             <Avatar src={auth.currentUser?.photoURL} /> {auth.currentUser?.displayName}
           </MenuItem>
-          <MenuItem >
+          <MenuItem sx={{ backgroundColor: '#fff' }}>
             <ListItemIcon>
               <PersonAdd fontSize="small" />
             </ListItemIcon>
             Switch Accounts
           </MenuItem>
-          <MenuItem onClick={handleUsernameClick} sx={{ fontFamily: "Montserrat, sans-serif" }}>
+          <MenuItem onClick={handleUsernameClick} sx={{ fontFamily: "Montserrat, sans-serif", backgroundColor: '#fff' }}>
             <ListItemIcon>
               <AccountCircleIcon fontSize="small" />
             </ListItemIcon>
             Change User Name
           </MenuItem>
           <Divider />
-          <MenuItem >
+          <MenuItem sx={{ backgroundColor: '#fff' }} >
             <FormControlLabel className="animate__animated animate__fadeIn" control={<Switch checked={toggleDark} onChange={() => { settoggleDark(!toggleDark); setLogoImg(!logoImg); setMode((prevMode: PaletteMode) => prevMode === 'light' ? 'dark' : 'light') }} />} label={currentMode + ' mode'} />
           </MenuItem>
-          <MenuItem onClick={() => signOutUser()} >
+          <MenuItem onClick={() => signOutUser()} sx={{ backgroundColor: '#fff' }}>
             <ListItemIcon >
               <Logout fontSize="small" />
             </ListItemIcon>
@@ -317,7 +317,7 @@ export default function GroupList({ setCurrentRoom, currentRoom, setUserChats, s
         </Box>
         :
         <Box>
-          <Box sx={{ overflowY: 'scroll', maxHeight: '200px' }}>
+          <Box sx={{ overflowY: 'scroll', maxHeight: '350px' }}>
             <Typography
               color="primary.contrastText"
               backgroundColor="primary.main"

@@ -1,10 +1,5 @@
-
-import { createTheme } from "@mui/material/styles";
 import {
   Box,
-  CssBaseline,
-  Paper,
-  Typography,
   Button
 } from "@mui/material";
 import { getFirestore, collection } from "firebase/firestore";
@@ -42,13 +37,11 @@ export default function Login({ }: Props) {
 
 
   return (
-    <Box backgroundColor="primary.main" sx={{ justifyContent: "center", padding: "400px 0 50px 0" }}>
+    <Box sx={{ justifyContent: "center", padding: "400px 0 50px 0", backgroundColor: "primary.main" }}>
       <Box color="primary.dark"> <img className="animate__animated animate__fadeInDown" src={logo} style={{ display: 'block', margin: 'auto' }}></img></Box>
-      {/* <CssBaseline /> */}
       <Box
         height="100vh"
         display="flex"
-        // justifyContent="center"
         alignItems="center"
         flexDirection="column"
       >
@@ -58,4 +51,3 @@ export default function Login({ }: Props) {
   );
 }
 
-//sx={{ backgroundColor: '#542F34' }}

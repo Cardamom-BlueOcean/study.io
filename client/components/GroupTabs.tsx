@@ -194,7 +194,7 @@ export default function GroupTabs({ userChats, showCalendar, setShowCalendar, se
           <SearchUserToAdd sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '3' }} searchedUsers={searchedUsers} />
 
           <Button variant="outlined" sx={{ width: '90%', justifySelf: 'center', gridColumnStart: '4', marginBottom: '8px', height: '55.98px' }} onClick={addUserToCurrentRoom}>Add User</Button>
-          <Button variant="outlined" sx={{ width: '10%', justifySelf: 'center', gridColumnStart: '5', marginBottom: '8px', height: '55.98px' }} onClick={LeaveCurrentRoom}>Leave</Button>
+          <Button variant="outlined" sx={{ width: '80%', justifySelf: 'center', gridColumnStart: '5', marginBottom: '8px', height: '55.98px' }} onClick={LeaveCurrentRoom}>Leave</Button>
 
         </Box>
         <Box sx={{ height: '100%', overflow: 'scroll', display: 'flex', flexDirection: 'column-reverse', marginTop: '3px' }}>

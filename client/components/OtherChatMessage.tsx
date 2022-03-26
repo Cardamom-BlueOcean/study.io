@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Box, Stack, Avatar, Button, Chip } from '@mui/material';
 import styled from 'styled-components';
 import PhotoModal from "./PhotoModal";
+import ReplyIcon from '@mui/icons-material/Reply';
 
 const ReplyDiv = styled.div`
   color: blue;
@@ -42,7 +43,7 @@ export default function OtherChatMessage({ replyToThread, message, index }) {
               <PhotoModal url={message.MessageMediaContent} /> : null}
             {message.MessageThread.length > 0 ?
               <Box sx={{ display: 'flex', alignSelf: 'start' }}><Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px' }}>Show {message.MessageThread.length} Replies</Button></Box>
-              : <Box sx={{ display: 'flex', alignSelf: 'start' }}><Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px', justifyContent: 'start' }}>Reply</Button></Box>}
+              : <Box sx={{ display: 'flex', alignSelf: 'start' }}><Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px', justifyContent: 'start' }}>Reply<ReplyIcon size="small" /></Button></Box>}
           </Stack>
         </Box >
         : <Box sx={{ display: 'flex', gridTemplateColumns: '5% 95%', border: "1px solid #e3dcd5", width: '60%', overflowX: 'wrap', padding: '8px', marginBottom: '5px', borderRadius: '4px' }}>

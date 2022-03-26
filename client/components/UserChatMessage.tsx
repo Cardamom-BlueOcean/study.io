@@ -3,7 +3,7 @@ import ReplyList from './replies/ReplyList';
 import { useState } from 'react';
 import { Box, Stack, Avatar, Button, Chip } from '@mui/material';
 import PhotoModal from './PhotoModal';
-
+import ReplyIcon from '@mui/icons-material/Reply';
 export default function UserChatMessage({ replyToThread, message, index }) {
 
   const [showReply, setShowReply] = useState(false);
@@ -33,7 +33,7 @@ export default function UserChatMessage({ replyToThread, message, index }) {
               <PhotoModal url={message.MessageMediaContent} /> : null}
             {message.MessageThread.length > 0 ?
               <Box sx={{ display: 'flex', alignSelf: 'end' }}><Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px', justifyContent: 'end' }}>Show {message.MessageThread.length} Replies</Button></Box>
-              : <Box sx={{ display: 'flex', alignSelf: 'end' }}><Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px', justifyContent: 'end' }}>Reply</Button></Box>}
+              : <Box sx={{ display: 'flex', alignSelf: 'end' }}><Button onClick={handleReplyClick} style={{ maxHeight: '15px', maxWidth: '100px', fontSize: '8px', justifyContent: 'end' }}>Reply<ReplyIcon size="small" /></Button></Box>}
           </Stack>
           <Avatar sx={{ width: 40, height: 40, alignSelf: 'top', justifySelf: 'center' }} src={message.Avatar} imgProps={{ referrerPolicy: 'no-referrer' }}></Avatar>
         </Box>

@@ -27,6 +27,7 @@ Study | Learn | Grow
 ![](https://imgur.com/Id5uw7w.gif)
 
 #### Video Chat
+<img src="https://imgur.com/efI24k8.gif"/>
 ![](https://imgur.com/efI24k8.gif)
 
 #### Logout
@@ -65,7 +66,7 @@ Set up a config.ts with the following:
 
 ### Contributors🤝
 - [BJ White](https://www.linkedin.com/in/bj-white/)
-  - ![Github](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png) [Github]()
+  - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="100"/> [Github](https://github.com/rjLinley)
 - [Richard Linley](https://www.linkedin.com/in/richard-linley/)
   - ![Github](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png) [Github](https://github.com/rjLinley)
 - [Alex Nahas](https://www.linkedin.com/in/alex-nahas/)

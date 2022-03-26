@@ -2,15 +2,11 @@
 # study.io
 Study | Learn | Grow
 ### Table of Contents
-1. [General Info](#General-Info)
-2. [Demo](#Demo)
-3. [Technologies](#Technologies)
-4. [Installation](#Installation)
-5. [FAQs](#FAQS)
-6. [Contributors](#Contributors)
+1. [Demo](#Demo)
+2. [Technologies](#Technologies)
+3. [Installation](#Installation)
+4. [Contributors](#Contributors)
 
-
-### General Info
 
 
 ### Demo✨
@@ -61,9 +57,6 @@ $ npm run watch
 Set up a config.ts with the following:
 
 * firebase config
-
-
-### FAQs🧐
 
 
 ### Contributors🤝

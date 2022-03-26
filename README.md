@@ -29,6 +29,9 @@ Study | Learn | Grow
 #### Video Chat
 ![](https://imgur.com/fuYmzEK.gif)
 
+#### Create Memes
+![](https://imgur.com/fuYmzEK.gif)
+
 #### Logout
 ![](https://imgur.com/QIRAXZ7.gif)
 
@@ -73,6 +76,6 @@ Set up a config.ts with the following:
 - [John Bronson](https://www.linkedin.com/in/john-bronson/)
   - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="60"/> [Github](https://github.com/victorsmonster)
 - [Tobin Lee](https://www.linkedin.com/in/amy-shi218/)
-  - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="60"/> [Github](https://github.com/rjLinley)
+  - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="60"/> [Github](https://github.com/iamtobin)
 - [Amy Shi](https://www.linkedin.com/in/amy-shi218/)
-  - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="60"/> [Github](https://github.com/rjLinley)
+  - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="60"/> [Github](https://github.com/amyshi218)

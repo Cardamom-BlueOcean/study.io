@@ -1,47 +1,48 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
-import MemeThumbnail from './MemeThumbnail.jsx';
-import AddMemes from './AddMemes.jsx';
+import MemeThumbnail from './MemeThumbnail.tsx';
+import AddMemes from './AddMemes.tsx';
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
 
 const CloseModalIcon = styled(DoNotDisturbOnIcon)`
 	color: purple;
 	cursor: pointer;
-	height: 10px;
+	height: 20px;
 	position: absolute;
 	padding: 0;
 	right: 10px;
 	top: 10px;
-	width: 10px;
+	width: 20px;
 	z-index: 1;
 `;
 
 const ModalDiv = styled.div`
-	align-items: center;
+	align-items: start;
 	display: flex;
 	height: 100%;
-	justify-content: center;
+	justify-content: start;
 	position: fixed;
 	width: 100%;
+	z-index: 999;
 `;
 
 const ModalContainer = styled.div`
 	border-radius: 10px;
 	box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-	background: #fff;
-	color: #000;
+	background: white;
+	color: #000000;
 	display: flex;
 	flex-direction: column;
 	height: 600px;
 	grid-template-columns: 1fr 1fr;
 	position: relative;
 	width: 800px;
-	z-index: 10;
+	/* z-index: 999; */
 `;
 
 const ModalMainImage = styled.img`
-	background-color: hsla(10, 50%, 70%, 0.5);
+	/* background-color: hsla(10, 50%, 70%, 0.5); */
 	box-shadow: 0 5px 16px rgba(0, 0, 0, 0.8);
 	display: flex;
 	height: 300px;
@@ -69,6 +70,21 @@ const MemeModalContainer = styled.div`
 	width: 800px;
 `;
 
+const jokerMeme = {
+	id: 'joker',
+	name: "It's Simple, Kill the Batman",
+	lines: 2,
+	overlays: 0,
+	styles: [],
+	blank: 'https://api.memegen.link/images/joker.png',
+	example: {
+		text: ["it's simple", 'kill the batman'],
+		url: "https://api.memegen.link/images/joker/it's_simple/kill_the_batman.png",
+	},
+	source: 'https://www.youtube.com/watch?v=f_XHjqABQQA',
+	_self: 'https://api.memegen.link/templates/joker',
+};
+
 const MemeModal = ({ allMemes, toggleMemeModal, setToggleMemeModal, setCreatedMeme }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [currentMeme, setCurrentMeme] = useState({});
@@ -79,6 +95,8 @@ const MemeModal = ({ allMemes, toggleMemeModal, setToggleMemeModal, setCreatedMe
 
 	const ref = useRef();
 
+	useEffect(() => setCurrentMeme(jokerMeme), []);
+
 	useEffect(() => {
 		setCurrentMeme(allMemes[currentIndex]);
 		setMemeID(allMemes[currentIndex]?.id);
@@ -87,9 +105,7 @@ const MemeModal = ({ allMemes, toggleMemeModal, setToggleMemeModal, setCreatedMe
 	useEffect(() => {
 		document.addEventListener('keydown', escapeKey);
 		return () => document.removeEventListener('keydown', escapeKey);
-	}, [escapeKey]);
-
-	useEffect(() => console.log('memeID: ', memeID), [currentMeme]);
+	}, []);
 
 	const animation = useSpring({
 		config: {
@@ -116,7 +132,6 @@ const MemeModal = ({ allMemes, toggleMemeModal, setToggleMemeModal, setCreatedMe
 
 	return (
 		<React.Fragment>
-			{allMemes && console.log('currentMeme 💩💩💩: ', currentMeme, currentMeme?.id)}
 			{toggleMemeModal ? (
 				<ModalDiv onClick={closeMemeModal} ref={ref}>
 					<animated.div style={animation}>

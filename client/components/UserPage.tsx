@@ -122,7 +122,6 @@ export default function UserPage(props) {
                 Rooms.push(doc.data().RoomName);
               });
 
-
               //console.log("ROOMS: ", Rooms);
               // updateUserRooms(Rooms);
               // dispatch to update global array here.

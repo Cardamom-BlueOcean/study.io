@@ -31,6 +31,14 @@ Study | Learn | Grow
 #### Logout
 ![](https://imgur.com/QIRAXZ7.gif)
 
+#### UI Design - Figma
+![](https://i.imgur.com/FOE5Nis.png)
+![](https://i.imgur.com/WLgVcz3.png)
+![](https://i.imgur.com/tU2VJrh.png)
+![](https://i.imgur.com/qpRJ88j.png)
+![](https://i.imgur.com/hm7DPK4.png)
+![](https://i.imgur.com/fK0Ks9X.png)
+
 ###  Technologies🧪
 <img src="https://www.drupal.org/files/project-images/animate.png" width="200"/><img src="https://www.vectorlogo.zone/logos/babeljs/babeljs-ar21.svg" width="200"/>
 <img src="https://www.bypeople.com/wp-content/uploads/2018/10/date-fns-js-featured-4.png" width="200"/>

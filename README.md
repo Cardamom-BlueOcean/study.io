@@ -31,7 +31,8 @@ Study | Learn | Grow
 #### Logout
 ![](https://imgur.com/QIRAXZ7.gif)
 
-#### UI Design - Figma
+
+### UI Design - Figma
 ![](https://i.imgur.com/FOE5Nis.png)
 ![](https://i.imgur.com/WLgVcz3.png)
 ![](https://i.imgur.com/tU2VJrh.png)

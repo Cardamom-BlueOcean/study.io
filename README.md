@@ -1,6 +1,15 @@
 ![](https://i.imgur.com/hPNYfXq.png)
 # study.io
 Study | Learn | Grow
+
+study.io is a lightweight, in-browser study group application, which allows users to chat in real time, upload images, schedule events on a personal calendar, and initiate video calls.
+
+This is the culmination of six engineers working closely over the course of one week to realize the requests of a client.
+
+Our client came to use with the following requests: Users should be able to group chat for real time updates/progress, send invites for members to join study groups, create/login to a user account, schedule virtual meet-ups to study/share resources, upload study notes/media and as a stretch goal, users should be able to engage in real time video chat.
+
+Please scroll through our gif gallery below to see how this team was able to actualize the clients requests!
+
 ### Table of Contents
 1. [Demo](#Demo)
 2. [Technologies](#Technologies)

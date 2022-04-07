@@ -19,6 +19,7 @@ Please scroll through our gif gallery below to see how this team was able to act
 
 
 ### Demo✨
+[Click here to view the application](https://studyio-97c11.web.app/)
 ####  Login
 ![](https://imgur.com/Svwvsi7.gif)
 
